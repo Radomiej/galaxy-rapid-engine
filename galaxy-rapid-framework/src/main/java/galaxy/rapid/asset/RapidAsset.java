@@ -18,6 +18,9 @@ public enum RapidAsset {
 	private AssetManager manager;
 	private Map<String, SpineAssetModel> spineMap = new HashMap<String, SpineAssetModel>(10);
 	
+	private RapidAsset() {
+		manager = new AssetManager();
+	}
 	public <T> void loadGdx(String fileName, Class<T> type){
 		manager.load(fileName, type);
 	}

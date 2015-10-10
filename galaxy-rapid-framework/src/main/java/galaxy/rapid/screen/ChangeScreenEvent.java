@@ -2,15 +2,15 @@ package galaxy.rapid.screen;
 
 import com.badlogic.gdx.Screen;
 
-public final class ChangeSceneEvent {
+public final class ChangeScreenEvent {
 	private Screen newScene;
 	private boolean disposeCurrent;
 
-	public ChangeSceneEvent(Screen newScene) {
+	public ChangeScreenEvent(Screen newScene) {
 		this(newScene, false);
 	}
 	
-	public ChangeSceneEvent(Screen newScene, boolean disposeCurrent) {
+	public ChangeScreenEvent(Screen newScene, boolean disposeCurrent) {
 		this.newScene = newScene;
 		this.disposeCurrent = disposeCurrent;
 	}

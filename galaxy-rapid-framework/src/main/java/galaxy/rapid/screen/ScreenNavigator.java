@@ -8,14 +8,21 @@ import com.badlogic.gdx.Screen;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
+import galaxy.rapid.asset.RapidAsset;
+
 public class ScreenNavigator {
 
 	private Screen currentScreen;
 	private Map<Class<? extends Screen>, Screen> activeOldScreens;
-	private EventBus eventBus = new EventBus("GlobalAppNavigator");
+	private EventBus eventBus;
 
 	public ScreenNavigator(Screen startScreen) {
-		eventBus.register(this);
+		this(startScreen, new EventBus("GlobalAppNavigator"));
+	}
+	
+	public ScreenNavigator(Screen startScreen, EventBus eventBus) {
+		this.eventBus = eventBus;
+		this.eventBus.register(this);
 		activeOldScreens = new HashMap<Class<? extends Screen>, Screen>();
 		changeScreen(startScreen, false);
 	}
@@ -39,7 +46,8 @@ public class ScreenNavigator {
 	}
 
 	@Subscribe
-	public void changeScreen(ChangeSceneEvent changeEvent) {
+	public void changeScreen(ChangeScreenEvent changeEvent) {
+		System.out.println("Incoming change screen event: " );
 		try {
 			changeScreen(changeEvent.getNewScene(), changeEvent.isDisposeCurrent());
 		} catch (Exception e) {
