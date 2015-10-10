@@ -13,7 +13,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)  
 public class SceneNavigatorTest {
 
-	SceneNavigator sceneNavigator;
+	ScreenNavigator sceneNavigator;
 	TestOneScreen test1, test2;
 	TestTwoScreen test3;
 	
@@ -43,28 +43,28 @@ public class SceneNavigatorTest {
 	}
 
 	private void initialScreenIsCurrentScreen() {
-		sceneNavigator = new SceneNavigator(test1);
-		assertEquals(test1, sceneNavigator.getCurrentScene());
+		sceneNavigator = new ScreenNavigator(test1);
+		assertEquals(test1, sceneNavigator.getCurrentScreen());
 	}
 
 	private void setScreenWithFalseDisposeGiveOldSceneForTheSameClassScreen() {
 		assertEquals(test1.getClass(), test2.getClass());
-		sceneNavigator.changeScene(test2, false);
-		assertEquals(test1, sceneNavigator.getCurrentScene());
+		sceneNavigator.changeScreen(test2, false);
+		assertEquals(test1, sceneNavigator.getCurrentScreen());
 	}
 
 	private void setScreenWithTrueDisposeGiveNewScreenForTheSameClassScreen() {
-		sceneNavigator.changeScene(test2, true);
-		assertEquals(test2, sceneNavigator.getCurrentScene());
+		sceneNavigator.changeScreen(test2, true);
+		assertEquals(test2, sceneNavigator.getCurrentScreen());
 	}
 
 	private void setScreenWithDifrentClassGiveNewOneOrNonDisposableOld() {
-		sceneNavigator.changeScene(test3, false);
-		assertEquals(test3, sceneNavigator.getCurrentScene());
+		sceneNavigator.changeScreen(test3, false);
+		assertEquals(test3, sceneNavigator.getCurrentScreen());
 		
 		TestOneScreen tempScreen = new TestOneScreen();
-		sceneNavigator.changeScene(tempScreen, true);
-		assertEquals(test1, sceneNavigator.getCurrentScene());
+		sceneNavigator.changeScreen(tempScreen, true);
+		assertEquals(test1, sceneNavigator.getCurrentScreen());
 	}
 
 }
