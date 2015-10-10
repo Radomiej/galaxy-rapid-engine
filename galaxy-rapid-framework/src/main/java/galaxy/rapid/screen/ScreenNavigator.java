@@ -1,4 +1,4 @@
-package galaxy.rapid.scene;
+package galaxy.rapid.screen;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +61,13 @@ public class ScreenNavigator {
 
 	public void dispose() {
 		exitCurrentScreenView(true);
+		disposeAllActiveOldScreen();
+	}
+
+	private void disposeAllActiveOldScreen() {
+		for(Screen screen : activeOldScreens.values()){
+			screen.dispose();
+		}
 	}
 
 	public void resize(int width, int height) {

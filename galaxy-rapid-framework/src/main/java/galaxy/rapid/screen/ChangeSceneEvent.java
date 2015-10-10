@@ -1,4 +1,4 @@
-package galaxy.rapid.scene;
+package galaxy.rapid.screen;
 
 import com.badlogic.gdx.Screen;
 

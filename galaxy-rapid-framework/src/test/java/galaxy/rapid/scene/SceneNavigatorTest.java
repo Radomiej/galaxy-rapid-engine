@@ -10,6 +10,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.runners.MockitoJUnit44Runner;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import galaxy.rapid.screen.ScreenNavigator;
+
 @RunWith(MockitoJUnitRunner.class)  
 public class SceneNavigatorTest {
 
