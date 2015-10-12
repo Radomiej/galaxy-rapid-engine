@@ -2,7 +2,9 @@ package galaxy.rapid.screen;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.kotcrab.vis.ui.VisUI;
 
 public class RapidApp extends ApplicationAdapter {
@@ -17,11 +19,17 @@ public class RapidApp extends ApplicationAdapter {
 	@Override
 	public void create() {
 		VisUI.load();
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		
 		screenNavigator = new ScreenNavigator(startScreen);
 	}
 
 	@Override
 	public void render() {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		screenNavigator.updateCurrentScreen(Gdx.graphics.getDeltaTime());
 	}
 

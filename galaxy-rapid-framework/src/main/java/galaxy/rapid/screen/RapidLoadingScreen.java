@@ -29,6 +29,7 @@ public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 
 	private void privateInitialize() {
 		actor = getProgressActor();
+		nextScene = getNextScreen();
 		build();
 		setup(eventBus);
 	}
@@ -44,16 +45,14 @@ public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 		table.setPosition(stage.getViewport().getScreenWidth() / 2 - table.getWidth() / 2,
 				stage.getViewport().getScreenHeight() / 2 - table.getHeight() / 2);
 		stage.addActor(table);
-
-		VisLabel label = new VisLabel("Loading...");
-		table.add(label);
+		table.add(actor);
 	}
 
 	protected abstract void initialize();
 
 	protected abstract Actor getProgressActor();
 	
-	protected abstract Screen getNestScreen();
+	protected abstract Screen getNextScreen();
 
 	protected abstract boolean updateProgressInActor();
 
@@ -68,7 +67,7 @@ public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 
 	private void changeScene() {
 
-		ChangeScreenEvent changeSceneEvent = new ChangeScreenEvent(nextScene);
+		ChangeScreenEvent changeSceneEvent = new ChangeScreenEvent(nextScene, true);
 		eventBus.post(changeSceneEvent);
 
 	}
@@ -87,10 +86,11 @@ public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 	}
 
 	public void dispose() {
+		stage.dispose();
 	}
 
 	public void injectEventBus(EventBus globalEventBus) {
-		this.eventBus = eventBus;
+		this.eventBus = globalEventBus;
 	}
 
 }
