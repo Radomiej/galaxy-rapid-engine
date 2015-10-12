@@ -6,6 +6,12 @@ public class RenderComponent extends Component {
 	private int layout;
 	private int orderZ;
 
+	public RenderComponent() {
+	}
+	public RenderComponent(int orderZ) {
+		this.orderZ = orderZ;
+	}
+
 	public int getLayout() {
 		return layout;
 	}

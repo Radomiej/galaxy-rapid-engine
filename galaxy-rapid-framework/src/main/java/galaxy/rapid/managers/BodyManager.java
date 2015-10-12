@@ -16,6 +16,7 @@ public class BodyManager extends Manager{
 	private EntitySubscription bodySubscription;
 	private Set<Entity> entities;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialize() {
 		super.initialize();

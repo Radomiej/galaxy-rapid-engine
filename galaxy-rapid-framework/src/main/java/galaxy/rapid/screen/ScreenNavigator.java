@@ -2,13 +2,10 @@ package galaxy.rapid.screen;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import com.badlogic.gdx.Screen;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-
-import galaxy.rapid.asset.RapidAsset;
 
 public class ScreenNavigator {
 
@@ -98,6 +95,9 @@ public class ScreenNavigator {
 		if (activeOldScreens.containsKey(newScene.getClass())) {
 			newScene = activeOldScreens.get(newScene.getClass());
 			activeOldScreens.remove(newScene.getClass());
+		}else if(newScene instanceof EventBusInjector){
+			EventBusInjector eventBusInjector = (EventBusInjector) newScene;
+			eventBusInjector.injectEventBus(eventBus);
 		}
 		this.currentScreen = newScene;
 	}

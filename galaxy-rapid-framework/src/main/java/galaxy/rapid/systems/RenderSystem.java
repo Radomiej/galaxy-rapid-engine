@@ -1,11 +1,9 @@
 package galaxy.rapid.systems;
 
-import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
-import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import galaxy.rapid.components.RenderComponent;
@@ -36,12 +34,9 @@ public class RenderSystem extends BaseSystem {
 
 	@Override
 	protected void processSystem() {
-		int count = 0;
 		for (Entity e : renderableManager.getRendererObjects()) {
 			Renderer renderer = getRendererForEntity(e);
-			renderer.render(e, spriteBatch);
-			
-			System.out.println("draw: " + count);
+			renderer.render(e, spriteBatch);			
 		}
 	}
 

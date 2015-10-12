@@ -3,6 +3,7 @@ package galaxy.rapid.screen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.kotcrab.vis.ui.VisUI;
 
 public class RapidApp extends ApplicationAdapter {
 
@@ -15,6 +16,7 @@ public class RapidApp extends ApplicationAdapter {
 
 	@Override
 	public void create() {
+		VisUI.load();
 		screenNavigator = new ScreenNavigator(startScreen);
 	}
 
@@ -31,6 +33,7 @@ public class RapidApp extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		screenNavigator.dispose();
+		VisUI.dispose();
 	}
 
 	@Override

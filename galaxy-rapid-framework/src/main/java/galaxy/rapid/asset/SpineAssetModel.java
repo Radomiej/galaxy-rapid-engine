@@ -3,7 +3,6 @@ package galaxy.rapid.asset;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
-import com.esotericsoftware.spine.SkeletonData;
 
 public class SpineAssetModel
 {

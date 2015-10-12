@@ -1,8 +1,9 @@
 package galaxy.rapid.managers;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import com.artemis.Aspect;
 import com.artemis.AspectSubscriptionManager;
@@ -17,15 +18,16 @@ import galaxy.rapid.components.RenderComponent;
 public class RenderableManager extends Manager {
 	private AspectSubscriptionManager asm;
 	private EntitySubscription bodySubscription;
-	private TreeSet<Entity> entities;
+	private List<Entity> entities;
 
 	private ComponentMapper<RenderComponent> renderMapper;
+	private RenderComparator comparator = new RenderComparator();
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialize() {
 		super.initialize();
-		entities = new TreeSet<Entity>(new RenderComparator());
+		entities = new ArrayList<Entity>();//new TreeSet<Entity>(new RenderComparator());
 		bodySubscription = asm.get(Aspect.all(RenderComponent.class));
 	}
 
@@ -39,9 +41,11 @@ public class RenderableManager extends Manager {
 			Entity entity = world.getEntity(entityId);
 			entities.add(entity);
 		}		
+		
+		Collections.sort(entities, comparator);
 	}
 
-	public Set<Entity> getRendererObjects() {
+	public List<Entity> getRendererObjects() {
 		getSortedEntities();
 		return entities;
 	}

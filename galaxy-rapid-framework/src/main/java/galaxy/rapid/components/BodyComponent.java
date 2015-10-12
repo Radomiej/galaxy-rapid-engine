@@ -1,7 +1,6 @@
 package galaxy.rapid.components;
 
 import com.artemis.Component;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 
 public class BodyComponent extends Component {
