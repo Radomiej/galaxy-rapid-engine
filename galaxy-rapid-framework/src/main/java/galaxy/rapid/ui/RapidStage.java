@@ -54,4 +54,8 @@ public class RapidStage {
 	public void resize(int width, int height){
 		stage.getViewport().update(width, height, false);
 	}
+
+	public void dispose() {
+		stage.dispose();
+	}
 }

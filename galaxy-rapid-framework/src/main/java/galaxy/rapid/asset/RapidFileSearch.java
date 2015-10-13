@@ -26,7 +26,7 @@ public class RapidFileSearch {
 			}
 			String extansion = file.extension();
 			if(isOneWithSomeExtansions(extansion, extansions)){
-				assetNames.add(file.name());
+				assetNames.add(file.path());
 			}
 		}
 	}

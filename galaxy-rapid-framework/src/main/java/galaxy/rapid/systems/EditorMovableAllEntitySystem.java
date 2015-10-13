@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.google.common.eventbus.EventBus;
 
 import galaxy.rapid.components.BodyComponent;
+import galaxy.rapid.event.ClickEmptySpace;
 import galaxy.rapid.event.SelectEntityEvent;
 import galaxy.rapid.event.UpdateEntityEvent;
 import galaxy.rapid.managers.BodyManager;
@@ -72,14 +73,14 @@ public class EditorMovableAllEntitySystem extends BaseSystem {
 		System.out.println("Click: " + clickRectangle);
 		
 		for (Entity entity : entities) {
-			if (checkCollisionWithEntity(clickRectangle, entity)) {
+			if (checkCollisionWithEntityAndProccesCollision(clickRectangle, entity)) {
 				return;
 			}
 		}
 
 	}
 
-	private boolean checkCollisionWithEntity(Rectangle clickRectangle, Entity entity) {
+	private boolean checkCollisionWithEntityAndProccesCollision(Rectangle clickRectangle, Entity entity) {
 		BodyComponent body = bodyMapper.get(entity);
 		Rectangle bodyRect = new Rectangle(body.getPosition().x, body.getPosition().y, body.getSize().x,
 				body.getSize().y);
@@ -87,17 +88,22 @@ public class EditorMovableAllEntitySystem extends BaseSystem {
 		Rectangle intersector = new Rectangle();
 		if (Intersector.intersectRectangles(clickRectangle, bodyRect, intersector)) {
 			setSelectedEntity(entity);
-			sendEvent(entity);
+			sendSelectedEntityEvent(entity);
 			return true;
 		}
+		sendEmptyClickEvent();
 		return false;
+	}
+
+	private void sendEmptyClickEvent() {
+		eventBus.post(new ClickEmptySpace());
 	}
 
 	private void setSelectedEntity(Entity entity) {
 		draggedEntityId = entity.getId();
 	}
 
-	private void sendEvent(Entity entity) {
+	private void sendSelectedEntityEvent(Entity entity) {
 		SelectEntityEvent selectEvent = new SelectEntityEvent();
 		selectEvent.setClickEntity(entity);
 		try {
