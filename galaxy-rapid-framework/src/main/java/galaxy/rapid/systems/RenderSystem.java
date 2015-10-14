@@ -7,11 +7,13 @@ import com.artemis.annotations.Wire;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import galaxy.rapid.components.RenderComponent;
+import galaxy.rapid.components.ShapeComponent;
 import galaxy.rapid.components.SpineComponent;
 import galaxy.rapid.components.SpriteComponent;
 import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.render.EmptyRenderer;
 import galaxy.rapid.render.Renderer;
+import galaxy.rapid.render.ShapeRenderer;
 import galaxy.rapid.render.SpriteRenderer;
 
 public class RenderSystem extends BaseSystem {
@@ -19,6 +21,7 @@ public class RenderSystem extends BaseSystem {
 	private ComponentMapper<RenderComponent> renderMapper;
 	private ComponentMapper<SpriteComponent> spriteMapper;
 	private ComponentMapper<SpineComponent> spineMapper;
+	private ComponentMapper<ShapeComponent> shapeMapper;
 
 	private RenderableManager renderableManager;
 	@Wire
@@ -43,6 +46,8 @@ public class RenderSystem extends BaseSystem {
 	private Renderer getRendererForEntity(Entity e) {
 		if(spriteMapper.has(e)){
 			return SpriteRenderer.INSTANCE;
+		} else if(shapeMapper.has(e)){
+			return ShapeRenderer.INSTANCE;
 		} else if(spriteMapper.has(e)){
 			return null;
 		}else{
