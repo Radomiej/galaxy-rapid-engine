@@ -7,7 +7,7 @@ public final class ChangeScreenEvent {
 	private boolean disposeCurrent;
 
 	public ChangeScreenEvent(Screen newScene) {
-		this(newScene, false);
+		this(newScene, true);
 	}
 	
 	public ChangeScreenEvent(Screen newScene, boolean disposeCurrent) {

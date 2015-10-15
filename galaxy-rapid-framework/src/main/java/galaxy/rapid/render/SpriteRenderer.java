@@ -14,7 +14,7 @@ public enum SpriteRenderer implements Renderer {
 	public void render(Entity e, Batch batch) {
 		ComponentMapper<SpriteComponent> spriteMapper = ComponentMapper.getFor(SpriteComponent.class, e.getWorld());
 		ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class, e.getWorld());
-		
+				
 		BodyComponent body = bodyMapper.get(e);
 		SpriteComponent spriteComponent = spriteMapper.get(e);
 		Sprite sprite = spriteComponent.getSprite();

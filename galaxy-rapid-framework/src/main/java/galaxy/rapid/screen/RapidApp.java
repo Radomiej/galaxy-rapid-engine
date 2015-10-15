@@ -12,16 +12,27 @@ public class RapidApp extends ApplicationAdapter {
 	private ScreenNavigator screenNavigator;
 	private Screen startScreen;
 
+	private String skinAssetName;
+
 	public RapidApp(Screen startScreen) {
+		this(startScreen, null);
+	}
+
+	public RapidApp(Screen startScreen, String skinName) {
 		this.startScreen = startScreen;
+		this.skinAssetName = skinName;
 	}
 
 	@Override
 	public void create() {
-		VisUI.load();
+		if (skinAssetName != null)
+			VisUI.load(Gdx.files.internal(skinAssetName));
+		else
+			VisUI.load();
+
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
+
 		screenNavigator = new ScreenNavigator(startScreen);
 	}
 

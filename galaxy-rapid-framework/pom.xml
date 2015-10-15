@@ -37,7 +37,14 @@
 			<artifactId>vis-ui</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-ai</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+
+
 		<dependency>
 			<groupId>spine-libgdx-external</groupId>
 			<artifactId>spine-libgdx-external</artifactId>

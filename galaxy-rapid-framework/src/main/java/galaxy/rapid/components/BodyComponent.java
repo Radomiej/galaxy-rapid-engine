@@ -57,5 +57,10 @@ public class BodyComponent extends Component {
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
 	}
+	
+	@Override
+	public String toString() {
+		return "position: " + position + " size: " + size + " origin: " + origin + " rotation: " + rotation;
+	}
 
 }

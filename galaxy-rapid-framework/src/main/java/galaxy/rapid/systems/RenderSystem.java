@@ -4,6 +4,8 @@ import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import galaxy.rapid.components.RenderComponent;
@@ -26,12 +28,15 @@ public class RenderSystem extends BaseSystem {
 	private RenderableManager renderableManager;
 	@Wire
 	private SpriteBatch spriteBatch;
+	@Wire
+	private OrthographicCamera camera;
 
 	public RenderSystem() {
 	}
 
 	@Override
-	protected void begin() {
+	protected void begin() {		
+		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
 	}
 
@@ -48,7 +53,7 @@ public class RenderSystem extends BaseSystem {
 			return SpriteRenderer.INSTANCE;
 		} else if(shapeMapper.has(e)){
 			return ShapeRenderer.INSTANCE;
-		} else if(spriteMapper.has(e)){
+		} else if(spineMapper.has(e)){
 			return null;
 		}else{
 			return EmptyRenderer.INSTANCE;
