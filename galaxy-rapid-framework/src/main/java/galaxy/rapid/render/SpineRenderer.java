@@ -34,8 +34,8 @@ public enum SpineRenderer implements Renderer {
 
 		skeleton.setFlipX(render.isFlipX());
 		skeleton.setPosition(body.getPosition().x + body.getSize().x / 2, body.getPosition().y + body.getSize().y / 2);
-		skeleton.setBonesToSetupPose();
-		skeleton.setSlotsToSetupPose();
+//		skeleton.setBonesToSetupPose();
+//		skeleton.setSlotsToSetupPose();
 		skeleton.getColor().a = 1;
 		state.update(e.getWorld().getDelta());
 		state.apply(skeleton);

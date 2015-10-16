@@ -16,6 +16,7 @@ import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.render.EmptyRenderer;
 import galaxy.rapid.render.Renderer;
 import galaxy.rapid.render.ShapeRenderer;
+import galaxy.rapid.render.SpineRenderer;
 import galaxy.rapid.render.SpriteRenderer;
 
 public class RenderSystem extends BaseSystem {
@@ -54,7 +55,7 @@ public class RenderSystem extends BaseSystem {
 		} else if(shapeMapper.has(e)){
 			return ShapeRenderer.INSTANCE;
 		} else if(spineMapper.has(e)){
-			return null;
+			return SpineRenderer.INSTANCE;
 		}else{
 			return EmptyRenderer.INSTANCE;
 		}		
