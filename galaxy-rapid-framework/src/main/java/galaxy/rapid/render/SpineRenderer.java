@@ -29,13 +29,15 @@ public enum SpineRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		RenderComponent render = renderMapper.get(e);
 		SpineComponent spine = spineMapper.get(e);
-		AnimationState state = spine.getState();
+		AnimationState state = spine.getAnimationState();
 		Skeleton skeleton = spine.getSkeleton();
 
 		skeleton.setFlipX(render.isFlipX());
 		skeleton.setPosition(body.getPosition().x + body.getSize().x / 2, body.getPosition().y + body.getSize().y / 2);
 //		skeleton.setBonesToSetupPose();
 //		skeleton.setSlotsToSetupPose();
+//		System.out.println("Rotacja spine: " + body.getRotation());
+		skeleton.getRootBone().setRotation(body.getRotation());
 		skeleton.getColor().a = 1;
 		state.update(e.getWorld().getDelta());
 		state.apply(skeleton);

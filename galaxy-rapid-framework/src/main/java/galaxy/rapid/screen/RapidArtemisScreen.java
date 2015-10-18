@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
+import galaxy.rapid.systems.TickEventSystem;
+
 public abstract class RapidArtemisScreen extends RapidScreen {
 
 	public static final float MIN_DELTA = 1 / 15f;
@@ -42,6 +44,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		spriteBatch = new SpriteBatch();
 
 		worldConfiguration.setSystem(GroupManager.class);
+		worldConfiguration.setSystem(TickEventSystem.class);		
 		worldConfiguration.register(camera);
 		worldConfiguration.register(inputMultiplexer);
 		worldConfiguration.register(spriteBatch);

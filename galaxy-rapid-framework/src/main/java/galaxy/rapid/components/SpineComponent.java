@@ -26,7 +26,7 @@ public class SpineComponent extends Component {
 		this.skeleton = skeleton;
 	}
 
-	public AnimationState getState() {
+	public AnimationState getAnimationState() {
 		return state;
 	}
 

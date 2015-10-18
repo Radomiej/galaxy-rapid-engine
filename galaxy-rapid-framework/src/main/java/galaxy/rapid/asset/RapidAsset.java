@@ -43,20 +43,11 @@ public enum RapidAsset {
 	public void loadSpine(String spineSaveName, String spineJson, String spineAtlas, float scale) {
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(spineAtlas));
 		SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON
-														// data, which is
-														// stateless.
-		json.setScale(scale); // Load the skeleton at 100% the size it was in
-								// Spine.
-
+		json.setScale(scale); 
 		SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(spineJson));
-
-		Skeleton skeleton = new Skeleton(skeletonData); // Skeleton holds
-														// skeleton state (bone
-														// positions, slot
-														// attachments, etc).
-
+		
+		Skeleton skeleton = new Skeleton(skeletonData); 
 		AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines
-																				// mixing
 																				// (crossfading)
 																				// between
 																				// animations.
