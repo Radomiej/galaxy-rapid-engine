@@ -16,9 +16,9 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 	public static final float MIN_DELTA = 1 / 15f;
 
 	protected World world;
-	private InputMultiplexer inputMultiplexer;
-	private OrthographicCamera camera;
-	private SpriteBatch spriteBatch;
+	protected InputMultiplexer inputMultiplexer;
+	protected OrthographicCamera camera;
+	protected SpriteBatch spriteBatch;
 
 	public void render(float delta) {
 		world.setDelta(MathUtils.clamp(delta, 0, MIN_DELTA));
@@ -31,8 +31,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 
 	@Override
 	protected void create() {
-		WorldConfiguration worldConfiguration = new WorldConfiguration();
-		processWorldConfiguration(worldConfiguration);
+		
 
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
@@ -43,16 +42,18 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		inputMultiplexer = (InputMultiplexer) Gdx.input.getInputProcessor();
 		spriteBatch = new SpriteBatch();
 
-		worldConfiguration.setSystem(GroupManager.class);
-		worldConfiguration.setSystem(TickEventSystem.class);		
+		WorldConfiguration worldConfiguration = new WorldConfiguration();		
+		worldConfiguration.setSystem(GroupManager.class);				
 		worldConfiguration.register(camera);
 		worldConfiguration.register(inputMultiplexer);
 		worldConfiguration.register(spriteBatch);
-		worldConfiguration.register(eventBus);
-
+		worldConfiguration.register(eventBus);		
+		processWorldConfiguration(worldConfiguration);
+		worldConfiguration.setSystem(TickEventSystem.class);
+		
 		world = new World(worldConfiguration);
 		injectWorld(world);
-	}
+	}	
 
 	protected abstract void processWorldConfiguration(WorldConfiguration worldConfiguration);
 

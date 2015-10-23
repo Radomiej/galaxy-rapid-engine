@@ -12,12 +12,13 @@ public class SpineComponent extends Component {
 
 	public SpineComponent() {
 	}
-	
+
 	public SpineComponent(SpineAssetModel spine) {
 		skeleton = new Skeleton(spine.getSkeleton());
 		state = new AnimationState(spine.getAnimationStateData());
+
 	}
-	
+
 	public Skeleton getSkeleton() {
 		return skeleton;
 	}

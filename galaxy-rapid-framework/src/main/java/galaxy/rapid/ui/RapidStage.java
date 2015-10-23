@@ -58,4 +58,8 @@ public class RapidStage {
 	public void dispose() {
 		stage.dispose();
 	}
+
+	public void setDebug(boolean b) {
+		stage.setDebugAll(b);
+	}
 }

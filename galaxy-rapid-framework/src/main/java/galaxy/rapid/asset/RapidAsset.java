@@ -61,6 +61,10 @@ public enum RapidAsset {
 	}
 
 	public SpineAssetModel getSpine(String spineSaveName) {
+		SpineAssetModel spineModel = spineMap.get(spineSaveName);
+		if(spineModel == null){
+			throw new UnsupportedOperationException("Brak asseta o nazwie: " + spineSaveName);
+		}
 		return spineMap.get(spineSaveName);
 	}
 
