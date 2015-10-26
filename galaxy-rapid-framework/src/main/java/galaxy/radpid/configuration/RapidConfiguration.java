@@ -6,9 +6,9 @@ import com.badlogic.gdx.Preferences;
 public enum RapidConfiguration {
 	INSTANCE;
 
-	public static final int DEFAULT_WIDTH = 1024;
+	private final int default_width = 1024;
 	
-	private String appName;
+	private String appName = "NoNameApp";
 	private int appVersion;
 	private int defaultAssetScale = 1;
 	private int currentScale = 1;
@@ -99,7 +99,13 @@ public enum RapidConfiguration {
 	public void setHeightRatio(float heightRatio) {
 		this.heightRatio = heightRatio;
 	}
-	
+
+	public int getGameWidth() {
+		return default_width;
+	}
+	public int getGameHeight() {
+		return (int) (default_width * heightRatio);
+	}
 	
 	
 }

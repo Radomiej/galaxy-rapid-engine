@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.BodyComponent;
 
@@ -24,9 +25,16 @@ public enum ShapeRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		if(body == null) return;
 		
+		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.rect(body.getPosition().x, body.getPosition().y, body.getOrigin().x, body.getOrigin().y, body.getSize().x, body.getSize().y, 1, 1, body.getRotation());
+		shapeRenderer.rect(posX, posX, originX, originY, sizeX, sizeY, 1, 1, body.getRotation());
 		shapeRenderer.end();
 
 	}

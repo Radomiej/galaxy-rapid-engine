@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.BodyComponent;
 
@@ -23,9 +24,16 @@ public enum EmptyRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		if(body == null) return;
 		
-		withoutEntitySprite.setPosition(body.getPosition().x, body.getPosition().y);
-		withoutEntitySprite.setSize(body.getSize().x, body.getSize().y);
-		withoutEntitySprite.setOrigin(body.getOrigin().x, body.getOrigin().y);
+		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		
+		withoutEntitySprite.setPosition(posX, posY);
+		withoutEntitySprite.setSize(sizeX, sizeY);
+		withoutEntitySprite.setOrigin(originX, originY);
 		withoutEntitySprite.setRotation(body.getRotation());
 		withoutEntitySprite.draw(batch);
 

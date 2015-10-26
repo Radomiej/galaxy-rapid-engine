@@ -5,6 +5,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.SpriteComponent;
 
@@ -18,9 +19,17 @@ public enum SpriteRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		SpriteComponent spriteComponent = spriteMapper.get(e);
 		Sprite sprite = spriteComponent.getSprite();
-		sprite.setPosition(body.getPosition().x, body.getPosition().y);
-		sprite.setSize(body.getSize().x, body.getSize().y);
-		sprite.setOrigin(body.getOrigin().x, body.getOrigin().y);
+		
+		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		
+		sprite.setPosition(posX, posY);
+		sprite.setSize(sizeX, sizeY);
+		sprite.setOrigin(originX, originY);
 		sprite.setRotation(body.getRotation());
 		sprite.draw(batch);		
 	}

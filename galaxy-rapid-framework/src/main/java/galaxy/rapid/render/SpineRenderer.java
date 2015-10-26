@@ -7,6 +7,7 @@ import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 
+import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.SpineComponent;
@@ -33,7 +34,13 @@ public enum SpineRenderer implements Renderer {
 		Skeleton skeleton = spine.getSkeleton();
 
 		skeleton.setFlipX(render.isFlipX());
-		skeleton.setPosition(body.getPosition().x + body.getSize().x / 2, body.getPosition().y + body.getSize().y / 2);
+		
+		float halfSizeX = (body.getSize().x / 2) * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
+		float halfSizeY = (body.getSize().y / 2) * RapidConfiguration.INSTANCE.getCurrentScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		
+		skeleton.setPosition(posX + halfSizeX, posY + halfSizeY);
 //		skeleton.setBonesToSetupPose();
 //		skeleton.setSlotsToSetupPose();
 //		System.out.println("Rotacja spine: " + body.getRotation());
