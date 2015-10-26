@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
+import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.systems.TickEventSystem;
 
 public abstract class RapidArtemisScreen extends RapidScreen {
@@ -35,7 +36,10 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
-		camera = new OrthographicCamera(w, w * (h / w));
+		float realW = 1024;		
+//		camera = new OrthographicCamera(w, w * (h / w));
+		
+		camera = new OrthographicCamera(realW, realW * (h / w));
 		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 		camera.update();
 

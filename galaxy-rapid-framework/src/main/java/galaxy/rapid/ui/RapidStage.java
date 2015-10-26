@@ -62,4 +62,8 @@ public class RapidStage {
 	public void setDebug(boolean b) {
 		stage.setDebugAll(b);
 	}
+
+	public void row() {
+		table.row();
+	}
 }

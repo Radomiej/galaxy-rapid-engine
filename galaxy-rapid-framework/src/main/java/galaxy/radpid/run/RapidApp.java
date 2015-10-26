@@ -1,4 +1,4 @@
-package galaxy.rapid.screen;
+package galaxy.radpid.run;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.kotcrab.vis.ui.VisUI;
+
+import galaxy.rapid.screen.ScreenNavigator;
 
 public class RapidApp extends ApplicationAdapter {
 
