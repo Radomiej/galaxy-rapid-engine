@@ -6,9 +6,14 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-	  <targetJdk>1.6</targetJdk>
+		<targetJdk>1.6</targetJdk>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>galaxy-rapid-downloader</groupId>
+			<artifactId>galaxy-rapid-downloader</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>net.mostlyoriginal.artemis-odb</groupId>
 			<artifactId>contrib-core</artifactId>
