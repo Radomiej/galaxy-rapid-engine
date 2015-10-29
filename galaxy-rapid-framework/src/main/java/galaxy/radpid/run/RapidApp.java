@@ -7,6 +7,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.kotcrab.vis.ui.VisUI;
 
+import galaxy.radpid.configuration.RapidConfig;
+import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.screen.ScreenNavigator;
 
 public class RapidApp extends ApplicationAdapter {
@@ -15,26 +17,46 @@ public class RapidApp extends ApplicationAdapter {
 	private Screen startScreen;
 
 	private String skinAssetName;
+	private RapidConfig rapidConfig;
 
 	public RapidApp(Screen startScreen) {
-		this(startScreen, null);
+		this(startScreen, new RapidConfig());
 	}
 
+	@Deprecated
 	public RapidApp(Screen startScreen, String skinName) {
 		this.startScreen = startScreen;
-		this.skinAssetName = skinName;
+		RapidConfig rapidConfig = new RapidConfig();
+		rapidConfig.skinAsset = skinName;
+		this.rapidConfig = rapidConfig;
+	}
+	
+	public RapidApp(Screen startScreen, RapidConfig config) {
+		this.startScreen = startScreen;
+		this.rapidConfig = config;
 	}
 
 	@Override
 	public void create() {
-		if (skinAssetName != null)
+		
+		if(RapidConfiguration.INSTANCE.load(rapidConfig)){
+			Gdx.app.log("Configuration", "Apply configuration object");
+		}
+		
+		if (skinAssetName != null){
 			VisUI.load(Gdx.files.internal(skinAssetName));
-		else
+		}
+		else{
 			VisUI.load();
-
+		}
+		if(rapidConfig.debugMode){
+			Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
+		}
+		
+		System.out.println("after vis");
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-
+		System.out.println("before ScreenNav");
 		screenNavigator = new ScreenNavigator(startScreen);
 	}
 

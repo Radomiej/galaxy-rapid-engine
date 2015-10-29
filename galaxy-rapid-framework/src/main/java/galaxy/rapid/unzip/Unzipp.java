@@ -1,11 +1,8 @@
 package galaxy.rapid.unzip;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+
+import com.badlogic.gdx.files.FileHandle;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -15,21 +12,21 @@ public class Unzipp {
 		return false;
 	}
 
-	public boolean unzipWithPassword(File fileZip, String destination, String password){
+	public boolean unzipWithPassword(File fileZip, FileHandle destination, String password){
 	    try {
 	         ZipFile zipFile = new ZipFile(fileZip);
 	         if (zipFile.isEncrypted()) {
 	            zipFile.setPassword(password);
 	         }
-	         zipFile.extractAll(destination);
+	         zipFile.extractAll(destination.file().getAbsolutePath());
 	    } catch (ZipException e) {
 	        e.printStackTrace();
 	    }
 
 		return true;
 	}
-	public boolean unzip(File fileZip, String destination) {
-		return unzipWithPassword(fileZip, destination, "");
+	public boolean unzip(File fileZip, FileHandle assetFolder) {
+		return unzipWithPassword(fileZip, assetFolder, "");
 	}
 	
 	

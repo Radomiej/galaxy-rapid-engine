@@ -15,34 +15,45 @@ public enum RapidConfiguration {
 	private float heightRatio = 1;
 	
 	private boolean firstInitializationComplete = false;
-	private ResizingStrategy resizingStrategy;
 
 	
-	public void load(){
-		Preferences preferences = Gdx.app.getPreferences(appName);
-		appVersion = preferences.getInteger("appVersion", -1);
-		defaultAssetScale = preferences.getInteger("appVersion", 1);
-		firstInitializationComplete = preferences.getBoolean("firstInitializationComplete", false);
-		resizingStrategy = ResizingStrategy.valueOf(preferences.getString("resizingStrategy", ResizingStrategy.WITHOUT_RESIZING.name()));
 	
+	
+	/**
+	 * Load application configuration with device memory
+	 * @param rapidConfig default user initial configuration.
+	 * @return true if inject configuration will be apply.
+	 */
+	public boolean load(RapidConfig rapidConfig) {
+		appName = rapidConfig.appName;
+		Preferences preferences = Gdx.app.getPreferences(rapidConfig.appName);		
+		proccesFirstInitializationIfNeeded(rapidConfig, preferences);
+		
+		
+		appVersion = preferences.getInteger("appVersion", 0);
+		defaultAssetScale = preferences.getInteger("defaultAssetScale", 1);
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		heightRatio = h / w;
+		
+		
+		return false;
 	}
-	
-	public void save(){
-		Preferences preferences = Gdx.app.getPreferences(appName);
-		preferences.putInteger("appVersion", appVersion);
-		preferences.putInteger("defaultAssetScale", defaultAssetScale);
-		preferences.putBoolean("firstInitializationComplete", firstInitializationComplete);
-		preferences.putString("resizingStrategy", resizingStrategy.name());
+
+	private void proccesFirstInitializationIfNeeded(RapidConfig rapidConfig, Preferences preferences) {
+		firstInitializationComplete = preferences.getBoolean("firstInitializationComplete", false);	
+		if(!firstInitializationComplete){
+			save(rapidConfig);
+		}
+	}
+
+	private void save(RapidConfig rapidConfig) {
+		Preferences preferences = Gdx.app.getPreferences(rapidConfig.appName);
+		preferences.putInteger("appVersion", rapidConfig.appVersion);
+		preferences.putInteger("defaultAssetScale", rapidConfig.defaultAssetScale);
+		preferences.putBoolean("firstInitializationComplete", true);
 		preferences.flush();
 	}
-	
-	
-	
-	
-	
 	
 	public int getDefaultAssetScale() {
 		return defaultAssetScale;
@@ -50,23 +61,7 @@ public enum RapidConfiguration {
 
 	public void setDefaultAssetScale(int defaultAssetScale) {
 		this.defaultAssetScale = defaultAssetScale;
-	}
-
-	public boolean isFirstInitializationComplete() {
-		return firstInitializationComplete;
-	}
-
-	public void setFirstInitializationComplete(boolean firstInitializationComplete) {
-		this.firstInitializationComplete = firstInitializationComplete;
-	}
-
-	public ResizingStrategy getResizingStrategy() {
-		return resizingStrategy;
-	}
-
-	public void setResizingStrategy(ResizingStrategy resizingStrategy) {
-		this.resizingStrategy = resizingStrategy;
-	}
+	}	
 
 	public int getAppVersion() {
 		return appVersion;
