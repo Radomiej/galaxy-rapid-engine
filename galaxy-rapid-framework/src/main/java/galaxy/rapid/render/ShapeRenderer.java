@@ -17,7 +17,6 @@ public enum ShapeRenderer implements Renderer {
 	
 	private ShapeRenderer() {
 		shapeRenderer = new com.badlogic.gdx.graphics.glutils.ShapeRenderer();
-		
 	}
 
 	public void render(Entity e, Batch batch) {
@@ -34,7 +33,7 @@ public enum ShapeRenderer implements Renderer {
 		
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.rect(posX, posX, originX, originY, sizeX, sizeY, 1, 1, body.getRotation());
+		shapeRenderer.rect(posX, posY, originX, originY, sizeX, sizeY, 1, 1, body.getRotation());
 		shapeRenderer.end();
 
 	}

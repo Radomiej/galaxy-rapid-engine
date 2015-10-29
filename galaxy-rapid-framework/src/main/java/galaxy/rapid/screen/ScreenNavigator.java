@@ -18,12 +18,10 @@ public class ScreenNavigator {
 	}
 	
 	public ScreenNavigator(Screen startScreen, EventBus eventBus) {
-		System.out.println("Screen Nav constructor");
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
 		activeOldScreens = new HashMap<Class<? extends Screen>, Screen>();
 		changeScreen(startScreen, false);
-		System.out.println("Screen Nav end constructor");
 	}
 
 	public void updateCurrentScreen(float delta) {

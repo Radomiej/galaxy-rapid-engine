@@ -13,7 +13,7 @@ public enum RapidConfiguration {
 	private int defaultAssetScale = 1;
 	private int currentScale = 1;
 	private float heightRatio = 1;
-	
+	private boolean debugMode = false;	
 	private boolean firstInitializationComplete = false;
 
 	
@@ -26,6 +26,7 @@ public enum RapidConfiguration {
 	 */
 	public boolean load(RapidConfig rapidConfig) {
 		appName = rapidConfig.appName;
+		debugMode = rapidConfig.debugMode;
 		Preferences preferences = Gdx.app.getPreferences(rapidConfig.appName);		
 		proccesFirstInitializationIfNeeded(rapidConfig, preferences);
 		
@@ -100,6 +101,10 @@ public enum RapidConfiguration {
 	}
 	public int getGameHeight() {
 		return (int) (default_width * heightRatio);
+	}
+
+	public boolean isDebugMode() {
+		return debugMode;
 	}
 	
 	

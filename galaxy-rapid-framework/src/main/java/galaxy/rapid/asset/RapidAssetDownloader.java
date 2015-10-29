@@ -5,7 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Json;
 
 import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.downloader.AsynAdvenceDownloader;
@@ -17,6 +19,7 @@ import galaxy.rapid.unzip.Unzipp;
 
 public class RapidAssetDownloader {
 
+	private static final String DOWNLOAD_HISTORY_NAME = "downloadHistory";
 	private URL url = null;
 	private double progress;
 	private double speed;
@@ -38,7 +41,15 @@ public class RapidAssetDownloader {
 	}
 
 	public void startDownload() {
-		Gdx.app.debug(this.getClass().getSimpleName(), "Starting download...");
+		
+		
+		if(checkIsAllreadyDownloaded()){
+			Gdx.app.debug(RapidAssetDownloader.class.getSimpleName(), "Content from this url is allready downloaded: " + url.toString());
+			end = true;
+			return;
+		}
+		
+		Gdx.app.debug(RapidAssetDownloader.class.getSimpleName(), "Starting download...");
 		AsynAdvenceDownloader downloader = new AsynAdvenceDownloader(url, new DownloadListener() {
 
 			@Override
@@ -86,6 +97,21 @@ public class RapidAssetDownloader {
 		}
 	}
 
+	private boolean checkIsAllreadyDownloaded() {
+		Preferences preferences = Gdx.app.getPreferences(RapidConfiguration.INSTANCE.getAppName());
+		Json json = new Json();
+		DownloadHistory downloadHistory = json.fromJson(DownloadHistory.class, preferences.getString(DOWNLOAD_HISTORY_NAME));
+		if(downloadHistory == null) downloadHistory = new DownloadHistory();
+		
+		boolean contains = downloadHistory.contains(url.toString());
+		if(contains) return contains;
+		
+		downloadHistory.getDownloadUrls().add(url.toString());
+		preferences.putString(DOWNLOAD_HISTORY_NAME, json.toJson(downloadHistory));
+		preferences.flush();
+		return contains;
+	}
+
 	public double getProgress() {
 		return progress;
 	}
@@ -94,7 +120,7 @@ public class RapidAssetDownloader {
 		return speed;
 	}
 
-	public boolean isEnd() {
+	public boolean isComplete() {
 		return end;
 	}
 

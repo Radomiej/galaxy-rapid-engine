@@ -53,10 +53,8 @@ public class RapidApp extends ApplicationAdapter {
 			Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
 		}
 		
-		System.out.println("after vis");
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		System.out.println("before ScreenNav");
 		screenNavigator = new ScreenNavigator(startScreen);
 	}
 

@@ -27,7 +27,7 @@ public class BodyManager extends Manager{
 		entities = Mapper.getEntitiesFromBag(bodySubscription.getEntities(), world);
 	}
 
-	public Set<Entity> getBuffs(){
+	public Set<Entity> getEntities(){
 		updateList();
 		return entities;
 	}
