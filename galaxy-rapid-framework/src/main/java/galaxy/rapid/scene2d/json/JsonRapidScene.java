@@ -35,8 +35,9 @@ public class JsonRapidScene {
 			ComponentType componentType = parent.type;
 			List<JsonNode> childrens = master.getChildrens(parent);
 			for(JsonNode child : childrens){
-				Actor actor = master.getActors().get(child.name);
-				componentType.addActor(parenActor, actor, child);				
+                            Actor actor = null;
+                            if(child != null) actor = master.getActors().get(child.name);
+                            componentType.addActor(parenActor, actor, child);				
 			}
 		}
 	}
