@@ -32,4 +32,9 @@ public abstract class RapidScreen implements Screen, EventBusInjector {
 	public void injectEventBus(EventBus globalEventBus) {
 		eventBus = globalEventBus;
 	}
+	
+	protected void changeScreen(Screen screen){
+		ChangeScreenEvent changeScreenEvent = new ChangeScreenEvent(screen);
+		eventBus.post(changeScreenEvent);
+	}
 }

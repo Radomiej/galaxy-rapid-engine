@@ -63,4 +63,16 @@ public class BodyComponent extends Component {
 		return "position: " + position + " size: " + size + " origin: " + origin + " rotation: " + rotation;
 	}
 
+	public void setCenterPosition(float x, float y) {
+		position.x = x - (size.x / 2);
+		position.y = y - (size.y / 2);
+	}
+
+	public void set(BodyComponent body) {
+		position.set(body.position);
+		size.set(body.size);
+		origin.set(body.origin);
+		rotation = body.rotation;
+	}
+
 }

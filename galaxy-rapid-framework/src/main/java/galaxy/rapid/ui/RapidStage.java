@@ -22,7 +22,7 @@ public class RapidStage {
 		stage.addActor(table);
 		table.setFillParent(true);
 	}
-
+	
 	public Cell<Actor> add(Actor actor) {
 		return table.add(actor);
 	}

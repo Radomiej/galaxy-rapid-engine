@@ -36,7 +36,7 @@ public class EditorMovableAllEntitySystem extends BaseSystem {
 	@Override
 	protected void processSystem() {
 
-		Set<Entity> entities = bodyManager.getBuffs();
+		Set<Entity> entities = bodyManager.getEntities();
 		if (Gdx.input.justTouched()) {
 			getCurrentClickEntity(entities);
 		} else if (draggedEntityId >= 0) {

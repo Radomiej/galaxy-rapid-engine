@@ -11,14 +11,9 @@ import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import galaxy.rapid.downloader.exceptions.CanNotStartDownload;
 
 public class AsynAdvenceDownloader {
-	Logger logger = LoggerFactory.getLogger(AsynAdvenceDownloader.class);
-	   
 	private final int INTERVAL_BETWEEN_UPDATE = 1000;
 	private DownloadListener downloadListener;
 	private DownloadInfo downloadInfo;
@@ -31,15 +26,11 @@ public class AsynAdvenceDownloader {
 		this.downloadListener = downloadListener;
 		this.downloadInfo = new DownloadInfo();
 		this.url = linkToResource;
-		logger.info("Utworzono Downloader dla URL: " + linkToResource.toString());
 	}
 
 	public void startDownload() throws CanNotStartDownload {
-		logger.info("Rozpoczynam pobieranie ");
 		final File tempFile = createTempFile();
 		downloadInfo.setLenght(DownloadUtils.tryGetFileSize(url));
-		
-
 		
 		Thread thread = new Thread(new Runnable() {			
 			@Override
@@ -63,20 +54,19 @@ public class AsynAdvenceDownloader {
 		
 	}
 
-	private void downloadFile(final File tempFile){
-		logger.info("run pobieranie ");
+	private void downloadFile(final File downloadedFile){
 		BufferedOutputStream out = null;
 		BufferedInputStream in = null;
 		try {
 			in = new BufferedInputStream(url.openStream());
-			out = new BufferedOutputStream(new FileOutputStream(tempFile));
+			out = new BufferedOutputStream(new FileOutputStream(downloadedFile));
 			byte data[] = new byte[1024];
 			int count;			
 			
 			while ((count = in.read(data, 0, 1024)) != -1) {
 				
 				out.write(data, 0, count);
-				downloadInfo.addDownloadedData(count);
+				downloadInfo.addDownloadedData(count);				
 			}
 			
 		} catch (IOException e) {
