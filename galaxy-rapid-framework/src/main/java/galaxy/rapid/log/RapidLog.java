@@ -1,4 +1,4 @@
-package galaxy.rapid.common;
+package galaxy.rapid.log;
 
 public class RapidLog {
 	@SuppressWarnings("rawtypes")
@@ -15,7 +15,10 @@ public class RapidLog {
 	public void info(String message) {
 		System.out.println("info: " + clazz.getName() + " : " + message);
 	}
-	
+
+	public void error(String message) {
+		System.err.println("error: " + clazz.getName() + " : " + message);
+	}
 	
 	@Deprecated
 	public static void debug(Class clazz, String message) {
@@ -25,4 +28,5 @@ public class RapidLog {
 	public static void info(Class clazz, String message) {
 		System.out.println("info: " + clazz.getName() + " : " + message);
 	}
+
 }

@@ -1,5 +1,6 @@
 package galaxy.rapid.asset;
 
+import java.awt.image.VolatileImage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -18,9 +19,9 @@ import com.esotericsoftware.spine.SkeletonJson;
 public enum RapidAsset {
 	INSTANCE;
 
-	private AssetManager manager;
+	private volatile AssetManager manager;
 	private Map<String, SpineAssetModel> spineMap = new HashMap<String, SpineAssetModel>(10);
-	ExecutorService executor = Executors.newFixedThreadPool(1);
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 	
 	private RapidAsset() {
 		manager = new AssetManager(new RapidFileHandleResolver());
@@ -32,7 +33,7 @@ public enum RapidAsset {
 	}
 
 	public void loadPredefinedSpine(final String spineOldUID, final String skinName) {
-		executor.submit(new Runnable() {			
+		executor.execute(new Runnable() {			
 			@Override
 			public void run() {
 				if (spineMap.containsKey(skinName)) {
@@ -51,16 +52,14 @@ public enum RapidAsset {
 
 	public void loadSpine(final String spineSaveName, final String spineJson, final String spineAtlas, final float scale) {
 		manager.load(spineAtlas, TextureAtlas.class);
-		
-		executor.submit(new Runnable() {			
+		executor.execute(new Runnable() {			
 			@Override
 			public void run() {
-				System.out.println("Czekam na atlas");
-				manager.finishLoadingAsset(spineAtlas);
-				System.out.println("Lece skoksem");
+				while(!manager.isLoaded(spineAtlas)){					
+					Thread.yield();
+				}
 				TextureAtlas atlas = manager.get(spineAtlas);
 				
-//				TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(spineAtlas));
 				SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON
 				json.setScale(scale); 
 				SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(spineJson));

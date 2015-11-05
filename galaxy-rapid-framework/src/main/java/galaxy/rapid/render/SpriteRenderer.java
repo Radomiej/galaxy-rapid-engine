@@ -20,12 +20,12 @@ public enum SpriteRenderer implements Renderer {
 		SpriteComponent spriteComponent = spriteMapper.get(e);
 		Sprite sprite = spriteComponent.getSprite();
 		
-		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getCurrentScale();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
-		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getDefaultScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getDefaultScale();
+		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getDefaultScale();
 		
 		sprite.setPosition(posX, posY);
 		sprite.setSize(sizeX, sizeY);

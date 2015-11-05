@@ -35,10 +35,10 @@ public enum SpineRenderer implements Renderer {
 
 		skeleton.setFlipX(render.isFlipX());
 		
-		float halfSizeX = (body.getSize().x / 2) * RapidConfiguration.INSTANCE.getCurrentScale();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float halfSizeY = (body.getSize().y / 2) * RapidConfiguration.INSTANCE.getCurrentScale();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float halfSizeX = (body.getSize().x / 2) * RapidConfiguration.INSTANCE.getDefaultScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float halfSizeY = (body.getSize().y / 2) * RapidConfiguration.INSTANCE.getDefaultScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getDefaultScale();
 		
 		skeleton.setPosition(posX + halfSizeX, posY + halfSizeY);
 //		skeleton.setBonesToSetupPose();

@@ -30,23 +30,44 @@ public class JsonRapidScene {
 	}
 
 	private void buildStageActors() {
-		for(JsonNode parent : root.getNodes()){
-			Actor parenActor = master.getActors().get(parent.name);	
+		for (JsonNode parent : root.getNodes()) {
+			Actor parenActor = master.getActors().get(parent.name);
 			ComponentType componentType = parent.type;
 			List<JsonNode> childrens = master.getChildrens(parent);
-			for(JsonNode child : childrens){
-                            Actor actor = null;
-                            if(child != null) actor = master.getActors().get(child.name);
-                            componentType.addActor(parenActor, actor, child);				
+			for (JsonNode child : childrens) {
+				if (child != null) System.out.println("Dodaje do: " + parent.name + " dziecko: " + child.name);
+				else  System.out.println("Dodaje do: " + parent.name + " dziecko: " + "ROW");
+				
+				Actor actor = null;
+				if (child != null){
+					actor = master.getActors().get(child.name);
+				}
+				componentType.addActor(parenActor, actor, child);
 			}
 		}
 	}
 
 	private void createActors() {
 		for (JsonNode node : root.getNodes()) {
+			node.name = node.name.trim();
+			node.name = node.name.replaceAll("\t", "");
+			node.name = node.name.replaceAll("\n", "");
+			node.name = node.name.replaceAll(" ", "");
+			System.out.println("Tworze obiekt: " + node.name);
+			if(master.getNodes().containsValue(node)) {
+				System.err.println("Wykryto powtorzenie sie obiektu: " + node.name);
+			}
+			for(String children : node.childrens){
+				System.out.println("dziecko: " + children);
+			}
+			
+			
+			
 			ComponentType componentType = node.type;
-			Actor actor = componentType.createActor(node);
+			Actor actor = componentType.createActor(node);			
 			master.put(node, actor);
+			
+			
 		}
 	}
 

@@ -1,10 +1,14 @@
 package galaxy.radpid.run;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.VisUI;
 
 import galaxy.radpid.configuration.RapidConfig;
@@ -16,35 +20,17 @@ public class RapidApp extends ApplicationAdapter {
 	private ScreenNavigator screenNavigator;
 	private Screen startScreen;
 
-	private String skinAssetName;
-	private RapidConfig rapidConfig;
-
-	public RapidApp(Screen startScreen) {
-		this(startScreen, new RapidConfig());
-	}
-
-	@Deprecated
-	public RapidApp(Screen startScreen, String skinName) {
-		this.startScreen = startScreen;
-		RapidConfig rapidConfig = new RapidConfig();
-		rapidConfig.skinAsset = skinName;
-		this.rapidConfig = rapidConfig;
-	}
-	
-	public RapidApp(Screen startScreen, RapidConfig config) {
-		this.startScreen = startScreen;
-		this.rapidConfig = config;
-	}
+	public RapidApp(Screen startScreen) {		
+		this.startScreen = startScreen;		
+		
+	}	
 
 	@Override
 	public void create() {
-		
-		if(RapidConfiguration.INSTANCE.load(rapidConfig)){
-			Gdx.app.log("Configuration", "Apply configuration object");
-		}
-		
-		if (skinAssetName != null){
-			VisUI.load(Gdx.files.internal(skinAssetName));
+		RapidConfiguration.INSTANCE.load();
+		RapidConfig rapidConfig = RapidConfiguration.INSTANCE.getRapidConfig();		
+		if (rapidConfig.skinAsset != null){
+			VisUI.load(Gdx.files.internal(rapidConfig.skinAsset));
 		}
 		else{
 			VisUI.load();

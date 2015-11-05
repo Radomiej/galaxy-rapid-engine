@@ -8,7 +8,8 @@ public class RapidInput {
 	
 	static public int getX(){
 		int realX = Gdx.input.getX();
-		return realX;
+		float scale = Gdx.graphics.getWidth() / 1024;
+		return (int) (realX * scale);
 	}
 	
 	static public int getY(){

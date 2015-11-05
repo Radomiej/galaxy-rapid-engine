@@ -8,6 +8,10 @@ import com.artemis.Component;
 public class ComponentsBag {
 	private Set<Component> components;
 	
+	public ComponentsBag() {
+		components = new HashSet<Component>();
+	}
+	
 	public ComponentsBag(Component... componentsTab) {
 		components = new HashSet<Component>();		
 		for(Component component : componentsTab){

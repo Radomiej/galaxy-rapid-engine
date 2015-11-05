@@ -36,11 +36,11 @@ public class RapidFileHandleResolver implements FileHandleResolver {
 
 	private FileHandle getFromExternal(String fileName) {
 		FileHandle file = null;
-		file = Gdx.files.internal(fileName);		
+		file = Gdx.files.external("assets" + File.separator + fileName);		
 		if(file.exists()) return file;
 		System.out.println("Brak pliku w: " + file.path());
 		
-		file = Gdx.files.internal(RapidConfiguration.INSTANCE.getAppName() + File.separator + fileName);
+		file = Gdx.files.external(RapidConfiguration.INSTANCE.getAppName() + File.separator  + "assets" + File.separator + fileName);
 		if(file.exists()) return file;
 		System.out.println("Brak pliku w: " + file.path());
 		

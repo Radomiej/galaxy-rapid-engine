@@ -2,7 +2,9 @@ package galaxy.rapid.scene2d.json;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisImageButton;
@@ -23,13 +25,14 @@ public enum ComponentType {
 
 		@Override
 		public void addActor(Actor actor, Actor children, JsonNode childrenNode) {
-			System.out.println("Dodaje aktora do tabeli");
+//			System.out.println("Dodaje aktora do tabeli");
 			Table table = (Table) actor;
-			if (children == null) {
+			if (children == null) {	
 				table.row();
 				return;
 			}
-			table.add(children);
+			Cell<Actor> cell = table.add(children);
+			celling(cell, childrenNode);
 		}
 	},
 	TEXT_AREA {
@@ -46,6 +49,7 @@ public enum ComponentType {
 	BUTTON {
 		@Override
 		public Actor createActor(JsonNode node) {
+//			System.out.println("Tworze: " + this.name() + " text: " + node.text);
 			return new VisTextButton(node.text);
 		}
 
@@ -91,6 +95,18 @@ public enum ComponentType {
 	};
 
 	public abstract Actor createActor(JsonNode node);
+
+	protected void celling(Cell<Actor> cell, JsonNode childrenNode) {
+		if(childrenNode.colspan >= 0){
+			cell.colspan(childrenNode.colspan);
+		}
+		if(childrenNode.expandX > 0 || childrenNode.expandY > 0){
+			cell.expand(childrenNode.expandX, childrenNode.expandY);
+		}
+		if(childrenNode.fillX > 0 || childrenNode.fillY > 0){
+			cell.fill(childrenNode.fillX, childrenNode.fillY);
+		}
+	}
 
 	public abstract void addActor(Actor parent, Actor children, JsonNode childrenNode);
 }

@@ -24,12 +24,12 @@ public enum ShapeRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		if(body == null) return;
 		
-		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getCurrentScale();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getCurrentScale();
-		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getCurrentScale();
-		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getCurrentScale();
+		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getDefaultScale();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getDefaultScale();
+		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getDefaultScale();
+		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getDefaultScale();
 		
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Line);
