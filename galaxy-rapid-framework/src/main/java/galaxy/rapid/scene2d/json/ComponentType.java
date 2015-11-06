@@ -3,6 +3,8 @@ package galaxy.rapid.scene2d.json;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
@@ -14,6 +16,8 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 
+import galaxy.rapid.asset.RapidAsset;
+import galaxy.rapid.common.DrawableHelper;
 import galaxy.rapid.ui.RapidStage;
 
 public enum ComponentType {
@@ -35,10 +39,47 @@ public enum ComponentType {
 			celling(cell, childrenNode);
 		}
 	},
+	STACK {
+		@Override
+		public Actor createActor(JsonNode node) {
+			return new Stack();
+		}
+
+		@Override
+		public void addActor(Actor actor, Actor children, JsonNode childrenNode) {
+			Stack table = (Stack) actor;
+			if (children == null) {	
+				return;
+			}
+			table.add(actor);
+		}
+	},
+	IMAGE {
+		@Override
+		public Actor createActor(JsonNode node) {
+			return new Image(RapidAsset.INSTANCE.getTexture(node.imageAsset));
+		}
+
+		@Override
+		public void addActor(Actor actor, Actor children, JsonNode childrenNode) {
+			throw new NotAllowedOperation("Cannot add actor to this component: " + this.name());
+		}
+	},
 	TEXT_AREA {
 		@Override
 		public Actor createActor(JsonNode node) {
 			return new VisTextArea(node.text);
+		}
+
+		@Override
+		public void addActor(Actor actor, Actor children, JsonNode childrenNode) {
+			throw new NotAllowedOperation("Cannot add actor to this component: " + this.name());
+		}
+	},
+	IMAGE_BUTTON {
+		@Override
+		public Actor createActor(JsonNode node) {
+			return new VisImageButton(DrawableHelper.getDrawableFromTexture(node.imageAsset));
 		}
 
 		@Override

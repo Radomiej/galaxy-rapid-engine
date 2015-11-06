@@ -38,6 +38,7 @@ public class RapidMultiAssetDownloader {
 	private AtomicInteger loadingCounter = new AtomicInteger(0);
 	private int maximumCounter;
 	private boolean complete;
+	private double speed;
 	
 	public RapidMultiAssetDownloader() {
 		textUrls = RapidConfiguration.INSTANCE.getAssetsUrls();
@@ -52,6 +53,7 @@ public class RapidMultiAssetDownloader {
 					RapidAssetDownloader downloader = new RapidAssetDownloader(url);
 					downloader.startDownload();
 					while(!downloader.isComplete()){
+						speed = downloader.getSpeed();
 						Thread.yield();
 					}
 					decramentCounter();
@@ -75,10 +77,15 @@ public class RapidMultiAssetDownloader {
 	}
 	
 	public boolean isComplete() {
+		if(maximumCounter == 0) return true;
 		return complete;
 	}
 	
 	public float getProgress(){
 		return 1 - loadingCounter.get() / (float)maximumCounter;
+	}
+
+	public int getSpeed() {
+		return (int) speed;
 	}
 }

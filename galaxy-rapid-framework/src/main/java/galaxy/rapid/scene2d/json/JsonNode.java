@@ -17,6 +17,7 @@ public class JsonNode {
 	public float min = 0;
 	public boolean checked;
 	public float value;
+	public String imageAsset;
 	
 	//Pozycjonowanie
 	public JsonAlign align = JsonAlign.CENTER;
@@ -34,5 +35,6 @@ public class JsonNode {
 	public float spaceLeft = -1;
 	public float spaceBottom = -1;
 	public float spaceRight = -1;
+	
 	
 }

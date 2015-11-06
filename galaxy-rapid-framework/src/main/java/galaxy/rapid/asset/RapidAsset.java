@@ -22,9 +22,11 @@ public enum RapidAsset {
 	private volatile AssetManager manager;
 	private Map<String, SpineAssetModel> spineMap = new HashMap<String, SpineAssetModel>(10);
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private RapidFileHandleResolver handleResolver;
 	
 	private RapidAsset() {
-		manager = new AssetManager(new RapidFileHandleResolver());
+		handleResolver = new RapidFileHandleResolver();
+		manager = new AssetManager(handleResolver);
 		executor = Executors.newFixedThreadPool(1);
 	}
 
@@ -62,7 +64,8 @@ public enum RapidAsset {
 				
 				SkeletonJson json = new SkeletonJson(atlas); // This loads skeleton JSON
 				json.setScale(scale); 
-				SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(spineJson));
+				
+				SkeletonData skeletonData = json.readSkeletonData(handleResolver.resolve(spineJson));
 				
 				Skeleton skeleton = new Skeleton(skeletonData); 
 				AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines
