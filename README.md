@@ -28,7 +28,7 @@ Install Gradle:
 
 
 ```
-#!json
+#!gradle
 
 allprojects {
     apply plugin: "eclipse"
