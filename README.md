@@ -1,3 +1,5 @@
+Current version **0.0.1-SNAPSHOT**
+
 Project is under **Apache License 2.0**
 
 Install Maven:
