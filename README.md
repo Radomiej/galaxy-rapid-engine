@@ -52,3 +52,12 @@ allprojects {
 }
 
 ```
+
+
+```
+#!gradle
+
+compile "galaxy-rapid-framework:galaxy-rapid-framework:$galaxyRapidVersion"
+compile "JGNL:JGNL:0.0.1-SNAPSHOT"
+
+```
