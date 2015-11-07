@@ -3,6 +3,7 @@ package galaxy.rapid.render;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
@@ -16,7 +17,7 @@ public enum SpineRenderer implements Renderer {
 	INSTANCE;
 
 	private SkeletonRenderer renderer;
-
+	
 	private SpineRenderer() {
 		renderer = new SkeletonRenderer();
 		renderer.setPremultipliedAlpha(true);
@@ -49,7 +50,8 @@ public enum SpineRenderer implements Renderer {
 		state.update(e.getWorld().getDelta());
 		state.apply(skeleton);
 		skeleton.updateWorldTransform();
-		renderer.draw(batch, skeleton);
+
+		renderer.draw((PolygonSpriteBatch)batch, skeleton);
 	}
 
 }

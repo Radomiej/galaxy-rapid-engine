@@ -1,6 +1,7 @@
 package galaxy.rapid.components;
 
 import com.artemis.Component;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import galaxy.rapid.common.RenderBody;
@@ -8,10 +9,11 @@ import galaxy.rapid.common.RenderOffset;
 
 public class RenderComponent extends Component {
 	// TODO zrobi wsparcie do foramtowania spritów
-	private RenderOffset wOffset = RenderOffset.CENTER;
-	private RenderOffset hOffset = RenderOffset.CENTER;
+	private RenderOffset widthOffset = RenderOffset.CENTER;
+	private RenderOffset heightOffset = RenderOffset.CENTER;
 	private Vector2 cornerPosition = new Vector2();
 	private RenderBody renderBody;
+	private Color color;
 	private boolean flipX, flipY;
 
 	private int layer;
@@ -60,4 +62,29 @@ public class RenderComponent extends Component {
 	public void setFlipY(boolean flipY) {
 		this.flipY = flipY;
 	}
+
+	public RenderOffset getWidthOffset() {
+		return widthOffset;
+	}
+
+	public void setWidthOffset(RenderOffset widthOffset) {
+		this.widthOffset = widthOffset;
+	}
+
+	public RenderOffset getHeightOffset() {
+		return heightOffset;
+	}
+
+	public void setHeightOffset(RenderOffset heightOffset) {
+		this.heightOffset = heightOffset;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 }

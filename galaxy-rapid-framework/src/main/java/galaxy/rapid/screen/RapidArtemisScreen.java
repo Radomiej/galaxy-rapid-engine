@@ -6,10 +6,13 @@ import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
 import galaxy.radpid.configuration.RapidConfiguration;
+import galaxy.rapid.managers.RenderableManager;
+import galaxy.rapid.systems.RenderSystem;
 import galaxy.rapid.systems.TickEventSystem;
 
 public abstract class RapidArtemisScreen extends RapidScreen {
@@ -19,7 +22,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 	protected World world;
 	protected InputMultiplexer inputMultiplexer;
 	protected OrthographicCamera camera;
-	protected SpriteBatch spriteBatch;
+	protected PolygonSpriteBatch spriteBatch;
 
 	public void render(float delta) {
 		world.setDelta(MathUtils.clamp(delta, 0, MIN_DELTA));
@@ -44,20 +47,27 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		camera.update();
 
 		inputMultiplexer = (InputMultiplexer) Gdx.input.getInputProcessor();
-		spriteBatch = new SpriteBatch();
+		spriteBatch = new PolygonSpriteBatch();
 
-		WorldConfiguration worldConfiguration = new WorldConfiguration();		
-		worldConfiguration.setSystem(GroupManager.class);				
+		WorldConfiguration worldConfiguration = new WorldConfiguration();	
+		processBeforeWorldConfiguration(worldConfiguration);		
+		worldConfiguration.setSystem(GroupManager.class);	
+		worldConfiguration.setSystem(RenderableManager.class);	
+		worldConfiguration.setSystem(TickEventSystem.class);
+		worldConfiguration.setSystem(new RenderSystem());
 		worldConfiguration.register(camera);
 		worldConfiguration.register(inputMultiplexer);
 		worldConfiguration.register(spriteBatch);
 		worldConfiguration.register(eventBus);		
 		processWorldConfiguration(worldConfiguration);
-		worldConfiguration.setSystem(TickEventSystem.class);
+		
 		
 		world = new World(worldConfiguration);
 		injectWorld(world);
 	}	
+
+	protected void processBeforeWorldConfiguration(WorldConfiguration worldConfiguration) {
+	}
 
 	protected abstract void processWorldConfiguration(WorldConfiguration worldConfiguration);
 

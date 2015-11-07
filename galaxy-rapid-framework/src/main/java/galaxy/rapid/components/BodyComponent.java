@@ -26,6 +26,10 @@ public class BodyComponent extends Component {
 		origin = new Vector2(originX, originY);
 	}
 
+	public BodyComponent(BodyComponent body) {
+		this(body.getPosition().x, body.getPosition().y, body.getSize().x, body.getSize().y, body.getOrigin().x, body.getOrigin().y);
+	}
+
 	public Vector2 getPosition() {
 		return position;
 	}

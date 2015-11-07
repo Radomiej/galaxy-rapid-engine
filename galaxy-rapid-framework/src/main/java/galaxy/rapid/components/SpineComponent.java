@@ -31,7 +31,7 @@ public class SpineComponent extends Component {
 		return state;
 	}
 
-	public void setState(AnimationState state) {
+	public void setAnimationState(AnimationState state) {
 		this.state = state;
 	}
 }

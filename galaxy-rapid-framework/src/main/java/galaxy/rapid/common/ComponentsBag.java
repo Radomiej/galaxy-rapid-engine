@@ -6,7 +6,7 @@ import java.util.Set;
 import com.artemis.Component;
 
 public class ComponentsBag {
-	private Set<Component> components;
+	private HashSet<Component> components;
 	
 	public ComponentsBag() {
 		components = new HashSet<Component>();
@@ -29,7 +29,7 @@ public class ComponentsBag {
 		return components;
 	}
 
-	public void setComponents(Set<Component> components) {
+	public void setComponents(HashSet<Component> components) {
 		this.components = components;
 	}
 }

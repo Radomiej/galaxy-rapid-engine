@@ -8,7 +8,30 @@
 	<properties>
 		<targetJdk>1.6</targetJdk>
 	</properties>
-	<dependencies>		
+
+	<distributionManagement>
+		<repository>
+			<id>silver-maven-ftp</id>
+			<url>ftp://serwer1557980.home.pl/maven</url>
+		</repository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>maven-repo</id>
+			<name>SilverRepo</name>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<!-- distributionManagement url was <url>git:your-branch://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url> -->
+			<url>https://api.bitbucket.org/1.0/repositories/radomiej/maven-repo/raw/snapshots</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
 		<dependency>
 			<groupId>net.mostlyoriginal.artemis-odb</groupId>
 			<artifactId>contrib-core</artifactId>
@@ -182,5 +205,12 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-7</version>
+			</extension>
+		</extensions>
 	</build>
 </project>
