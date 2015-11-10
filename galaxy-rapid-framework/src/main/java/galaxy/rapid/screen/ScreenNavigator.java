@@ -4,20 +4,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Screen;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
+
+import galaxy.rapid.eventbus.RapidBus;
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class ScreenNavigator {
 
 	private Screen currentScreen;
 	private Map<Class<? extends Screen>, Screen> activeOldScreens;
-	private EventBus eventBus;
+	private RapidBus eventBus;
 
 	public ScreenNavigator(Screen startScreen) {
-		this(startScreen, new EventBus("GlobalAppNavigator"));
+		this(startScreen, new RapidBus("GlobalAppNavigator"));
 	}
 	
-	public ScreenNavigator(Screen startScreen, EventBus eventBus) {
+	public ScreenNavigator(Screen startScreen, RapidBus eventBus) {
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
 		activeOldScreens = new HashMap<Class<? extends Screen>, Screen>();
@@ -26,6 +27,7 @@ public class ScreenNavigator {
 
 	public void updateCurrentScreen(float delta) {
 		currentScreen.render(delta);
+		eventBus.process();
 	}
 
 	private void createCurrentScreenView() {

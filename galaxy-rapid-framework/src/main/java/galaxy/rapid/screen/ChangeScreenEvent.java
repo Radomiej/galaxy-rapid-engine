@@ -2,7 +2,9 @@ package galaxy.rapid.screen;
 
 import com.badlogic.gdx.Screen;
 
-public final class ChangeScreenEvent {
+import net.mostlyoriginal.api.event.common.Event;
+
+public final class ChangeScreenEvent implements Event{
 	private Screen newScene;
 	private boolean disposeCurrent;
 

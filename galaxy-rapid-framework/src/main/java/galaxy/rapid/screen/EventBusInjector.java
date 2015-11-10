@@ -1,7 +1,7 @@
 package galaxy.rapid.screen;
 
-import com.google.common.eventbus.EventBus;
+import galaxy.rapid.eventbus.RapidBus;
 
 public interface EventBusInjector {
-	public void injectEventBus(EventBus globalEventBus);
+	public void injectEventBus(RapidBus globalEventBus);
 }

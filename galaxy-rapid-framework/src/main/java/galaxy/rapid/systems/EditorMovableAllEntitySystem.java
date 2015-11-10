@@ -10,12 +10,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.google.common.eventbus.EventBus;
 
 import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.event.ClickEmptySpace;
 import galaxy.rapid.event.SelectEntityEvent;
 import galaxy.rapid.event.UpdateEntityEvent;
+import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.BodyManager;
 
 public class EditorMovableAllEntitySystem extends BaseSystem {
@@ -26,7 +26,7 @@ public class EditorMovableAllEntitySystem extends BaseSystem {
 	@Wire
 	private SpriteBatch spriteBatch;
 	@Wire
-	private EventBus eventBus;
+	private RapidBus eventBus;
 
 	private int draggedEntityId = -1;
 

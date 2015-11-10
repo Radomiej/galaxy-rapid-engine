@@ -7,14 +7,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.google.common.eventbus.EventBus;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
+
+import galaxy.rapid.eventbus.RapidBus;
 
 public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 	private boolean initialize = false;
 	private Actor actor;
-	private EventBus eventBus;
+	private RapidBus eventBus;
 	private Stage stage;
 	private Table table;
 	private Screen nextScene;
@@ -41,7 +42,7 @@ public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 		table = new VisTable();
 	}
 
-	private void setup(EventBus eventBus) {
+	private void setup(RapidBus eventBus) {
 		table.setPosition(stage.getViewport().getScreenWidth() / 2 - table.getWidth() / 2,
 				stage.getViewport().getScreenHeight() / 2 - table.getHeight() / 2);
 		stage.addActor(table);
@@ -89,7 +90,7 @@ public abstract class RapidLoadingScreen implements Screen, EventBusInjector {
 		stage.dispose();
 	}
 
-	public void injectEventBus(EventBus globalEventBus) {
+	public void injectEventBus(RapidBus globalEventBus) {
 		this.eventBus = globalEventBus;
 	}
 

@@ -2,7 +2,9 @@ package galaxy.rapid.event;
 
 import com.artemis.Entity;
 
-public class SelectEntityEvent {
+import net.mostlyoriginal.api.event.common.Event;
+
+public class SelectEntityEvent implements Event{
 	private Entity clickEntity;
 
 	public Entity getClickEntity() {

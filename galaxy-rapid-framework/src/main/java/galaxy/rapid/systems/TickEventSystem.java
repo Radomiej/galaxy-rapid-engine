@@ -6,17 +6,16 @@ import java.util.List;
 
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
-import com.google.common.collect.ImmutableList;
-import com.google.common.eventbus.EventBus;
 
 import galaxy.rapid.common.TickEvent;
+import galaxy.rapid.eventbus.RapidBus;
 
 public class TickEventSystem extends BaseSystem {
 
 	private List<TickEvent> tickets;
 
 	@Wire
-	private EventBus eventBus;
+	private RapidBus eventBus;
 
 	@Override
 	protected void initialize() {
@@ -25,7 +24,7 @@ public class TickEventSystem extends BaseSystem {
 
 	@Override
 	protected void processSystem() {
-		ImmutableList<TickEvent> immutableTickets = ImmutableList.copyOf(tickets);
+		List<TickEvent> immutableTickets = new ArrayList<TickEvent>(tickets);
 		for (TickEvent tick : immutableTickets) {
 			decramentTimeToInvoke(tick);
 			if (tick.getInvokeTime() <= 0) {

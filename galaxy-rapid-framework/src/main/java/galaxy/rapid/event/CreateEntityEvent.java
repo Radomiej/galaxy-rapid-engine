@@ -1,8 +1,9 @@
 package galaxy.rapid.event;
 
 import galaxy.rapid.common.ComponentsBag;
+import net.mostlyoriginal.api.event.common.Event;
 
-public class CreateEntityEvent {
+public class CreateEntityEvent implements Event{
 	private ComponentsBag componentsBag;
 
 	public CreateEntityEvent(ComponentsBag componentsBag) {

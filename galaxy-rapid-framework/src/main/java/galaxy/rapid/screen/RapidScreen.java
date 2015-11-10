@@ -1,12 +1,13 @@
 package galaxy.rapid.screen;
 
 import com.badlogic.gdx.Screen;
-import com.google.common.eventbus.EventBus;
+
+import galaxy.rapid.eventbus.RapidBus;
 
 public abstract class RapidScreen implements Screen, EventBusInjector {
 	private boolean initialize = false;
 
-	protected EventBus eventBus;
+	protected RapidBus eventBus;
 
 	public void show() {
 		if (!initialize) {
@@ -29,7 +30,7 @@ public abstract class RapidScreen implements Screen, EventBusInjector {
 	public void resize(int width, int height) {
 	}
 
-	public void injectEventBus(EventBus globalEventBus) {
+	public void injectEventBus(RapidBus globalEventBus) {
 		eventBus = globalEventBus;
 	}
 	

@@ -1,5 +1,7 @@
 package galaxy.rapid.event;
 
-public class ClickEmptySpace {
+import net.mostlyoriginal.api.event.common.Event;
+
+public class ClickEmptySpace implements Event{
 
 }
