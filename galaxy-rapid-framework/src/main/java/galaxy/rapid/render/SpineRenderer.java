@@ -8,10 +8,10 @@ import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 
-import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.SpineComponent;
+import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum SpineRenderer implements Renderer {
 	INSTANCE;
@@ -36,10 +36,10 @@ public enum SpineRenderer implements Renderer {
 
 		skeleton.setFlipX(render.isFlipX());
 		
-		float halfSizeX = (body.getSize().x / 2) * RapidConfiguration.INSTANCE.getDefaultScale();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getDefaultScale();
-		float halfSizeY = (body.getSize().y / 2) * RapidConfiguration.INSTANCE.getDefaultScale();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getDefaultScale();
+		float halfSizeX = (body.getSize().x / 2) * RapidConfiguration.INSTANCE.getGameRatio();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
+		float halfSizeY = (body.getSize().y / 2) * RapidConfiguration.INSTANCE.getGameRatio();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
 		
 		skeleton.setPosition(posX + halfSizeX, posY + halfSizeY);
 //		skeleton.setBonesToSetupPose();

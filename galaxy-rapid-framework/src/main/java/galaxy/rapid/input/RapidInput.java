@@ -1,8 +1,8 @@
-package galaxy.radpid.input;
+package galaxy.rapid.input;
 
 import com.badlogic.gdx.Gdx;
 
-import galaxy.radpid.configuration.RapidConfiguration;
+import galaxy.rapid.configuration.RapidConfiguration;
 
 public class RapidInput {
 	

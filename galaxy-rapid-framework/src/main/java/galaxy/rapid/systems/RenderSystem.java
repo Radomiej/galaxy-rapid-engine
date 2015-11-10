@@ -33,11 +33,6 @@ public class RenderSystem extends BaseSystem {
 	private OrthographicCamera camera;
 
 	@Override
-	protected void initialize() {
-		polygonBatch = new PolygonSpriteBatch();
-	}
-	
-	@Override
 	protected void begin() {
 		polygonBatch.setProjectionMatrix(camera.combined);
 		polygonBatch.begin();

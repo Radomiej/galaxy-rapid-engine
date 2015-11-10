@@ -9,7 +9,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 
-import galaxy.radpid.configuration.RapidConfiguration;
+import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.downloader.AsynAdvenceDownloader;
 import galaxy.rapid.downloader.DownloadInfo;
 import galaxy.rapid.downloader.DownloadListener;

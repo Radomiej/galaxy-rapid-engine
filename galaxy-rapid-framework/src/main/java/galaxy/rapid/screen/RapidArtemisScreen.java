@@ -3,6 +3,7 @@ package galaxy.rapid.screen;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.managers.GroupManager;
+import com.artemis.managers.UuidEntityManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
-import galaxy.radpid.configuration.RapidConfiguration;
+import galaxy.rapid.common.EntityEngine;
+import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.systems.RenderSystem;
 import galaxy.rapid.systems.TickEventSystem;
@@ -19,7 +21,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 
 	public static final float MIN_DELTA = 1 / 15f;
 
-	protected World world;
+	protected EntityEngine world;
 	protected InputMultiplexer inputMultiplexer;
 	protected OrthographicCamera camera;
 	protected PolygonSpriteBatch spriteBatch;
@@ -50,7 +52,8 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		spriteBatch = new PolygonSpriteBatch();
 
 		WorldConfiguration worldConfiguration = new WorldConfiguration();	
-		processBeforeWorldConfiguration(worldConfiguration);		
+		processBeforeWorldConfiguration(worldConfiguration);	
+		worldConfiguration.setSystem(UuidEntityManager.class);
 		worldConfiguration.setSystem(GroupManager.class);	
 		worldConfiguration.setSystem(RenderableManager.class);	
 		worldConfiguration.setSystem(TickEventSystem.class);
@@ -62,7 +65,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		processWorldConfiguration(worldConfiguration);
 		
 		
-		world = new World(worldConfiguration);
+		world = new EntityEngine(worldConfiguration);
 		injectWorld(world);
 	}	
 
@@ -71,6 +74,6 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 
 	protected abstract void processWorldConfiguration(WorldConfiguration worldConfiguration);
 
-	protected abstract void injectWorld(World world);
+	protected abstract void injectWorld(EntityEngine world);
 
 }

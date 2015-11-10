@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-import galaxy.radpid.configuration.RapidConfiguration;
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.BodyComponent;
+import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum ShapeRenderer implements Renderer {
 	INSTANCE;
@@ -24,12 +24,12 @@ public enum ShapeRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		if(body == null) return;
 		
-		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getDefaultScale();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getDefaultScale();
-		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getDefaultScale();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getDefaultScale();
-		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getDefaultScale();
-		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getDefaultScale();
+		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getGameRatio();
+		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
+		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getGameRatio();
+		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
+		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getGameRatio();
+		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getGameRatio();
 		
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Line);

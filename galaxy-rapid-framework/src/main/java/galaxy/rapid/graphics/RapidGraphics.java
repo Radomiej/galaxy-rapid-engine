@@ -1,6 +1,6 @@
-package galaxy.radpid.graphics;
+package galaxy.rapid.graphics;
 
-import galaxy.radpid.configuration.RapidConfiguration;
+import galaxy.rapid.configuration.RapidConfiguration;
 
 public class RapidGraphics {
 

@@ -1,4 +1,4 @@
-package galaxy.radpid.run;
+package galaxy.rapid.run;
 
 import java.util.ArrayList;
 
@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.VisUI;
 
-import galaxy.radpid.configuration.RapidConfig;
-import galaxy.radpid.configuration.RapidConfiguration;
+import galaxy.rapid.configuration.RapidConfig;
+import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.screen.ScreenNavigator;
 
 public class RapidApp extends ApplicationAdapter {

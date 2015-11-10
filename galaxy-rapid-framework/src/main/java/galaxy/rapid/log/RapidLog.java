@@ -16,6 +16,10 @@ public class RapidLog {
 		System.out.println("info: " + clazz.getName() + " : " + message);
 	}
 
+	public void warn(String message) {
+		System.err.println("warn: " + clazz.getName() + " : " + message);
+	}
+
 	public void error(String message) {
 		System.err.println("error: " + clazz.getName() + " : " + message);
 	}

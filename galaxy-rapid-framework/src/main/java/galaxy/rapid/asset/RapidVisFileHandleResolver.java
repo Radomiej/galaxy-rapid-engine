@@ -8,26 +8,33 @@ import com.badlogic.gdx.files.FileHandle;
 
 import galaxy.rapid.configuration.RapidConfiguration;
 
-public class RapidFileHandleResolver implements FileHandleResolver {
+public class RapidVisFileHandleResolver implements FileHandleResolver {
 	public FileHandle resolve(String fileName) {
+		System.out.println("Filename: " + fileName);
 		FileHandle file = null;
 		try {
 			file = getFromExternal(fileName);
 			if(file.exists()) return file;
-//			System.out.println("Brak pliku w pobranych");
+			System.out.println("Brak pliku w pobranych");
 			
 			file = Gdx.files.internal(fileName);
 			if(file.exists()) return file;
-//			System.out.println("Brak internal");
+			System.out.println("Brak internal");
+			file = Gdx.files.internal("vis/" + fileName);
+			if(file.exists()) return file;
+			System.out.println("Brak vis internal");
 			file = Gdx.files.local(fileName);
 			if(file.exists()) return file;			
-//			System.out.println("Brak lokalnego");			
+			System.out.println("Brak lokalnego");	
+			file = Gdx.files.local("vis/" + fileName);
+			if(file.exists()) return file;			
+			System.out.println("Brak vis lokalnego");	
 			file = Gdx.files.absolute(fileName);
 			if(file.exists()) return file;
-//			System.out.println("Brak absolute");	
+			System.out.println("Brak absolute");	
 			
 		} catch (Exception e) {
-//			System.out.println("Catch get native fileHandler");
+			System.out.println("Catch get native fileHandler");
 			file = new FileHandle(fileName);
 			return file;
 		}
@@ -38,11 +45,11 @@ public class RapidFileHandleResolver implements FileHandleResolver {
 		FileHandle file = null;
 		file = Gdx.files.external("assets" + File.separator + fileName);		
 		if(file.exists()) return file;
-//		System.out.println("Brak pliku w: " + file.path());
+		System.out.println("Brak pliku w: " + file.path());
 		
 		file = Gdx.files.external(RapidConfiguration.INSTANCE.getAppName() + File.separator  + "assets" + File.separator + fileName);
 		if(file.exists()) return file;
-//		System.out.println("Brak pliku w: " + file.path());
+		System.out.println("Brak pliku w: " + file.path());
 		
 		return file;
 	}

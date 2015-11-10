@@ -30,7 +30,7 @@ public class CreateEntitySystem extends BaseSystem {
 	
 	@Subscribe
 	public void entityCreateEventListener(CreateEntityEvent createEntityEvent){		
-		new EntityBuilder(world).with(createEntityEvent.getComponentsBag().getComponentsLikeTab()).build();
+		new EntityBuilder(world).with(createEntityEvent.getComponentsBag().getComponentsTab()).build();
 	}
 
 }
