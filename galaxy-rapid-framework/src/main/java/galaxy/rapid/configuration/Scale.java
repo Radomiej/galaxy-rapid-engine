@@ -1,13 +1,13 @@
 package galaxy.rapid.configuration;
 
 public enum Scale {
-	HD(2) {
+	HD(1) {
 		@Override
 		public int getDefaultWidth() {
 			return 2048;
 		}
 	},
-	SD(1) {
+	SD(0.5f) {
 		@Override
 		public int getDefaultWidth() {
 			return 1024;
@@ -19,7 +19,7 @@ public enum Scale {
 			return 960;
 		}
 	},
-	TINY(0.41667f) {
+	TINY(0.3125f) {
 		@Override
 		public int getDefaultWidth() {
 			return 640;

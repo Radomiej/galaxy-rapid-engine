@@ -18,30 +18,35 @@
 
 	<repositories>
 		<repository>
-			<id>maven-repo</id>
-			<name>SilverRepo</name>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<!-- distributionManagement url was <url>git:your-branch://git@bitbucket.org:yourbitbucketusername/your-bitbucket-repo.git</url> -->
-			<url>https://api.bitbucket.org/1.0/repositories/radomiej/maven-repo/raw/snapshots</url>
+			<id>artemis-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 	</repositories>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>silver-reflection</groupId>
+			<artifactId>silver-reflection</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>galaxy.rapid</groupId>
+			<artifactId>galaxy-rapid-network</artifactId>
+			<version>0.5</version>
+		</dependency>
 		<dependency>
 			<groupId>net.mostlyoriginal.artemis-odb</groupId>
 			<artifactId>contrib-core</artifactId>
 			<version>1.1.0</version>
 		</dependency>
+	
 		<dependency>
 			<groupId>net.mostlyoriginal.artemis-odb</groupId>
 			<artifactId>contrib-eventbus</artifactId>
 			<version>1.1.0</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>net.lingala.zip4j</groupId>
 			<artifactId>zip4j</artifactId>
@@ -57,6 +62,7 @@
 			<artifactId>vis-ui</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-ai</artifactId>
@@ -65,7 +71,7 @@
 		<dependency>
 			<groupId>spine-libgdx-external</groupId>
 			<artifactId>spine-libgdx-external</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>

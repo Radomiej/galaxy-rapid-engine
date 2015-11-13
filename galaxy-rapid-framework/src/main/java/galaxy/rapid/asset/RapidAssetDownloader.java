@@ -15,13 +15,9 @@ import galaxy.rapid.downloader.DownloadInfo;
 import galaxy.rapid.downloader.DownloadListener;
 import galaxy.rapid.downloader.DownloadUtils;
 import galaxy.rapid.downloader.exceptions.CanNotStartDownload;
-import galaxy.rapid.log.RapidLog;
-import galaxy.rapid.log.RapidLogFactory;
 import galaxy.rapid.unzip.Unzipp;
 
 public class RapidAssetDownloader {
-	private static RapidLog logger = RapidLogFactory.getLogger(RapidAssetDownloader.class);
-	
 	private static final String DOWNLOAD_HISTORY_NAME = "downloadHistory";
 	private URL url = null;
 	private double progress;
@@ -43,7 +39,7 @@ public class RapidAssetDownloader {
 		try {
 			url = new URL("http://www." + assetsUrl);
 		} catch (MalformedURLException e1) {
-			logger.error("Cannot parse url: " + assetsUrl);
+			Gdx.app.error(RapidAssetDownloader.class.getSimpleName(), "Cannot parse url: " + assetsUrl);
 			e1.printStackTrace();
 		}
 	}

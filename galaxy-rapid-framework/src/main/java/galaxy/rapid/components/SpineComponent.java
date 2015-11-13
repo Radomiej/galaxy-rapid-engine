@@ -14,8 +14,8 @@ public class SpineComponent extends Component {
 	}
 
 	public SpineComponent(SpineAssetModel spine) {
-		skeleton = new Skeleton(spine.getSkeleton());
-		state = new AnimationState(spine.getAnimationStateData());
+		skeleton = spine.getSkeleton();
+		state = spine.getAnimationState();
 
 	}
 

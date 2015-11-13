@@ -1,30 +1,24 @@
 package galaxy.rapid.asset;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import galaxy.rapid.log.RapidLog;
-import galaxy.rapid.log.RapidLogFactory;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class MultiTextureAtlas {
-	private static RapidLog logger = RapidLogFactory.getLogger(MultiTextureAtlas.class);
-	String symbolicName;
-	String fullName;
+	private String fullName;
 	
-	AtomicInteger end = new AtomicInteger();
-	Set<TextureAtlas> atlases = new HashSet<TextureAtlas>();
-	ExecutorService executor = Executors.newFixedThreadPool(1);
+	private Set<String> atlases = new HashSet<String>();
+	private Set<String> assetsInAtlases = new HashSet<String>();
+	private AssetManager manager;
 	/**
 	 * 
 	 * @param fullName this is name in format [atlas-simple-name][scale-name]
@@ -34,24 +28,14 @@ public class MultiTextureAtlas {
 	}
 	
 	public void findAllAtlas(FileHandleResolver fileHandleResolver, final AssetManager manager){
+		this.manager = manager;
 		int startIndex = 0;
 		while(true){
 			final String searchAtlas = fullName + startIndex + ".atlas";
 			FileHandle fileAtlas = fileHandleResolver.resolve(searchAtlas);
 			if(fileAtlas.exists()){
-				end.incrementAndGet();
+				atlases.add(searchAtlas);
 				manager.load(searchAtlas, TextureAtlas.class);
-				executor.execute(new Runnable() {
-					@Override
-					public void run() {
-						while (!manager.isLoaded(searchAtlas)) {
-							Thread.yield();
-						}
-						atlases.add(manager.get(searchAtlas, TextureAtlas.class));
-						end.decrementAndGet();
-						logger.info(fullName + " dodaje do mapy atlas: " + searchAtlas);
-					}
-				});
 				startIndex++;
 			}	
 			else{
@@ -61,20 +45,26 @@ public class MultiTextureAtlas {
 	}
 	
 	public Sprite getSprite(String regionName){
-		while(end.get() != 0){
-			Thread.yield();
-		}
-		for(TextureAtlas atlas : atlases){
+		for(String atlasName : atlases){
+			TextureAtlas atlas = manager.get(atlasName);
 			if(atlas.findRegion(regionName) != null){
-				logger.info("Znaleziono texture: " + regionName + " w " + atlas.toString());
+				Gdx.app.log("ScreenNavigator" , "Znaleziono texture: " + regionName + " w " + atlas.toString());
 				return atlas.createSprite(regionName);
 			}
 		}
 		return null;		
 	}
 
-	public boolean loadingComplete() {
-		return end.get() == 0;
+	public void signAllAssets(Map<String, Sprite> spriteMap) {
+		for(String atlasName : atlases){
+			TextureAtlas atlas = manager.get(atlasName);
+			Array<AtlasRegion> regions = atlas.getRegions();
+			for(AtlasRegion region : regions){
+				String spriteName = region.name;
+				System.out.println("Region: " + spriteName);
+				assetsInAtlases.add(spriteName);
+				spriteMap.put(spriteName, atlas.createSprite(spriteName));
+			}
+		}
 	}
-
 }

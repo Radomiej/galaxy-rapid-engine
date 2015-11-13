@@ -5,6 +5,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.BodyComponent;
@@ -12,11 +13,10 @@ import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum EmptyRenderer implements Renderer {
 	INSTANCE;
-	private Sprite withoutEntitySprite;
+	private com.badlogic.gdx.graphics.glutils.ShapeRenderer shapeRenderer;
 
 	private EmptyRenderer() {
-		Texture textureWithoutEntity = RapidAsset.INSTANCE.getTexture("asset/emptyEntity.png");
-		withoutEntitySprite = new Sprite(textureWithoutEntity);
+		shapeRenderer = new com.badlogic.gdx.graphics.glutils.ShapeRenderer();
 	}
 
 	public void render(Entity e, Batch batch) {
@@ -24,19 +24,23 @@ public enum EmptyRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		if(body == null) return;
 		
-		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getGameRatio();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
-		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getGameRatio();
+//		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getGameRatio();
+//		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
+//		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getGameRatio();
+//		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
+//		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getGameRatio();
+//		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getGameRatio();
+		float sizeX = body.getSize().x;
+		float posX = body.getPosition().x;
+		float sizeY = body.getSize().y ;
+		float posY = body.getPosition().y ;
+		float originX = body.getOrigin().x ;
+		float originY = body.getOrigin().y;
 		
-		withoutEntitySprite.setPosition(posX, posY);
-		withoutEntitySprite.setSize(sizeX, sizeY);
-		withoutEntitySprite.setOrigin(originX, originY);
-		withoutEntitySprite.setRotation(body.getRotation());
-		withoutEntitySprite.draw(batch);
-
+		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.rect(posX, posY, originX, originY, sizeX, sizeY, 1, 1, body.getRotation());
+		shapeRenderer.end();
 	}
 
 }

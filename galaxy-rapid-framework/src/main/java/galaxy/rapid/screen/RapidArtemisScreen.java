@@ -15,7 +15,6 @@ import galaxy.rapid.common.EntityEngine;
 import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
-import galaxy.rapid.systems.RapidEventBusSystem;
 import galaxy.rapid.systems.RenderSystem;
 import galaxy.rapid.systems.TickEventSystem;
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -67,8 +66,6 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		worldConfiguration.register(spriteBatch);
 			
 		processWorldConfiguration(worldConfiguration);
-		
-		worldConfiguration.setSystem(RapidEventBusSystem.class);
 		
 		world = new EntityEngine(worldConfiguration);
 		injectWorld(world);

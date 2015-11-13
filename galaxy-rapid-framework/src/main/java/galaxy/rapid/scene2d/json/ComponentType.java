@@ -1,14 +1,11 @@
 package galaxy.rapid.scene2d.json;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
@@ -18,7 +15,6 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.common.DrawableHelper;
-import galaxy.rapid.ui.RapidStage;
 
 public enum ComponentType {
 	TABLE {
@@ -57,7 +53,7 @@ public enum ComponentType {
 	IMAGE {
 		@Override
 		public Actor createActor(JsonNode node) {
-			return new Image(RapidAsset.INSTANCE.getTexture(node.imageAsset));
+			return new Image(RapidAsset.INSTANCE.getSprite(node.imageAsset));
 		}
 
 		@Override
@@ -79,7 +75,7 @@ public enum ComponentType {
 	IMAGE_BUTTON {
 		@Override
 		public Actor createActor(JsonNode node) {
-			return new VisImageButton(DrawableHelper.getDrawableFromTexture(node.imageAsset));
+			return new VisImageButton(DrawableHelper.getDrawableFromAsset(node.imageAsset));
 		}
 
 		@Override

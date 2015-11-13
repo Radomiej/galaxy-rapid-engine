@@ -1,14 +1,11 @@
 package galaxy.rapid.asset;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
 
-public class SpineAssetModel
-{
+public class SpineAssetModel {
 	private Skeleton skeleton;
-	private AnimationStateData animationStateData;
-	private TextureAtlas textureAtlas;
+	private AnimationState animationState;
 
 	public Skeleton getSkeleton() {
 		return skeleton;
@@ -18,20 +15,12 @@ public class SpineAssetModel
 		this.skeleton = skeleton;
 	}
 
-	public AnimationStateData getAnimationStateData() {
-		return animationStateData;
+	public AnimationState getAnimationState() {
+		return animationState;
 	}
 
-	public void setAnimationStateData(AnimationStateData animationStateData) {
-		this.animationStateData = animationStateData;
-	}	
-
-	TextureAtlas getTextureAtlas() {
-		return textureAtlas;
-	}
-
-	void setTextureAtlas(TextureAtlas textureAtlas) {
-		this.textureAtlas = textureAtlas;
+	public void setAnimationState(AnimationState animationState) {
+		this.animationState = animationState;
 	}
 
 }

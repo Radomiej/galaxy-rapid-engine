@@ -24,12 +24,18 @@ public enum ShapeRenderer implements Renderer {
 		BodyComponent body = bodyMapper.get(e);
 		if(body == null) return;
 		
-		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getGameRatio();
-		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
-		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getGameRatio();
+//		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getGameRatio();
+//		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
+//		float sizeY = body.getSize().y * RapidConfiguration.INSTANCE.getGameRatio();
+//		float posY = body.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
+//		float originX = body.getOrigin().x * RapidConfiguration.INSTANCE.getGameRatio();
+//		float originY = body.getOrigin().y * RapidConfiguration.INSTANCE.getGameRatio();
+		float sizeX = body.getSize().x;
+		float posX = body.getPosition().x;
+		float sizeY = body.getSize().y ;
+		float posY = body.getPosition().y ;
+		float originX = body.getOrigin().x ;
+		float originY = body.getOrigin().y;
 		
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.begin(ShapeType.Line);

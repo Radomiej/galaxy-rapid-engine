@@ -54,6 +54,7 @@ public class RenderSystem extends BaseSystem {
 		} else if(spineMapper.has(e)){
 			return SpineRenderer.INSTANCE;
 		}else{
+			System.out.println("EMPTY renderer");
 			return EmptyRenderer.INSTANCE;
 		}		
 	}

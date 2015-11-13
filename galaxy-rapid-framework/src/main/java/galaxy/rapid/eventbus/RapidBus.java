@@ -24,12 +24,8 @@ public class RapidBus {
 		eventSystem.registerEvents(registerObject);
 	}
 
-	// TODO for feature upragdes
+	// TODO for feature upragdes and old event bus compatibility
 	public void unregister(Object createEntitySystem) {
 
-	}
-
-	public void process() {
-		eventSystem.process();
 	}
 }

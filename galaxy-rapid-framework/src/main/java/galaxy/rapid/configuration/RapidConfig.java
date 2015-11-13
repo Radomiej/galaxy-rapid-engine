@@ -9,6 +9,6 @@ public class RapidConfig {
 	public boolean multipleAsset = true;
 	public boolean debugMode;
 	public String skinAsset;
-	public int defaultAssetScale = 2;
+	public int defaultAssetScale = 1;
 	public List<String> remoteAssetsUrl = new ArrayList<String>();
 }

@@ -7,14 +7,11 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
-
-import galaxy.rapid.log.RapidLog;
-import galaxy.rapid.log.RapidLogFactory;
+import com.badlogic.gdx.utils.SerializationException;
 
 public enum RapidConfiguration {
 	INSTANCE;
 
-	private RapidLog logger = RapidLogFactory.getLogger(RapidConfiguration.class);
 	private final String CONFIG_ASSET = "static/configuration/rapid.properties";
 	private final int default_width = 1024;
 	private float heightRatio = 1;
@@ -38,19 +35,25 @@ public enum RapidConfiguration {
 		heightRatio = h / w;
 
 		scale = Scale.getByWidth(w);
-		System.out.println("Device scale: " + scale.name());
+		Gdx.app.log("Config" , "Device scale" + scale.name());
 
 		gameRatio = scale.getDefaultWidth() / (float) default_width;
-		System.out.println("Game ratio: " + gameRatio);
+		
+		Gdx.app.log("Config" , "Game ratio: " + gameRatio);
 	}
 
 	private void loadRapidConfiguration() {
 		Json json = new Json();
 		FileHandle jsonFile = Gdx.files.internal(CONFIG_ASSET);
-
-		rapidConfig = json.fromJson(RapidConfig.class, jsonFile);
-		if(rapidConfig == null){
-			logger.error("Configuration file not exist in: " + CONFIG_ASSET);
+		if (jsonFile.exists()) {
+			try {
+				rapidConfig = json.fromJson(RapidConfig.class, jsonFile);
+			} catch (SerializationException e) {
+				Gdx.app.error("Config" , "Cannot deserialize RapidCofig, please check this file in: " + CONFIG_ASSET, e);
+			}
+		}else{
+			Gdx.app.error("Config" , "Configuration file not exist in: " + CONFIG_ASSET);
+			rapidConfig = new RapidConfig();
 		}
 	}
 
