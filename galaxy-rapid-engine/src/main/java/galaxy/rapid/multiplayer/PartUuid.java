@@ -3,30 +3,34 @@ package galaxy.rapid.multiplayer;
 import java.util.UUID;
 
 public class PartUuid {
-	private Long mostSignBit = 0l;
-	private Long lestSignBit = 0l;
+	private Long mostSignBits = 0l;
+	private Long lestSignBits = 0l;
 
 	public PartUuid() {
 	}
 
 	public PartUuid(UUID uuidFromEntity) {
-		mostSignBit = uuidFromEntity.getMostSignificantBits();
-		lestSignBit = uuidFromEntity.getLeastSignificantBits();
+		mostSignBits = uuidFromEntity.getMostSignificantBits();
+		lestSignBits = uuidFromEntity.getLeastSignificantBits();
 	}
 
 	public Long getLestSignBit() {
-		return lestSignBit;
+		return lestSignBits;
 	}
 
 	public void setLestSignBit(Long lestSignBit) {
-		this.lestSignBit = lestSignBit;
+		this.lestSignBits = lestSignBit;
 	}
 
 	public Long getMostSignBit() {
-		return mostSignBit;
+		return mostSignBits;
 	}
 
 	public void setMostSignBit(Long mostSignBit) {
-		this.mostSignBit = mostSignBit;
+		this.mostSignBits = mostSignBit;
+	}
+
+	public UUID getUuid() {
+		return new UUID(mostSignBits, lestSignBits);
 	}
 }

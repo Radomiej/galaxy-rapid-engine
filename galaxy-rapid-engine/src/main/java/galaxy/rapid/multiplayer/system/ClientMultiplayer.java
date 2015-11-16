@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.minlog.Log;
 
 import galaxy.rapid.common.ComponentsBag;
+import galaxy.rapid.components.KeyboardComponent;
+import galaxy.rapid.multiplayer.ControllerObject;
 import galaxy.rapid.multiplayer.JsonGameComponent;
 import galaxy.rapid.multiplayer.PartUuid;
 import pl.silver.JGNL.JGNLClient;
@@ -30,13 +32,15 @@ public class ClientMultiplayer extends BaseSystem {
 	private Json json;
 	private UUID clientPlayerUuid;
 
+	private JGNLClient client;
+	
 	private List<JsonGameComponent> incomingEntities = Collections.synchronizedList(new ArrayList<JsonGameComponent>());
 
 	@Override
 	protected void initialize() {
 		Log.set(Log.LEVEL_ERROR);
 		json = new Json();
-		JGNLClient client = new JGNLClient();
+		client = new JGNLClient();
 		try {
 			client.connect("ra-studio.ddns.net", Network.portTCP, Network.portUDP);
 		} catch (IOException e) {
@@ -66,6 +70,10 @@ public class ClientMultiplayer extends BaseSystem {
 
 	@Override
 	protected void processSystem() {
+		processReciveEvent();
+	}
+
+	private void processReciveEvent() {
 		List<JsonGameComponent> incomingEvents = new ArrayList<JsonGameComponent>(incomingEntities);
 		incomingEntities.clear();
 		
@@ -75,6 +83,7 @@ public class ClientMultiplayer extends BaseSystem {
 
 			ComponentsBag bag = object.getComponents();
 			if (e == null) {
+				System.out.println("Create entity uuid: " + uuid);
 				new EntityBuilder(world).with(bag.getComponentsTab()).UUID(uuid).build();
 			} else {
 
@@ -93,5 +102,13 @@ public class ClientMultiplayer extends BaseSystem {
 
 	public UUID getPlayerUuid() {
 		return clientPlayerUuid;
+	}
+
+	public void sendControllerComponent(KeyboardComponent keyboardComponent) {
+		ControllerObject controllerObject = new ControllerObject();
+		controllerObject.setKeyboardComponent(keyboardComponent);
+		controllerObject.setPartUuid(new PartUuid(clientPlayerUuid));
+		System.out.println("Sending input state");
+		client.sendEvent(controllerObject);
 	}
 }
