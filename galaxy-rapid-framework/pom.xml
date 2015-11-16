@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>galaxy.rapid</groupId>
-	<artifactId>galaxy-rapid-framework</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<artifactId>galaxy-rapid-engine</artifactId>
+	<version>0.2.1-SNAPSHOT</version>
 
 	<properties>
 		<targetJdk>1.6</targetJdk>
@@ -26,57 +26,69 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>silver-reflection</groupId>
-			<artifactId>silver-reflection</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>galaxy.rapid</groupId>
 			<artifactId>galaxy-rapid-network</artifactId>
 			<version>0.5</version>
+			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>net.onedaybeard.artemis</groupId>
+			<artifactId>artemis-odb</artifactId>
+			<version>1.2.0</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>net.mostlyoriginal.artemis-odb</groupId>
 			<artifactId>contrib-core</artifactId>
 			<version>1.1.0</version>
+			<scope>provided</scope>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>net.mostlyoriginal.artemis-odb</groupId>
 			<artifactId>contrib-eventbus</artifactId>
 			<version>1.1.0</version>
+			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.lingala.zip4j</groupId>
 			<artifactId>zip4j</artifactId>
 			<version>1.3.2</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
 			<version>1.7.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.kotcrab.vis</groupId>
 			<artifactId>vis-ui</artifactId>
 			<version>0.9.1</version>
+			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-ai</artifactId>
 			<version>1.6.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>spine-libgdx-external</groupId>
 			<artifactId>spine-libgdx-external</artifactId>
 			<version>1.0.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-box2d</artifactId>
 			<version>1.7.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

@@ -4,6 +4,7 @@ import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 
@@ -34,12 +35,14 @@ public class RenderSystem extends BaseSystem {
 
 	@Override
 	protected void begin() {
+		Gdx.app.log("RenderSystem", "begin");
 		polygonBatch.setProjectionMatrix(camera.combined);
 		polygonBatch.begin();
 	}
 
 	@Override
 	protected void processSystem() {
+		Gdx.app.log("RenderSystem", "process");
 		for (Entity e : renderableManager.getRendererObjects()) {
 			Renderer renderer = getRendererForEntity(e);
 			renderer.render(e, polygonBatch);			
@@ -61,6 +64,7 @@ public class RenderSystem extends BaseSystem {
 
 	@Override
 	protected void end() {
+		Gdx.app.log("RenderSystem", "end");
 		polygonBatch.end();
 	}
 

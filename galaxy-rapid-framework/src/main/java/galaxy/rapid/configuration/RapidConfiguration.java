@@ -90,6 +90,7 @@ public enum RapidConfiguration {
 	}
 
 	public boolean isDebugMode() {
+		if(rapidConfig == null) return true;
 		return rapidConfig.debugMode;
 	}
 
