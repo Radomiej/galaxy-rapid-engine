@@ -1,6 +1,8 @@
-Current version **0.0.1-SNAPSHOT**
+Current version **0.2.1**
 
 Project is under **Apache License 2.0**
+
+Go to wiki for more info.
 
 Install Maven:
 
@@ -18,7 +20,7 @@ Install Maven:
 	<dependency>
 		<groupId>galaxy-rapid-framework</groupId>
 	        <artifactId>galaxy-rapid-framework</artifactId>
-	        <version>0.0.1-SNAPSHOT</version>
+	        <version>0.2.1</version>
 	</dependency>
 </dependencies>
 ```
@@ -38,7 +40,7 @@ allprojects {
         appName = 'HelloEnglish'
         gdxVersion = '1.7.0'
         roboVMVersion = '1.9.0'
-		galaxyRapidVersion = '0.0.1-SNAPSHOT'
+	galaxyRapidVersion = '0.2.1'
     }
 
     repositories {
@@ -55,5 +57,4 @@ allprojects {
 
 ```gradle
 compile "galaxy-rapid-framework:galaxy-rapid-framework:$galaxyRapidVersion"
-
 ```
