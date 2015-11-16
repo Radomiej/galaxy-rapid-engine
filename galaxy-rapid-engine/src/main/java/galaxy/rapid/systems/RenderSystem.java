@@ -35,14 +35,12 @@ public class RenderSystem extends BaseSystem {
 
 	@Override
 	protected void begin() {
-		Gdx.app.log("RenderSystem", "begin");
 		polygonBatch.setProjectionMatrix(camera.combined);
 		polygonBatch.begin();
 	}
 
 	@Override
 	protected void processSystem() {
-		Gdx.app.log("RenderSystem", "process");
 		for (Entity e : renderableManager.getRendererObjects()) {
 			Renderer renderer = getRendererForEntity(e);
 			renderer.render(e, polygonBatch);			
@@ -57,14 +55,12 @@ public class RenderSystem extends BaseSystem {
 		} else if(spineMapper.has(e)){
 			return SpineRenderer.INSTANCE;
 		}else{
-			System.out.println("EMPTY renderer");
 			return EmptyRenderer.INSTANCE;
 		}		
 	}
 
 	@Override
 	protected void end() {
-		Gdx.app.log("RenderSystem", "end");
 		polygonBatch.end();
 	}
 

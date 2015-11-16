@@ -5,6 +5,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.SpriteComponent;
 import galaxy.rapid.configuration.RapidConfiguration;
@@ -18,7 +19,8 @@ public enum SpriteRenderer implements Renderer {
 				
 		BodyComponent body = bodyMapper.get(e);
 		SpriteComponent spriteComponent = spriteMapper.get(e);
-		Sprite sprite = spriteComponent.getSprite();
+		String assetName = spriteComponent.getSpriteAsset();
+		Sprite sprite = RapidAsset.INSTANCE.getSprite(assetName);
 		
 		float sizeX = body.getSize().x * RapidConfiguration.INSTANCE.getGameRatio();
 		float posX = body.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();

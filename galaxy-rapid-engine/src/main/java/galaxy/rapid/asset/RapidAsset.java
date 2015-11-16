@@ -49,15 +49,14 @@ public enum RapidAsset {
 	}
 
 	public Sprite getSprite(String regionName) {
-		Gdx.app.log("RapidAsset" , "get Sprite: " + regionName);
 		return spriteMap.get(regionName);
 	}
 
-	public void loadTextureAtlas(final String spineAtlas) {
-		String atlasFullName = addFullNameAtlas("images", spineAtlas);
+	public void loadTextureAtlas(final String textureAtlasAsset) {
+		String atlasFullName = addFullNameAtlas("images", textureAtlasAsset);
 		MultiTextureAtlas multiTextureAtlas = new MultiTextureAtlas(atlasFullName);
 		multiTextureAtlas.findAllAtlas(handleResolver, manager);
-		atlasMap.put(spineAtlas, multiTextureAtlas);
+		atlasMap.put(textureAtlasAsset, multiTextureAtlas);
 	}
 
 	public SpineAssetModel getSpine(String skeletonAssetName, final String skinName) {
