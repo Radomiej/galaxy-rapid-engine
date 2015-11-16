@@ -5,9 +5,7 @@ Project is under **Apache License 2.0**
 Install Maven:
 
 
-```
-#!maven
-
+```maven
 <repositories>
 	<repository>
 		<id>maven-repo</id>
@@ -29,8 +27,7 @@ Install Maven:
 Install Gradle:
 
 
-```
-#!gradle
+```gradle
 
 allprojects {
     apply plugin: "eclipse"
@@ -46,7 +43,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-		mavenLocal()
+	mavenLocal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "http://maven.ra-studio.ovh/" }
@@ -56,9 +53,7 @@ allprojects {
 ```
 
 
-```
-#!gradle
-
+```gradle
 compile "galaxy-rapid-framework:galaxy-rapid-framework:$galaxyRapidVersion"
 
 ```
