@@ -40,12 +40,12 @@ allprojects {
         appName = 'HelloEnglish'
         gdxVersion = '1.7.0'
         roboVMVersion = '1.9.0'
-	galaxyRapidVersion = '0.2.1'
+        galaxyRapidVersion = '0.2.1'
     }
 
     repositories {
         mavenCentral()
-	mavenLocal()
+        mavenLocal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "http://maven.ra-studio.ovh/" }
