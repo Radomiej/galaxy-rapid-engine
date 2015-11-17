@@ -79,24 +79,40 @@ public class ClientMultiplayer extends BaseSystem {
 		
 		for (JsonGameComponent object : incomingEvents) {
 			UUID uuid = new UUID(object.getMostSignBit(), object.getLestSignBit());
-			Entity e = uuidManager.getEntity(uuid);
+			Entity localEntity = uuidManager.getEntity(uuid);
 
 			ComponentsBag bag = object.getComponents();
-			if (e == null) {
-				System.out.println("Create entity uuid: " + uuid);
+			if (localEntity == null) {
+				System.out.println("Create new local entity, uuid: " + uuid);
 				new EntityBuilder(world).with(bag.getComponentsTab()).UUID(uuid).build();
 			} else {
-
-				for (Component newData : bag.getComponents()) {
-					Component orginal = e.getComponent(newData.getClass());
-					if (orginal == null) {
-						e.edit().add(newData);
-					} else {
-						SilverReflectionUtills.copyProperties(orginal, newData);
-					}
-
+				if(object.isDelete()){
+					System.err.println("Remove entity: " + uuid);
+					world.deleteEntity(localEntity);
+					continue;
 				}
+				addOrCopyComponentsData(localEntity, bag);
+				removeOldComponents(localEntity, object.getRemovedComponents());
+				
 			}
+		}
+	}
+
+	private void removeOldComponents(Entity localEntity, ComponentsBag removedComponents) {
+		for (Component removeComponent : removedComponents.getComponents()) {
+			localEntity.edit().remove(removeComponent.getClass());
+		}
+	}
+
+	private void addOrCopyComponentsData(Entity localEntity, ComponentsBag bag) {
+		for (Component newData : bag.getComponents()) {
+			Component orginal = localEntity.getComponent(newData.getClass());
+			if (orginal == null) {
+				localEntity.edit().add(newData);
+			} else {
+				SilverReflectionUtills.copyProperties(orginal, newData);
+			}
+
 		}
 	}
 
@@ -108,7 +124,7 @@ public class ClientMultiplayer extends BaseSystem {
 		ControllerObject controllerObject = new ControllerObject();
 		controllerObject.setKeyboardComponent(keyboardComponent);
 		controllerObject.setPartUuid(new PartUuid(clientPlayerUuid));
-		System.out.println("Sending input state");
+//		System.out.println("Sending input state");
 		client.sendEvent(controllerObject);
 	}
 }

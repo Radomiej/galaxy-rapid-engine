@@ -8,7 +8,7 @@ import com.artemis.Component;
 import galaxy.rapid.components.BodyComponent;
 
 public class ComponentsBag {
-	private HashSet<Component> components;
+	private Set<Component> components;
 	
 	public ComponentsBag() {
 		components = new HashSet<Component>();
@@ -21,6 +21,10 @@ public class ComponentsBag {
 		}
 	}
 	
+	public ComponentsBag(Set<Component> componentToRemove) {
+		components = componentToRemove;
+	}
+
 	public Component[] getComponentsTab(){
 		Component[] componentsTab = new Component[components.size()];
 		componentsTab = components.toArray(componentsTab);

@@ -1,16 +1,13 @@
 package galaxy.rapid.multiplayer;
 
-import java.util.List;
-import java.util.UUID;
-
-import com.artemis.Component;
-
 import galaxy.rapid.common.ComponentsBag;
 
 public class JsonGameComponent {
 	private Long mostSignBits;
 	private Long lestSignBits;
 	private ComponentsBag components;
+	private ComponentsBag removedComponents;
+	private boolean delete = false;
 
 //	public String getJsonComponents() {
 //		return jsonComponents;
@@ -47,5 +44,21 @@ public class JsonGameComponent {
 
 	public void setComponents(ComponentsBag components) {
 		this.components = components;
+	}
+
+	public ComponentsBag getRemovedComponents() {
+		return removedComponents;
+	}
+
+	public void setRemovedComponents(ComponentsBag removedComponents) {
+		this.removedComponents = removedComponents;
+	}
+
+	public boolean isDelete() {
+		return delete;
+	}
+
+	public void setDelete(boolean delete) {
+		this.delete = delete;
 	}
 }
