@@ -30,6 +30,56 @@ public class BodyComponent extends Component {
 		this(body.getPosition().x, body.getPosition().y, body.getSize().x, body.getSize().y, body.getOrigin().x, body.getOrigin().y);
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
+		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + Float.floatToIntBits(rotation);
+		result = prime * result + ((size == null) ? 0 : size.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		BodyComponent other = (BodyComponent) obj;
+		if (origin == null) {
+			if (other.origin != null) {
+				return false;
+			}
+		} else if (!origin.equals(other.origin)) {
+			return false;
+		}
+		if (position == null) {
+			if (other.position != null) {
+				return false;
+			}
+		} else if (!position.equals(other.position)) {
+			return false;
+		}
+		if (Float.floatToIntBits(rotation) != Float.floatToIntBits(other.rotation)) {
+			return false;
+		}
+		if (size == null) {
+			if (other.size != null) {
+				return false;
+			}
+		} else if (!size.equals(other.size)) {
+			return false;
+		}
+		return true;
+	}
+
 	public Vector2 getPosition() {
 		return position;
 	}

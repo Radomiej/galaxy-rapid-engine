@@ -21,7 +21,9 @@ import galaxy.rapid.multiplayer.ArtemisServerRequestResponser;
 import galaxy.rapid.multiplayer.EntityHelper;
 import galaxy.rapid.multiplayer.JsonGameComponent;
 import galaxy.rapid.multiplayer.PartUuid;
+import galaxy.rapid.multiplayer.server.HashSynchronizedStrategy;
 import galaxy.rapid.multiplayer.server.SimpleSynchronizedStrategy;
+import galaxy.rapid.multiplayer.server.SynchronizedStrategy;
 import net.mostlyoriginal.api.event.common.Subscribe;
 import pl.silver.JGNL.JGNLServer;
 import pl.silver.JGNL.Network;
@@ -34,14 +36,14 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem{
 	private UuidEntityManager uuidManager;
 	
 	private JGNLServer server;
-	private SimpleSynchronizedStrategy synchronizedStrategy;
+	private SynchronizedStrategy synchronizedStrategy;
 	private RequestReciver requestReciver;
 	
 	
 	private ServerMultiplayer() {
 		super(Aspect.all(BodyComponent.class), 1000 / 60f);
 		server = new JGNLServer(); 
-		synchronizedStrategy = new SimpleSynchronizedStrategy(server);
+		synchronizedStrategy = new HashSynchronizedStrategy(server);
 	}
 	
 	public ServerMultiplayer(final ArtemisServerRequestResponser createPlayerReciver) {

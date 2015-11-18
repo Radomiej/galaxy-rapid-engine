@@ -13,7 +13,7 @@ public enum RapidConfiguration {
 	INSTANCE;
 
 	private final String CONFIG_ASSET = "static/configuration/rapid.properties";
-	private final int default_width = 1024;
+	private final int default_width = 2048;
 	private float heightRatio = 1;
 	private float gameRatio = 1;
 

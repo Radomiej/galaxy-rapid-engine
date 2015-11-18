@@ -38,11 +38,13 @@ public class ClientMultiplayer extends BaseSystem {
 
 	@Override
 	protected void initialize() {
-		Log.set(Log.LEVEL_ERROR);
+		Log.set(Log.LEVEL_INFO);
 		json = new Json();
 		client = new JGNLClient();
 		try {
-			client.connect("ra-studio.ddns.net", Network.portTCP, Network.portUDP);
+			client.connect("ns364990.ovh.net", Network.portTCP, Network.portUDP);
+//			client.connect("ra-studio.ddns.net", Network.portTCP, Network.portUDP);
+//			client.connect("192.168.0.101", Network.portTCP, Network.portUDP);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -99,6 +101,7 @@ public class ClientMultiplayer extends BaseSystem {
 	}
 
 	private void removeOldComponents(Entity localEntity, ComponentsBag removedComponents) {
+		if(removedComponents == null) {return;}
 		for (Component removeComponent : removedComponents.getComponents()) {
 			localEntity.edit().remove(removeComponent.getClass());
 		}

@@ -6,6 +6,7 @@ import com.esotericsoftware.spine.Skeleton;
 
 import galaxy.rapid.asset.SpineAssetModel;
 
+//TODO move Client data to external structure
 public class SpineComponent extends Component {
 	private Skeleton skeleton;
 	private AnimationState state;
