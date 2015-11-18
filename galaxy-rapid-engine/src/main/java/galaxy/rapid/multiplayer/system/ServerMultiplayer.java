@@ -42,7 +42,7 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem{
 	
 	
 	private ServerMultiplayer() {
-		super(Aspect.all(BodyComponent.class), 1000 / 60f);
+		super(Aspect.all(BodyComponent.class), 1000 / 30f);
 		server = new JGNLServer(CommonClass.INSTANCE.getCommonsTab()); 
 		synchronizedStrategy = new HashSynchronizedStrategy(server);
 	}

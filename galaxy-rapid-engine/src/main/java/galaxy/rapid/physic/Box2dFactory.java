@@ -13,13 +13,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import galaxy.rapid.components.BodyComponent;
+import galaxy.rapid.components.PositionComponent;
 
 public class Box2dFactory {
 
-	public static Fixture createCircle(World world, BodyComponent bodyComponent) {
+	public static Fixture createCircle(World world, BodyComponent bodyComponent, PositionComponent positionComponent) {
 
 		// Set our body's starting position in the world
-		Vector2 position = new Vector2(bodyComponent.getPosition()).add(bodyComponent.getOrigin());
+		Vector2 position = new Vector2(positionComponent.getPosition());
 
 		Body body = BodyCreator.getBody(position, world);
 		body.setLinearDamping(0.2f);
@@ -79,14 +80,14 @@ public class Box2dFactory {
 		return vectores;
 	}
 
-	public static Fixture createRectangle(World world, BodyComponent bodyComponent) {
+	public static Fixture createRectangle(World world, BodyComponent bodyComponent, PositionComponent positionComponent) {
 		// First we create a body definition
 		BodyDef bodyDef = new BodyDef();
 		// We set our body to dynamic, for something like ground which doesn't
 		// move we would set it to StaticBody
 		bodyDef.type = BodyType.DynamicBody;
 		// Set our body's starting position in the world
-		Vector2 position = new Vector2(bodyComponent.getPosition()).add(bodyComponent.getOrigin());
+		Vector2 position = new Vector2(positionComponent.getPosition());
 		bodyDef.position.set(position);
 
 		// Create our body in the world using our body definition
