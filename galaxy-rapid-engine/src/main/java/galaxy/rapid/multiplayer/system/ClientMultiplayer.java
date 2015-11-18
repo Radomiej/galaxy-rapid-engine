@@ -16,6 +16,7 @@ import com.esotericsoftware.minlog.Log;
 
 import galaxy.rapid.common.ComponentsBag;
 import galaxy.rapid.components.KeyboardComponent;
+import galaxy.rapid.multiplayer.CommonClass;
 import galaxy.rapid.multiplayer.ControllerObject;
 import galaxy.rapid.multiplayer.JsonGameComponent;
 import galaxy.rapid.multiplayer.PartUuid;
@@ -40,11 +41,11 @@ public class ClientMultiplayer extends BaseSystem {
 	protected void initialize() {
 		Log.set(Log.LEVEL_INFO);
 		json = new Json();
-		client = new JGNLClient();
+		client = new JGNLClient(CommonClass.INSTANCE.getCommonsTab());
 		try {
-			client.connect("ns364990.ovh.net", Network.portTCP, Network.portUDP);
+//			client.connect("ns364990.ovh.net", Network.portTCP, Network.portUDP);
 //			client.connect("ra-studio.ddns.net", Network.portTCP, Network.portUDP);
-//			client.connect("192.168.0.101", Network.portTCP, Network.portUDP);
+			client.connect("192.168.0.101", Network.portTCP, Network.portUDP);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

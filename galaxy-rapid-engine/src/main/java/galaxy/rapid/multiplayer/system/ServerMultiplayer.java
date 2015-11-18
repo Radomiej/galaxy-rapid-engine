@@ -18,6 +18,7 @@ import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.event.RemoveEntityEvent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.multiplayer.ArtemisServerRequestResponser;
+import galaxy.rapid.multiplayer.CommonClass;
 import galaxy.rapid.multiplayer.EntityHelper;
 import galaxy.rapid.multiplayer.JsonGameComponent;
 import galaxy.rapid.multiplayer.PartUuid;
@@ -42,7 +43,7 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem{
 	
 	private ServerMultiplayer() {
 		super(Aspect.all(BodyComponent.class), 1000 / 60f);
-		server = new JGNLServer(); 
+		server = new JGNLServer(CommonClass.INSTANCE.getCommonsTab()); 
 		synchronizedStrategy = new HashSynchronizedStrategy(server);
 	}
 	
