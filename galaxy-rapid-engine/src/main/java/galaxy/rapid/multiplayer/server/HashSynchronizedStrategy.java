@@ -53,20 +53,20 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 		HashComponentsValue oldBagValues = entitiesMemory.get(uuid);
 		Set<Component> freshComponents = bag.getComponents();
 
-		Set<Class<? extends Component>> componentsClassToRemove = new HashSet<Class<? extends Component>>(oldBagValues.getComponentClasses());
+		Set<Class<? extends Component>> componentsClassToRemove = new HashSet<Class<? extends Component>>(
+				oldBagValues.getComponentClasses());
 		Set<Component> componentsToUpdate = new HashSet<Component>();
 		Set<Component> componentsToAdd = new HashSet<Component>();
 		// Usun z listy do usuniecia componenty ktore nadal sa
 		// Dodaj je do listy freshComponent
 		for (Component freshComponent : freshComponents) {
 			componentsClassToRemove.remove(freshComponent.getClass());
-			if(oldBagValues.containsComponent(freshComponent)){
-				if(oldBagValues.isFreshComponent(freshComponent)){
+			if (oldBagValues.containsComponent(freshComponent)) {
+				if (oldBagValues.isFreshComponent(freshComponent)) {
 					componentsToUpdate.add(freshComponent);
 					oldBagValues.putComponent(freshComponent);
 				}
-			}
-			else{
+			} else {
 				System.out.println("Nowy komponent: " + freshComponent.getClass().getSimpleName());
 				componentsToAdd.add(freshComponent);
 				oldBagValues.putComponent(freshComponent);
@@ -104,13 +104,30 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 		server.sendUdpEvent(sendUpdateObject);
 	}
 
+	@Override
+	public void sendFullEntity(Entity e) {
+		ComponentsBag bag = EntityHelper.getComponentsFromEntity(e);
+		clearBagFromTransientComponent(bag);
+
+		UUID uuid = UuidHelper.getUuidFromEntity(e);
+
+		JsonGameComponent sendUpdateObject = new JsonGameComponent();
+		sendUpdateObject.setMostSignBit(uuid.getMostSignificantBits());
+		sendUpdateObject.setLestSignBit(uuid.getLeastSignificantBits());
+
+		System.out.println("Wysy³am ca³y obiekt");
+		sendUpdateObject.setComponents(bag);
+		server.sendEvent(sendUpdateObject);
+
+	}
+
 	private void fillHashValueBag(HashComponentsValue hashComponentsBag, Set<Component> components) {
 		for (Component component : components) {
-			if(hashComponentsBag.containsComponent(component)){
-				if(hashComponentsBag.isFreshComponent(component)){
+			if (hashComponentsBag.containsComponent(component)) {
+				if (hashComponentsBag.isFreshComponent(component)) {
 					hashComponentsBag.putComponent(component);
 				}
-			}else{
+			} else {
 				hashComponentsBag.putComponent(component);
 			}
 		}

@@ -34,8 +34,13 @@ public class ClientMultiplayer extends BaseSystem {
 	private UUID clientPlayerUuid;
 
 	private JGNLClient client;
+	private String host;
 	
 	private List<JsonGameComponent> incomingEntities = Collections.synchronizedList(new ArrayList<JsonGameComponent>());
+
+	public ClientMultiplayer(String host) {
+		this.host = host;
+	}
 
 	@Override
 	protected void initialize() {
@@ -45,7 +50,7 @@ public class ClientMultiplayer extends BaseSystem {
 		try {
 //			client.connect("ns364990.ovh.net", Network.portTCP, Network.portUDP);
 //			client.connect("ra-studio.ddns.net", Network.portTCP, Network.portUDP);
-			client.connect("192.168.0.101", Network.portTCP, Network.portUDP);
+			client.connect(host, Network.portTCP, Network.portUDP);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

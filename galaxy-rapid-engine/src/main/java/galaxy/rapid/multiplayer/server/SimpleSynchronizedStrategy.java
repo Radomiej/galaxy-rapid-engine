@@ -15,6 +15,7 @@ import galaxy.rapid.multiplayer.EntityHelper;
 import galaxy.rapid.multiplayer.JsonGameComponent;
 import pl.silver.JGNL.JGNLServer;
 
+@Deprecated
 public class SimpleSynchronizedStrategy implements SynchronizedStrategy{
 
 	private JGNLServer server;
@@ -24,6 +25,12 @@ public class SimpleSynchronizedStrategy implements SynchronizedStrategy{
 		this.server = server2;
 	}
 	
+	@Override
+	public void sendFullEntity(Entity e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void sendEntity(Entity e) {
 		ComponentsBag bag = EntityHelper.getComponentsFromEntity(e);

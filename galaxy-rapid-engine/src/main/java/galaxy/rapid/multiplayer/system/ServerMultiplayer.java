@@ -1,6 +1,7 @@
 package galaxy.rapid.multiplayer.system;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -30,37 +31,37 @@ import pl.silver.JGNL.JGNLServer;
 import pl.silver.JGNL.Network;
 import pl.silver.JGNL.request.RequestReciver;
 
-public class ServerMultiplayer extends IntervalEntityProcessingSystem{
-	
+public class ServerMultiplayer extends IntervalEntityProcessingSystem {
+
 	@Wire
 	private RapidBus eventSystem;
 	private UuidEntityManager uuidManager;
-	
+
 	private JGNLServer server;
 	private SynchronizedStrategy synchronizedStrategy;
 	private RequestReciver requestReciver;
-	
-	
+
+	private AtomicBoolean sendFullEntity = new AtomicBoolean(false);
+
 	private ServerMultiplayer() {
 		super(Aspect.all(BodyComponent.class), 1000 / 30f);
-		server = new JGNLServer(CommonClass.INSTANCE.getCommonsTab()); 
+		server = new JGNLServer(CommonClass.INSTANCE.getCommonsTab());
 		synchronizedStrategy = new HashSynchronizedStrategy(server);
 	}
-	
+
 	public ServerMultiplayer(final ArtemisServerRequestResponser createPlayerReciver) {
 		this();
 		requestReciver = new RequestReciver() {
 			@Override
 			public Object recivedRequest(Connection connection, Object object) {
-				 UUID uuid = createPlayerReciver.proccesNewPlayerJoin((EntityEngine) world);
-				 System.out.println("Send uuid: " + uuid);
-				 return new PartUuid(uuid);
+				UUID uuid = createPlayerReciver.proccesNewPlayerJoin((EntityEngine) world);
+				System.out.println("Send uuid: " + uuid);
+				sendFullEntity.set(true);
+				return new PartUuid(uuid);
 			}
 		};
 	}
 
-	
-	
 	@Override
 	protected void initialize() {
 		Log.set(Log.LEVEL_ERROR);
@@ -69,10 +70,14 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem{
 		server.start(Network.portTCP, Network.portUDP);
 		eventSystem.register(this);
 	}
-	
+
 	@Override
 	protected void process(Entity e) {
-		synchronizedStrategy.sendEntity(e);
+		if (sendFullEntity.compareAndSet(true, false)) {
+			synchronizedStrategy.sendFullEntity(e);
+		} else {
+			synchronizedStrategy.sendEntity(e);
+		}
 	}
 
 	@Subscribe

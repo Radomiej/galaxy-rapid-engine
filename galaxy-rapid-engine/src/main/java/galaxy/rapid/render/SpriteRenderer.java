@@ -46,12 +46,12 @@ public enum SpriteRenderer implements Renderer {
 		posY *= RapidConfiguration.INSTANCE.getGameRatio();
 
 		
-		System.out.println("GR: " + RapidConfiguration.INSTANCE.getGameRatio());
-		
-		System.out.println("position: " + position);
-		System.out.println("posX: " + posX + " posY: " + posY);
-		System.out.println("sizeX: " + sizeX + " sizeY: " + sizeY);
-		System.out.println("originX: " + originX + " originX: " + originX);
+//		System.out.println("GR: " + RapidConfiguration.INSTANCE.getGameRatio());
+//		
+//		System.out.println("position: " + position);
+//		System.out.println("posX: " + posX + " posY: " + posY);
+//		System.out.println("sizeX: " + sizeX + " sizeY: " + sizeY);
+//		System.out.println("originX: " + originX + " originX: " + originX);
 		sprite.setPosition(posX, posY);
 		sprite.setSize(sizeX, sizeY);
 		sprite.setOrigin(originX, originY);
