@@ -24,7 +24,6 @@
 	</repositories>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>galaxy.rapid</groupId>
 			<artifactId>galaxy-rapid-network</artifactId>

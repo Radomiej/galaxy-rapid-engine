@@ -7,6 +7,10 @@ public class PositionComponent extends Component{
 	private Vector2 position;
 	private float rotation;
 
+	public PositionComponent() {
+		position = new Vector2();
+	}
+	
 	public Vector2 getPosition() {
 		return position;
 	}

@@ -11,7 +11,7 @@ public class BodyComponent extends Component {
 	}
 
 	public BodyComponent(float width, float height) {
-		this(width, height, 0, 0);
+		this(width, height, width / 2, height / 2);
 	}
 
 	public BodyComponent(float width, float height, float originX, float originY) {
