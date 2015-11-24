@@ -8,20 +8,49 @@ import com.artemis.Component;
 import galaxy.rapid.components.BodyComponent;
 
 public class ComponentsBag {
-	private HashSet<Component> components;
-	
+	private Set<Component> components;
+
 	public ComponentsBag() {
 		components = new HashSet<Component>();
 	}
-	
+
 	public ComponentsBag(Component... componentsTab) {
-		components = new HashSet<Component>();		
-		for(Component component : componentsTab){
+		components = new HashSet<Component>();
+		for (Component component : componentsTab) {
 			components.add(component);
 		}
 	}
-	
-	public Component[] getComponentsTab(){
+
+	public ComponentsBag(Set<Component> componentToRemove) {
+		components = componentToRemove;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((components == null) ? 0 : components.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ComponentsBag other = (ComponentsBag) obj;
+		if (components == null) {
+			if (other.components != null)
+				return false;
+		} else if (!components.equals(other.components))
+			return false;
+		return true;
+	}
+
+	public Component[] getComponentsTab() {
 		Component[] componentsTab = new Component[components.size()];
 		componentsTab = components.toArray(componentsTab);
 		return componentsTab;
@@ -31,7 +60,7 @@ public class ComponentsBag {
 		return components;
 	}
 
-	public void setComponents(HashSet<Component> components) {
+	public void setComponents(Set<Component> components) {
 		this.components = components;
 	}
 

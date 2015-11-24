@@ -19,10 +19,10 @@ public enum Scale {
 			return 960;
 		}
 	},
-	TINY(0.3125f) {
+	TINY(0.40039f) {
 		@Override
 		public int getDefaultWidth() {
-			return 640;
+			return 820;
 		}
 	};
 
@@ -45,7 +45,7 @@ public enum Scale {
 			return Scale.HD;
 		} else if (w >= 992) {
 			return Scale.SD;
-		} else if (w >= 800) {
+		} else if (w >= 890) {
 			return Scale.SMALL;
 		}
 		return Scale.TINY;

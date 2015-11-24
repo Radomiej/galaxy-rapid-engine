@@ -12,6 +12,7 @@ import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.common.DrawableHelper;
@@ -112,6 +113,17 @@ public enum ComponentType {
 		@Override
 		public Actor createActor(JsonNode node) {
 			return new VisCheckBox(node.text, node.checked);
+		}
+
+		@Override
+		public void addActor(Actor actor, Actor children, JsonNode childrenNode) {
+			throw new NotAllowedOperation("Cannot add actor to this component: " + this.name());
+		}
+	},
+	TEXT_FIELD {
+		@Override
+		public Actor createActor(JsonNode node) {
+			return new VisTextField(node.text);
 		}
 
 		@Override

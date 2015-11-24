@@ -5,7 +5,9 @@ import com.artemis.Component;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
-public class Box2dComponent extends Component {
+import galaxy.rapid.components.marker.TransientNetworkElement;
+
+public class Box2dComponent extends Component implements TransientNetworkElement{
 	private transient Body body;
 	private transient Fixture fixture;
 
