@@ -17,6 +17,7 @@ import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.systems.DeleteEventSystem;
 import galaxy.rapid.systems.RenderSystem;
+import galaxy.rapid.systems.SpriteBodyToBodySystem;
 import galaxy.rapid.systems.TickEventSystem;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
@@ -59,6 +60,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		worldConfiguration.setSystem(RenderableManager.class);	
 		worldConfiguration.setSystem(TickEventSystem.class);
 		worldConfiguration.setSystem(DeleteEventSystem.class);
+		worldConfiguration.setSystem(SpriteBodyToBodySystem.class);
 		worldConfiguration.setSystem(new RenderSystem());
 		worldConfiguration.register(new RapidBus());	
 		worldConfiguration.register(camera);
