@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class JsonRapidScene {
@@ -61,18 +62,19 @@ public class JsonRapidScene {
 				System.out.println("dziecko: " + children);
 			}
 			
-			
-			
 			ComponentType componentType = node.type;
 			Actor actor = componentType.createActor(node);			
 			master.put(node, actor);
-			
 			
 		}
 	}
 
 	public Stage getStage() {
 		return stage;
+	}
+
+	public Actor getActor(String string) {
+		return master.getActors().get(string);
 	}
 
 }

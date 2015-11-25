@@ -22,5 +22,8 @@
 	<extend-configuration-property name="gdx.reflect.include" value="galaxy.rapid.managers" />
 	<extend-configuration-property name="gdx.reflect.include" value="galaxy.rapid.common" />
 	
-	<source path="" />
+	<source path='' >
+    <exclude name="**/multiplayer/**" />
+    <exclude name="**/downloader/**" />
+</source>
 </module>

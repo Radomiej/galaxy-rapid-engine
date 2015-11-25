@@ -1,16 +1,13 @@
 package galaxy.rapid.multiplayer;
 
-import java.util.List;
-import java.util.UUID;
-
-import com.artemis.Component;
-
 import galaxy.rapid.common.ComponentsBag;
 
 public class JsonGameComponent {
-	private Long mostSignBit;
-	private Long lestSignBit;
+	private Long mostSignBits;
+	private Long lestSignBits;
 	private ComponentsBag components;
+	private ComponentsBag removedComponents;
+	private boolean delete = false;
 
 //	public String getJsonComponents() {
 //		return jsonComponents;
@@ -22,23 +19,23 @@ public class JsonGameComponent {
 	
 	@Override
 	public String toString() {
-		return "uuid: " + mostSignBit.byteValue() + " | " + lestSignBit.byteValue();
+		return "uuid: " + mostSignBits.byteValue() + " | " + lestSignBits.byteValue();
 	}
 
 	public long getMostSignBit() {
-		return mostSignBit;
+		return mostSignBits;
 	}
 
 	public void setMostSignBit(long mostSignBit) {
-		this.mostSignBit = mostSignBit;
+		this.mostSignBits = mostSignBit;
 	}
 
 	public long getLestSignBit() {
-		return lestSignBit;
+		return lestSignBits;
 	}
 
 	public void setLestSignBit(long lestSignBit) {
-		this.lestSignBit = lestSignBit;
+		this.lestSignBits = lestSignBit;
 	}
 
 	public ComponentsBag getComponents() {
@@ -47,5 +44,21 @@ public class JsonGameComponent {
 
 	public void setComponents(ComponentsBag components) {
 		this.components = components;
+	}
+
+	public ComponentsBag getRemovedComponents() {
+		return removedComponents;
+	}
+
+	public void setRemovedComponents(ComponentsBag removedComponents) {
+		this.removedComponents = removedComponents;
+	}
+
+	public boolean isDelete() {
+		return delete;
+	}
+
+	public void setDelete(boolean delete) {
+		this.delete = delete;
 	}
 }

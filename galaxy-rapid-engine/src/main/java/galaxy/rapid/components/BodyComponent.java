@@ -4,38 +4,23 @@ import com.artemis.Component;
 import com.badlogic.gdx.math.Vector2;
 
 public class BodyComponent extends Component {
-	private Vector2 position, size, origin;
-	private float rotation;
-
+	private Vector2 size, origin;
 	
 	public BodyComponent() {
 		this(0, 0);
 	}
 
-	public BodyComponent(float x, float y) {
-		this(x, y, 1, 1);
+	public BodyComponent(float width, float height) {
+		this(width, height, width / 2, height / 2);
 	}
 
-	public BodyComponent(float x, float y, float width, float height) {
-		this(x, y, width, height, 0, 0);
-	}
-
-	public BodyComponent(float x, float y, float width, float height, float originX, float originY) {
-		position = new Vector2(x, y);
+	public BodyComponent(float width, float height, float originX, float originY) {
 		size = new Vector2(width, height);
 		origin = new Vector2(originX, originY);
 	}
 
 	public BodyComponent(BodyComponent body) {
-		this(body.getPosition().x, body.getPosition().y, body.getSize().x, body.getSize().y, body.getOrigin().x, body.getOrigin().y);
-	}
-
-	public Vector2 getPosition() {
-		return position;
-	}
-
-	public void setPosition(Vector2 position) {
-		this.position = position;
+		this(body.getSize().x, body.getSize().y, body.getOrigin().x, body.getOrigin().y);
 	}
 
 	public Vector2 getSize() {
@@ -54,29 +39,46 @@ public class BodyComponent extends Component {
 		this.origin = origin;
 	}
 
-	public float getRotation() {
-		return rotation;
-	}
-
-	public void setRotation(float rotation) {
-		this.rotation = rotation;
-	}
-	
-	@Override
-	public String toString() {
-		return "position: " + position + " size: " + size + " origin: " + origin + " rotation: " + rotation;
-	}
-
-	public void setCenterPosition(float x, float y) {
-		position.x = x - (size.x / 2);
-		position.y = y - (size.y / 2);
-	}
 
 	public void set(BodyComponent body) {
-		position.set(body.position);
 		size.set(body.size);
 		origin.set(body.origin);
-		rotation = body.rotation;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
+		result = prime * result + ((size == null) ? 0 : size.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BodyComponent other = (BodyComponent) obj;
+		if (origin == null) {
+			if (other.origin != null)
+				return false;
+		} else if (!origin.equals(other.origin))
+			return false;
+		if (size == null) {
+			if (other.size != null)
+				return false;
+		} else if (!size.equals(other.size))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BodyComponent [size=" + size + ", origin=" + origin + "]";
 	}
 
 }

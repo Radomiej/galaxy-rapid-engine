@@ -87,4 +87,59 @@ public class RenderComponent extends Component {
 		this.color = color;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((cornerPosition == null) ? 0 : cornerPosition.hashCode());
+		result = prime * result + (flipX ? 1231 : 1237);
+		result = prime * result + (flipY ? 1231 : 1237);
+		result = prime * result + ((heightOffset == null) ? 0 : heightOffset.hashCode());
+		result = prime * result + layer;
+		result = prime * result + orderZ;
+		result = prime * result + ((renderBody == null) ? 0 : renderBody.hashCode());
+		result = prime * result + ((widthOffset == null) ? 0 : widthOffset.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RenderComponent other = (RenderComponent) obj;
+		if (color == null) {
+			if (other.color != null)
+				return false;
+		} else if (!color.equals(other.color))
+			return false;
+		if (cornerPosition == null) {
+			if (other.cornerPosition != null)
+				return false;
+		} else if (!cornerPosition.equals(other.cornerPosition))
+			return false;
+		if (flipX != other.flipX)
+			return false;
+		if (flipY != other.flipY)
+			return false;
+		if (heightOffset != other.heightOffset)
+			return false;
+		if (layer != other.layer)
+			return false;
+		if (orderZ != other.orderZ)
+			return false;
+		if (renderBody == null) {
+			if (other.renderBody != null)
+				return false;
+		} else if (!renderBody.equals(other.renderBody))
+			return false;
+		if (widthOffset != other.widthOffset)
+			return false;
+		return true;
+	}
+
 }
