@@ -2,6 +2,7 @@ package galaxy.rapid.render;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -26,6 +27,11 @@ public enum SpriteRenderer implements Renderer {
 			return;
 
 		SpriteComponent spriteComponent = spriteMapper.get(e);
+		float opacity = spriteComponent.getOpacity();
+		
+		if(opacity <= 0.0f)
+			return;
+		
 		String assetName = spriteComponent.getSpriteAsset();
 		Sprite sprite = RapidAsset.INSTANCE.getSprite(assetName);
 
@@ -56,7 +62,9 @@ public enum SpriteRenderer implements Renderer {
 		sprite.setSize(sizeX, sizeY);
 		sprite.setOrigin(originX, originY);
 		sprite.setRotation(position.getRotation());
+		
+		Color sourceColor = sprite.getColor();
+		sprite.setColor(sourceColor.r, sourceColor.g, sourceColor.b, opacity);
 		sprite.draw(batch);
 	}
-
 }

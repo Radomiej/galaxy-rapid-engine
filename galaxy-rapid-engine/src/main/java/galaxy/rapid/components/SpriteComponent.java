@@ -4,8 +4,10 @@ import com.artemis.Component;
 
 public class SpriteComponent extends Component {
 	private String spriteAsset;
+	private float opacity;
 
 	public SpriteComponent() {
+		opacity = 1.0f;
 	}
 
 	public SpriteComponent(String string) {
@@ -20,6 +22,13 @@ public class SpriteComponent extends Component {
 		this.spriteAsset = spriteAsset;
 	}
 
+	public void setOpacity(float opacity) {
+		this.opacity = opacity;
+	}
+	
+	public float getOpacity() {
+		return opacity;
+	}
 	
 	@Override
 	public int hashCode() {
