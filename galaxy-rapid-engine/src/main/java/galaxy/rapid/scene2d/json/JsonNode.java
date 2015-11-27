@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 
 public class JsonNode {
 
-	public ComponentType type;
+	public ComponentFactory type;
 	public String name;
 	public List<String> childrens = new ArrayList<String>();
 	public String text;
@@ -36,5 +36,6 @@ public class JsonNode {
 	public float spaceBottom = -1;
 	public float spaceRight = -1;
 	
-	
+	public LogicalOffset horizontalOffset;
+	public LogicalOffset verticalOffset;
 }

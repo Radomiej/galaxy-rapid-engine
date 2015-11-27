@@ -42,7 +42,6 @@ public class RenderSystem extends BaseSystem {
 	@Override
 	protected void processSystem() {
 		for (Entity e : renderableManager.getRendererObjects()) {
-			System.out.println("Rysuje obiekt: " + e);
 			Renderer renderer = getRendererForEntity(e);
 			renderer.render(e, polygonBatch);			
 		}

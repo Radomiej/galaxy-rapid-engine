@@ -17,7 +17,7 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.common.DrawableHelper;
 
-public enum ComponentType {
+public enum ComponentFactory {
 	TABLE {
 		@Override
 		public Actor createActor(JsonNode node) {
@@ -34,6 +34,7 @@ public enum ComponentType {
 			}
 			Cell<Actor> cell = table.add(children);
 			celling(cell, childrenNode);
+			afterCelling(children, childrenNode);
 		}
 	},
 	STACK {
@@ -145,6 +146,16 @@ public enum ComponentType {
 
 	public abstract Actor createActor(JsonNode node);
 
+	protected void afterCelling(Actor children, JsonNode childrenNode) {
+		
+		if(childrenNode.horizontalOffset != null){
+			childrenNode.horizontalOffset.procces(children);
+		}
+		if(childrenNode.verticalOffset != null){
+			childrenNode.verticalOffset.procces(children);
+		}
+	}
+
 	protected void celling(Cell<Actor> cell, JsonNode childrenNode) {
 		if(childrenNode.colspan >= 0){
 			cell.colspan(childrenNode.colspan);
@@ -154,6 +165,12 @@ public enum ComponentType {
 		}
 		if(childrenNode.fillX > 0 || childrenNode.fillY > 0){
 			cell.fill(childrenNode.fillX, childrenNode.fillY);
+		}
+		if(childrenNode.horizontalOffset != null){
+			childrenNode.horizontalOffset.procces(cell);
+		}
+		if(childrenNode.verticalOffset != null){
+			childrenNode.verticalOffset.procces(cell);
 		}
 	}
 

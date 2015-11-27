@@ -33,7 +33,7 @@ public class JsonRapidScene {
 	private void buildStageActors() {
 		for (JsonNode parent : root.getNodes()) {
 			Actor parenActor = master.getActors().get(parent.name);
-			ComponentType componentType = parent.type;
+			ComponentFactory componentType = parent.type;
 			List<JsonNode> childrens = master.getChildrens(parent);
 			for (JsonNode child : childrens) {
 				if (child != null) System.out.println("Dodaje do: " + parent.name + " dziecko: " + child.name);
@@ -62,7 +62,7 @@ public class JsonRapidScene {
 				System.out.println("dziecko: " + children);
 			}
 			
-			ComponentType componentType = node.type;
+			ComponentFactory componentType = node.type;
 			Actor actor = componentType.createActor(node);			
 			master.put(node, actor);
 			

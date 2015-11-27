@@ -49,6 +49,7 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 		synchronizedStrategy = new HashSynchronizedStrategy(server);
 	}
 
+	
 	public ServerMultiplayer(final ArtemisServerRequestResponser createPlayerReciver) {
 		this();
 		requestReciver = new RequestReciver() {
