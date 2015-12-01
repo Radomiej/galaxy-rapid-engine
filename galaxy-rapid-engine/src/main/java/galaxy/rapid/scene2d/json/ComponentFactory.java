@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -55,7 +56,9 @@ public enum ComponentFactory {
 	IMAGE {
 		@Override
 		public Actor createActor(JsonNode node) {
-			return new Image(RapidAsset.INSTANCE.getSprite(node.imageAsset));
+			Image image = new Image();
+			if(node.imageAsset != null) image.setDrawable(new TextureRegionDrawable(RapidAsset.INSTANCE.getSprite(node.imageAsset)));
+			return image;
 		}
 
 		@Override

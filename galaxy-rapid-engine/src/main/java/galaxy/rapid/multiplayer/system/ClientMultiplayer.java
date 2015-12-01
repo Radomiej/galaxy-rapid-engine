@@ -28,28 +28,30 @@ import pl.silver.reflection.SilverReflectionUtills;
 
 public class ClientMultiplayer extends BaseSystem {
 
-	
 	private UuidEntityManager uuidManager;
-	private Json json;
 	private UUID clientPlayerUuid;
 
 	private JGNLClient client;
 	private String host;
-	
+
+	private Object sendingObject;
+
 	private List<JsonGameComponent> incomingEntities = Collections.synchronizedList(new ArrayList<JsonGameComponent>());
 
 	public ClientMultiplayer(String host) {
 		this.host = host;
 	}
 
+	public ClientMultiplayer(String host, Object sendObject) {
+		this.host = host;
+		this.sendingObject = sendObject;
+	}
+
 	@Override
 	protected void initialize() {
 		Log.set(Log.LEVEL_INFO);
-		json = new Json();
 		client = new JGNLClient(CommonClass.INSTANCE.getCommonsTab());
 		try {
-//			client.connect("ns364990.ovh.net", Network.portTCP, Network.portUDP);
-//			client.connect("ra-studio.ddns.net", Network.portTCP, Network.portUDP);
 			client.connect(host, Network.portTCP, Network.portUDP);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -65,7 +67,11 @@ public class ClientMultiplayer extends BaseSystem {
 				}
 			}
 		});
-		Future future = client.sendRequest("join");
+		Future future = null;
+		if(sendingObject == null) {future = client.sendRequest("join");}
+		else{
+			future = client.sendRequest(sendingObject);
+		}
 		System.out.println("Wysy³am future");
 		while(!future.isAnswer()){
 //			System.out.println("Czekam na future");
@@ -84,7 +90,7 @@ public class ClientMultiplayer extends BaseSystem {
 	private void processReciveEvent() {
 		List<JsonGameComponent> incomingEvents = new ArrayList<JsonGameComponent>(incomingEntities);
 		incomingEntities.clear();
-		
+
 		for (JsonGameComponent object : incomingEvents) {
 			UUID uuid = new UUID(object.getMostSignBit(), object.getLestSignBit());
 			Entity localEntity = uuidManager.getEntity(uuid);
@@ -94,20 +100,22 @@ public class ClientMultiplayer extends BaseSystem {
 				System.out.println("Create new local entity, uuid: " + uuid);
 				new EntityBuilder(world).with(bag.getComponentsTab()).UUID(uuid).build();
 			} else {
-				if(object.isDelete()){
+				if (object.isDelete()) {
 					System.err.println("Remove entity: " + uuid);
 					world.deleteEntity(localEntity);
 					continue;
 				}
 				addOrCopyComponentsData(localEntity, bag);
 				removeOldComponents(localEntity, object.getRemovedComponents());
-				
+
 			}
 		}
 	}
 
 	private void removeOldComponents(Entity localEntity, ComponentsBag removedComponents) {
-		if(removedComponents == null) {return;}
+		if (removedComponents == null) {
+			return;
+		}
 		for (Component removeComponent : removedComponents.getComponents()) {
 			localEntity.edit().remove(removeComponent.getClass());
 		}
@@ -133,7 +141,7 @@ public class ClientMultiplayer extends BaseSystem {
 		ControllerObject controllerObject = new ControllerObject();
 		controllerObject.setKeyboardComponent(keyboardComponent);
 		controllerObject.setPartUuid(new PartUuid(clientPlayerUuid));
-//		System.out.println("Sending input state");
+		// System.out.println("Sending input state");
 		client.sendEvent(controllerObject);
 	}
 }

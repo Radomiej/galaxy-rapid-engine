@@ -55,7 +55,7 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 		requestReciver = new RequestReciver() {
 			@Override
 			public Object recivedRequest(Connection connection, Object object) {
-				UUID uuid = createPlayerReciver.proccesNewPlayerJoin((EntityEngine) world);
+				UUID uuid = createPlayerReciver.proccesNewPlayerJoin((EntityEngine) world, object);
 				System.out.println("Send uuid: " + uuid);
 				sendFullEntity.set(true);
 				return new PartUuid(uuid);
