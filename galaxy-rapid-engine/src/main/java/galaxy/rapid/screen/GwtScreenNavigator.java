@@ -3,8 +3,11 @@ package galaxy.rapid.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
+import galaxy.rapid.asset.AssetQueue;
+
 public class GwtScreenNavigator {
 	private Screen currentScreen;
+	private AssetQueue assetQueue;
 
 	public GwtScreenNavigator(Screen startScreen) {
 		Gdx.app.log("ScreenNavigator" , "Initialize ScreenNavigator complete.");
