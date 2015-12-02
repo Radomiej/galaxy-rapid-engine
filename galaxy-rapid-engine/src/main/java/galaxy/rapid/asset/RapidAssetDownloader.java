@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Json;
 
 import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.downloader.AsynAdvenceDownloader;
+import galaxy.rapid.downloader.DownloadHistory;
 import galaxy.rapid.downloader.DownloadInfo;
 import galaxy.rapid.downloader.DownloadListener;
 import galaxy.rapid.downloader.DownloadUtils;

@@ -1,4 +1,4 @@
-package galaxy.rapid.asset;
+package galaxy.rapid.downloader;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -44,6 +44,12 @@ public class MultiTextureAtlas {
 		}		
 	}
 	
+	public void dispose(){
+		for(String atlasName : atlases){
+			manager.unload(atlasName);
+		}
+	}
+	
 	public Sprite getSprite(String regionName){
 		for(String atlasName : atlases){
 			TextureAtlas atlas = manager.get(atlasName);

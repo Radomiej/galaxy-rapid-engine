@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.esotericsoftware.spine.AnimationState;
@@ -36,20 +37,23 @@ public enum RapidAsset {
 		manager.setLoader(SkeletonData.class, new SkeletonDataLoader());
 	}
 
+	public void loadSound(String sound){
+		String assetName = "sounds/" + sound;
+		manager.load(assetName, Sound.class);
+	}
+	
+	/**
+	 * @param fileName path do texture with assets[root] folder
+	 */
 	public void loadTexture(String fileName) {
 		manager.load(fileName, Texture.class);
 	}
 
 	private void loadSprite() {
 		Gdx.app.log("RapidAsset" , "Loading all sprites in current avaiable in device memory");
-		
 		for (MultiTextureAtlas multiTextureAtlas : atlasMap.values()) {
 			multiTextureAtlas.signAllAssets(spriteMap);
 		}
-	}
-
-	public Sprite getSprite(String regionName) {
-		return spriteMap.get(regionName);
 	}
 
 	public void loadTextureAtlas(final String textureAtlasAsset) {
@@ -74,6 +78,10 @@ public enum RapidAsset {
 		return newSpineAssetModel;
 	}
 
+	public Sprite getSprite(String regionName) {
+		return spriteMap.get(regionName);
+	}
+
 	public void loadSpine(String spineAssetsName) {
 		final String spineAtlasFullName = "spine/" + spineAssetsName + "-"
 				+ RapidConfiguration.INSTANCE.getScale().name().toLowerCase() + ".atlas";
@@ -89,7 +97,23 @@ public enum RapidAsset {
 	private String addFullNameAtlas(String prefix, String spineAtlas) {
 		return prefix + "/" + spineAtlas + "-" + RapidConfiguration.INSTANCE.getScale().name().toLowerCase();
 	}
-
+	
+	public void unloadSpine(String spineAssetsName){
+		final String jsonFullName = "spine/" + spineAssetsName + ".json";
+		manager.unload(jsonFullName);
+	}
+	
+	public void unloadTextureAtlas(String textureAtlasAsset){
+		MultiTextureAtlas multiTextureAtlas = atlasMap.get(textureAtlasAsset);
+		multiTextureAtlas.dispose();
+		atlasMap.remove(textureAtlasAsset);
+	}
+	
+	public void unloadSound(String sound){
+		String assetName = "sounds/" + sound;
+		manager.unload(assetName);
+	}
+	
 	public boolean loadedComplete() {
 		if(manager.update()){
 			loadSprite();
