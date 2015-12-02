@@ -12,7 +12,7 @@ public class LiveComponent extends Component {
 	}
 
 	public LiveComponent(int hp) {
-		hp = hpMax = 3;
+		this.hp = hpMax = hp;
 	}
 
 	public int getHp() {

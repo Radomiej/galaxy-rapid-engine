@@ -9,10 +9,10 @@ public class MusicManager {
 	public MusicManager() {
 	}
 	
-	public void play(String assetName){
+	public void play(String assetName, boolean loop){
 		String assetFullName = "music/" + assetName;
 		music = Gdx.audio.newMusic(Gdx.files.internal(assetFullName));
-		music.setLooping(true);
+		music.setLooping(loop);
 		music.play();
 	}
 	
