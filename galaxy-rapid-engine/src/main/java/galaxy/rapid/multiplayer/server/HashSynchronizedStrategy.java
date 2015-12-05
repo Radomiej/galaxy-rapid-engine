@@ -115,7 +115,6 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 		sendUpdateObject.setMostSignBit(uuid.getMostSignificantBits());
 		sendUpdateObject.setLestSignBit(uuid.getLeastSignificantBits());
 
-		System.out.println("Wysy³am ca³y obiekt");
 		sendUpdateObject.setComponents(bag);
 		server.sendEvent(sendUpdateObject);
 

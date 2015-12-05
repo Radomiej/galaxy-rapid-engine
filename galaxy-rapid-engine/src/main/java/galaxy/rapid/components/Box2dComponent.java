@@ -10,6 +10,7 @@ import galaxy.rapid.components.marker.TransientNetworkElement;
 public class Box2dComponent extends Component implements TransientNetworkElement{
 	private transient Body body;
 	private transient Fixture fixture;
+	private transient Fixture fixtureSensor;
 
 	public Body getBody() {
 		return body;
@@ -31,5 +32,13 @@ public class Box2dComponent extends Component implements TransientNetworkElement
 	public String toString() {
 		String info = "body pos: " + body.getPosition();
 		return info;
+	}
+
+	public Fixture getSensor(){
+		return fixtureSensor;
+	}
+	
+	public void setSensor(Fixture fixtureWeakSensor) {
+		fixtureSensor = fixtureWeakSensor;
 	}
 }

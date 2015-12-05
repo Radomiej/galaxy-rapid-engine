@@ -67,4 +67,12 @@ public class ComponentsBag {
 	public void addComponent(Component component) {
 		components.add(component);
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ComponentsBag [" + (components != null ? "components=" + components : "") + "]";
+	}
 }

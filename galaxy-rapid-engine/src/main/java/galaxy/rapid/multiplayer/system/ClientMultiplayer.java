@@ -97,11 +97,11 @@ public class ClientMultiplayer extends BaseSystem {
 
 			ComponentsBag bag = object.getComponents();
 			if (localEntity == null) {
-				System.out.println("Create new local entity, uuid: " + uuid);
+//				System.out.println("Create new local entity, uuid: " + uuid + " bag: " + bag.getComponents().size());
 				new EntityBuilder(world).with(bag.getComponentsTab()).UUID(uuid).build();
 			} else {
 				if (object.isDelete()) {
-					System.err.println("Remove entity: " + uuid);
+//					System.err.println("Remove entity: " + uuid);
 					world.deleteEntity(localEntity);
 					continue;
 				}
@@ -141,7 +141,6 @@ public class ClientMultiplayer extends BaseSystem {
 		ControllerObject controllerObject = new ControllerObject();
 		controllerObject.setKeyboardComponent(keyboardComponent);
 		controllerObject.setPartUuid(new PartUuid(clientPlayerUuid));
-		// System.out.println("Sending input state");
 		client.sendEvent(controllerObject);
 	}
 }

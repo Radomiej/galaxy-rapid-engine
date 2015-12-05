@@ -42,7 +42,8 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 	private RequestReciver requestReciver;
 
 	private AtomicBoolean sendFullEntity = new AtomicBoolean(false);
-
+	private AtomicBoolean internalSendFullEntity = new AtomicBoolean(false);
+	
 	private ServerMultiplayer() {
 		super(Aspect.all(BodyComponent.class), 1000 / 30f);
 		server = new JGNLServer(CommonClass.INSTANCE.getCommonsTab());
@@ -73,17 +74,26 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 	}
 
 	@Override
-	protected void process(Entity e) {
+	protected void begin() {
 		if (sendFullEntity.compareAndSet(true, false)) {
+			internalSendFullEntity.set(true);
+		}
+	}
+	@Override
+	protected void process(Entity e) {
+		if (internalSendFullEntity.get()) {
 			synchronizedStrategy.sendFullEntity(e);
 		} else {
 			synchronizedStrategy.sendEntity(e);
 		}
 	}
 
+	@Override
+	protected void end() {
+		internalSendFullEntity.compareAndSet(true, false);
+	}
 	@Subscribe
 	public void removed(RemoveEntityEvent event) {
-		System.out.println("Multiplayer Otrzymano zdazenie usuniecia entity");
 		synchronizedStrategy.sendRemoveEntity(event.getRemoveEntity());
 	}
 

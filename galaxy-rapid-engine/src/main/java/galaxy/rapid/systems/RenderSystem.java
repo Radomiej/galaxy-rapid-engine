@@ -43,6 +43,7 @@ public class RenderSystem extends BaseSystem {
 	protected void processSystem() {
 		for (Entity e : renderableManager.getRendererObjects()) {
 			Renderer renderer = getRendererForEntity(e);
+//			if(renderer == ShapeRenderer.INSTANCE) continue;
 			renderer.render(e, polygonBatch);			
 		}
 	}
