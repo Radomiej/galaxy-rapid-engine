@@ -22,7 +22,7 @@ public class HashSynchronizedStrategyTest {
 	@Before
 	public void setUp() throws Exception {
 		JGNLServer server = Mockito.mock(JGNLServer.class);
-		testStrategy = new HashSynchronizedStrategy(server);
+//		testStrategy = new HashSynchronizedStrategy(server);
 	}
 
 	@After

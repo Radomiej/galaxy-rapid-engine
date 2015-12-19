@@ -26,6 +26,8 @@ import galaxy.rapid.multiplayer.PartUuid;
 import galaxy.rapid.multiplayer.server.HashSynchronizedStrategy;
 import galaxy.rapid.multiplayer.server.SimpleSynchronizedStrategy;
 import galaxy.rapid.multiplayer.server.SynchronizedStrategy;
+import galaxy.rapid.network.server.Room;
+import galaxy.rapid.network.service.RapidClient;
 import net.mostlyoriginal.api.event.common.Subscribe;
 import pl.silver.JGNL.JGNLServer;
 import pl.silver.JGNL.Network;
@@ -37,39 +39,29 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 	private RapidBus eventSystem;
 	private UuidEntityManager uuidManager;
 
-	private JGNLServer server;
 	private SynchronizedStrategy synchronizedStrategy;
-	private RequestReciver requestReciver;
-
+	private ArtemisServerRequestResponser createPlayerListener;
+	
 	private AtomicBoolean sendFullEntity = new AtomicBoolean(false);
 	private AtomicBoolean internalSendFullEntity = new AtomicBoolean(false);
+	private Room gameRoom;
+	
 	
 	private ServerMultiplayer() {
 		super(Aspect.all(BodyComponent.class), 1000 / 30f);
-		server = new JGNLServer(CommonClass.INSTANCE.getCommonsTab());
-		synchronizedStrategy = new HashSynchronizedStrategy(server);
 	}
 
 	
-	public ServerMultiplayer(final ArtemisServerRequestResponser createPlayerReciver) {
+	public ServerMultiplayer(Room gameRoom, final ArtemisServerRequestResponser createPlayerReciver) {
 		this();
-		requestReciver = new RequestReciver() {
-			@Override
-			public Object recivedRequest(Connection connection, Object object) {
-				UUID uuid = createPlayerReciver.proccesNewPlayerJoin((EntityEngine) world, object);
-				System.out.println("Send uuid: " + uuid);
-				sendFullEntity.set(true);
-				return new PartUuid(uuid);
-			}
-		};
+		this.gameRoom = gameRoom;
+		this.createPlayerListener = createPlayerListener;
+		synchronizedStrategy = new HashSynchronizedStrategy(gameRoom);
 	}
 
 	@Override
 	protected void initialize() {
 		Log.set(Log.LEVEL_ERROR);
-		new Json();
-		server.setRequestReciver(requestReciver);
-		server.start(Network.portTCP, Network.portUDP);
 		eventSystem.register(this);
 	}
 
@@ -97,7 +89,10 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 		synchronizedStrategy.sendRemoveEntity(event.getRemoveEntity());
 	}
 
-	public JGNLServer getServer() {
-		return server;
+	public PartUuid addClient(RapidClient client, Object clientCreateData) {
+		UUID uuid = createPlayerListener.proccesNewPlayerJoin((EntityEngine) world, clientCreateData);
+		System.out.println("Send uuid: " + uuid);
+		sendFullEntity.set(true);
+		return new PartUuid(uuid);
 	}
 }

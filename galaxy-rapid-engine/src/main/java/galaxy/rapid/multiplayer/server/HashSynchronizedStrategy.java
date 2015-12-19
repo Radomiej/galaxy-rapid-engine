@@ -17,15 +17,16 @@ import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.marker.TransientNetworkElement;
 import galaxy.rapid.multiplayer.EntityHelper;
 import galaxy.rapid.multiplayer.JsonGameComponent;
+import galaxy.rapid.network.server.Room;
 import pl.silver.JGNL.JGNLServer;
 
 public class HashSynchronizedStrategy implements SynchronizedStrategy {
 
-	private JGNLServer server;
+	private Room server;
 	private Map<UUID, HashComponentsValue> entitiesMemory = new HashMap<UUID, HashComponentsValue>();
 
-	public HashSynchronizedStrategy(JGNLServer server2) {
-		this.server = server2;
+	public HashSynchronizedStrategy(Room gameRoom) {
+		this.server = gameRoom;
 		System.out.println("HashSynchronizedStrategy");
 	}
 
