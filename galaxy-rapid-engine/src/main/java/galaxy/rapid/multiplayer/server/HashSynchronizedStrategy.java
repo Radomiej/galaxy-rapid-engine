@@ -17,16 +17,17 @@ import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.marker.TransientNetworkElement;
 import galaxy.rapid.multiplayer.EntityHelper;
 import galaxy.rapid.multiplayer.JsonGameComponent;
-import galaxy.rapid.network.server.Room;
+import galaxy.rapid.network.service.NetworkGroup;
 import pl.silver.JGNL.JGNLServer;
+import pl.silver.JGNL.Network;
 
 public class HashSynchronizedStrategy implements SynchronizedStrategy {
 
-	private Room server;
+	private NetworkGroup networkGroup;
 	private Map<UUID, HashComponentsValue> entitiesMemory = new HashMap<UUID, HashComponentsValue>();
 
-	public HashSynchronizedStrategy(Room gameRoom) {
-		this.server = gameRoom;
+	public HashSynchronizedStrategy(NetworkGroup gameRoom) {
+		this.networkGroup = gameRoom;
 		System.out.println("HashSynchronizedStrategy");
 	}
 
@@ -47,7 +48,7 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 			fillHashValueBag(hashComponentsBag, bag.getComponents());
 			entitiesMemory.put(uuid, hashComponentsBag);
 			sendUpdateObject.setComponents(bag);
-			server.sendEvent(sendUpdateObject);
+			networkGroup.sendEvent(sendUpdateObject);
 			return;
 		}
 
@@ -94,7 +95,7 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 			sendHardObject.setRemovedComponents(new ComponentsBag(componentsToRemove));
 		}
 		if (sendHard) {
-			server.sendEvent(sendHardObject);
+			networkGroup.sendEvent(sendHardObject);
 		}
 
 		bag.setComponents(componentsToUpdate);
@@ -102,7 +103,7 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 
 		// System.out.println("Update components: " +
 		// sendUpdateObject.getComponents());
-		server.sendUdpEvent(sendUpdateObject);
+		networkGroup.sendUdpEvent(sendUpdateObject);
 	}
 
 	@Override
@@ -117,7 +118,8 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 		sendUpdateObject.setLestSignBit(uuid.getLeastSignificantBits());
 
 		sendUpdateObject.setComponents(bag);
-		server.sendEvent(sendUpdateObject);
+		System.out.println("Send full entity: " + uuid + " : " + bag);
+		networkGroup.sendEvent(sendUpdateObject);
 
 	}
 
@@ -156,6 +158,6 @@ public class HashSynchronizedStrategy implements SynchronizedStrategy {
 		sendObject.setLestSignBit(uuid.getLeastSignificantBits());
 		sendObject.setDelete(true);
 
-		server.sendEvent(sendObject);
+		networkGroup.sendEvent(sendObject);
 	}
 }

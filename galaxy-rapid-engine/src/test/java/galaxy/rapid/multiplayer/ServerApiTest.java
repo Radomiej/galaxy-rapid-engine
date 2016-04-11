@@ -9,7 +9,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import galaxy.rapid.RapidEngine;
-import galaxy.rapid.network.server.ServerApiImpl;
 import galaxy.rapid.network.server.ServerSide;
 import galaxy.rapid.network.service.ServerApi;
 import pl.silver.JGNL.Network;
@@ -19,8 +18,8 @@ public class ServerApiTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		Network.registerClasses(ServerApi.class, ServerApiImpl.class);
-		server = new ServerSide();
+		Network.registerClasses(ServerApi.class);
+		server = new ServerSide(null);
 		server.startServer();
 		Thread.sleep(200);
 		System.out.println("after");

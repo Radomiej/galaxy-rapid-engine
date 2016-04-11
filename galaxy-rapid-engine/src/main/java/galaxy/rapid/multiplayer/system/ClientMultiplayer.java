@@ -14,12 +14,14 @@ import com.artemis.utils.EntityBuilder;
 import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.minlog.Log;
 
+import galaxy.rapid.RapidEngine;
 import galaxy.rapid.common.ComponentsBag;
 import galaxy.rapid.components.KeyboardComponent;
 import galaxy.rapid.multiplayer.CommonClass;
 import galaxy.rapid.multiplayer.ControllerObject;
 import galaxy.rapid.multiplayer.JsonGameComponent;
-import galaxy.rapid.multiplayer.PartUuid;
+import galaxy.rapid.multiplayer.event.FullSynchronizedEvent;
+import galaxy.rapid.network.server.PartUuid;
 import pl.silver.JGNL.JGNLClient;
 import pl.silver.JGNL.Network;
 import pl.silver.JGNL.event.ServerEventReciver;
@@ -31,55 +33,30 @@ public class ClientMultiplayer extends BaseSystem {
 	private UuidEntityManager uuidManager;
 	private UUID clientPlayerUuid;
 
-	private JGNLClient client;
-	private String host;
-
-	private Object sendingObject;
-
 	private List<JsonGameComponent> incomingEntities = Collections.synchronizedList(new ArrayList<JsonGameComponent>());
 
-	public ClientMultiplayer(String host) {
-		this.host = host;
-	}
-
-	public ClientMultiplayer(String host, Object sendObject) {
-		this.host = host;
-		this.sendingObject = sendObject;
+	public ClientMultiplayer(UUID playerUuid) {
+		clientPlayerUuid = playerUuid;
 	}
 
 	@Override
 	protected void initialize() {
 		Log.set(Log.LEVEL_INFO);
-		client = new JGNLClient(CommonClass.INSTANCE.getCommonsTab());
-		try {
-			client.connect(host, Network.portTCP, Network.portUDP);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		client.setReciver(new ServerEventReciver() {
+		
+		RapidEngine.INSTANCE.NETWORK.setReciver(new ServerEventReciver() {
 			@Override
 			public void reciveEvent(Object event) {
 				if (event instanceof JsonGameComponent) {
 					JsonGameComponent reciveObject = (JsonGameComponent) event;
 					incomingEntities.add(reciveObject);
+//					System.out.println("Odebrano JsonGameComponent ");
 				} else {
 					System.out.println("Other object: " + event.getClass().getSimpleName());
 				}
 			}
 		});
-		Future future = null;
-		if(sendingObject == null) {future = client.sendRequest("join");}
-		else{
-			future = client.sendRequest(sendingObject);
-		}
-		System.out.println("Wysy³am future");
-		while(!future.isAnswer()){
-//			System.out.println("Czekam na future");
-		}
-		System.out.println("Odebrano uuid gracza");
-		PartUuid partUuid = (PartUuid) future.getAnswerMessage();
-		clientPlayerUuid = new UUID(partUuid.getMostSignBit(), partUuid.getLestSignBit());
 		
+		RapidEngine.INSTANCE.NETWORK.sendEvent(new FullSynchronizedEvent());
 	}
 
 	@Override
@@ -141,6 +118,6 @@ public class ClientMultiplayer extends BaseSystem {
 		ControllerObject controllerObject = new ControllerObject();
 		controllerObject.setKeyboardComponent(keyboardComponent);
 		controllerObject.setPartUuid(new PartUuid(clientPlayerUuid));
-		client.sendEvent(controllerObject);
+		RapidEngine.INSTANCE.NETWORK.sendEvent(controllerObject);
 	}
 }

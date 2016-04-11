@@ -10,6 +10,7 @@ import galaxy.rapid.components.PlayerComponent;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.SpriteComponent;
+import galaxy.rapid.network.server.PartUuid;
 
 public enum CommonClass {
 	INSTANCE;

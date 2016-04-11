@@ -1,5 +1,7 @@
 package galaxy.rapid.multiplayer.system;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -15,6 +17,7 @@ import com.esotericsoftware.minlog.Log;
 
 import galaxy.rapid.common.ComponentsBag;
 import galaxy.rapid.common.EntityEngine;
+import galaxy.rapid.common.UuidHelper;
 import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.event.RemoveEntityEvent;
 import galaxy.rapid.eventbus.RapidBus;
@@ -22,12 +25,11 @@ import galaxy.rapid.multiplayer.ArtemisServerRequestResponser;
 import galaxy.rapid.multiplayer.CommonClass;
 import galaxy.rapid.multiplayer.EntityHelper;
 import galaxy.rapid.multiplayer.JsonGameComponent;
-import galaxy.rapid.multiplayer.PartUuid;
 import galaxy.rapid.multiplayer.server.HashSynchronizedStrategy;
-import galaxy.rapid.multiplayer.server.SimpleSynchronizedStrategy;
 import galaxy.rapid.multiplayer.server.SynchronizedStrategy;
-import galaxy.rapid.network.server.Room;
-import galaxy.rapid.network.service.RapidClient;
+import galaxy.rapid.network.server.PartUuid;
+import galaxy.rapid.network.service.NetworkGroup;
+import galaxy.rapid.network.service.ServerClient;
 import net.mostlyoriginal.api.event.common.Subscribe;
 import pl.silver.JGNL.JGNLServer;
 import pl.silver.JGNL.Network;
@@ -41,22 +43,30 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 
 	private SynchronizedStrategy synchronizedStrategy;
 	private ArtemisServerRequestResponser createPlayerListener;
-	
+
 	private AtomicBoolean sendFullEntity = new AtomicBoolean(false);
 	private AtomicBoolean internalSendFullEntity = new AtomicBoolean(false);
-	private Room gameRoom;
-	
-	
+
+	// TODO dodac odbieranie info o synchronizacji
+	private NetworkGroup group = new NetworkGroup();
+
 	private ServerMultiplayer() {
 		super(Aspect.all(BodyComponent.class), 1000 / 30f);
+
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				sendFullEntity.set(true);
+			}
+		}, 10, 1000);
 	}
 
-	
-	public ServerMultiplayer(Room gameRoom, final ArtemisServerRequestResponser createPlayerReciver) {
+	public ServerMultiplayer(final ArtemisServerRequestResponser createPlayerReciver) {
 		this();
-		this.gameRoom = gameRoom;
-		this.createPlayerListener = createPlayerListener;
-		synchronizedStrategy = new HashSynchronizedStrategy(gameRoom);
+		this.createPlayerListener = createPlayerReciver;
+		synchronizedStrategy = new HashSynchronizedStrategy(group);
 	}
 
 	@Override
@@ -71,8 +81,10 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 			internalSendFullEntity.set(true);
 		}
 	}
+
 	@Override
 	protected void process(Entity e) {
+//		System.out.println("Synchronized: " + UuidHelper.getUuidFromEntity(e));
 		if (internalSendFullEntity.get()) {
 			synchronizedStrategy.sendFullEntity(e);
 		} else {
@@ -84,15 +96,17 @@ public class ServerMultiplayer extends IntervalEntityProcessingSystem {
 	protected void end() {
 		internalSendFullEntity.compareAndSet(true, false);
 	}
+
 	@Subscribe
 	public void removed(RemoveEntityEvent event) {
 		synchronizedStrategy.sendRemoveEntity(event.getRemoveEntity());
 	}
 
-	public PartUuid addClient(RapidClient client, Object clientCreateData) {
+	public PartUuid addClient(ServerClient client, Object clientCreateData) {
 		UUID uuid = createPlayerListener.proccesNewPlayerJoin((EntityEngine) world, clientCreateData);
 		System.out.println("Send uuid: " + uuid);
 		sendFullEntity.set(true);
+		group.addClient(client);
 		return new PartUuid(uuid);
 	}
 }
