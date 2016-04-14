@@ -12,12 +12,7 @@ import com.badlogic.gdx.utils.SerializationException;
 public enum RapidConfiguration {
 	INSTANCE;
 
-	private final String CONFIG_ASSET = "static/configuration/rapid.properties";
-	private final int default_width = 2048;
-	private float heightRatio = 1;
-	private float gameRatio = 1;
-
-	private Scale scale;
+	private final String CONFIG_ASSET = "rapid.properties";
 	private RapidConfig rapidConfig;
 
 	/**
@@ -25,22 +20,8 @@ public enum RapidConfiguration {
 	 */
 	public void load() {
 		loadRapidConfiguration();
-		setHeightRatio();
 	}
 
-	private void setHeightRatio() {
-
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
-		heightRatio = h / w;
-
-		scale = Scale.getByWidth(w);
-		Gdx.app.log("Config" , "Device scale" + scale.name());
-
-		gameRatio = scale.getDefaultWidth() / (float) default_width;
-		
-		Gdx.app.log("Config" , "Game ratio: " + gameRatio);
-	}
 
 	private void loadRapidConfiguration() {
 		Json json = new Json();
@@ -57,36 +38,12 @@ public enum RapidConfiguration {
 		}
 	}
 
-	public int getDefaultAssetScale() {
-		return rapidConfig.defaultAssetScale;
-	}
-
 	public int getAppVersion() {
 		return rapidConfig.appVersion;
 	}
 
 	public String getAppName() {
 		return rapidConfig.appName;
-	}
-
-	public Scale getScale() {
-		return scale;
-	}
-
-	public float getHeightRatio() {
-		return heightRatio;
-	}
-
-	public void setHeightRatio(float heightRatio) {
-		this.heightRatio = heightRatio;
-	}
-
-	public int getGameWidth() {
-		return default_width;
-	}
-
-	public int getGameHeight() {
-		return (int) (default_width * heightRatio);
 	}
 
 	public boolean isDebugMode() {
@@ -100,9 +57,5 @@ public enum RapidConfiguration {
 
 	public List<String> getAssetsUrls() {
 		return rapidConfig.remoteAssetsUrl;
-	}
-
-	public float getGameRatio() {
-		return gameRatio;
 	}
 }

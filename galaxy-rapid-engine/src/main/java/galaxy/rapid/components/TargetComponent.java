@@ -5,9 +5,7 @@ import java.util.UUID;
 
 import com.artemis.Component;
 
-import galaxy.rapid.components.marker.TransientNetworkElement;
-
-public class TargetComponent extends Component implements TransientNetworkElement{
+public class TargetComponent extends Component{
 	private UUID target;
 
 	public TargetComponent() {

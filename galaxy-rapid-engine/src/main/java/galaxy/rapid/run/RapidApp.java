@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.kotcrab.vis.ui.VisUI;
 
 import galaxy.rapid.configuration.RapidConfig;
 import galaxy.rapid.configuration.RapidConfiguration;
@@ -29,13 +28,6 @@ public class RapidApp extends ApplicationAdapter {
 		RapidConfiguration.INSTANCE.load();
 		RapidConfig rapidConfig = RapidConfiguration.INSTANCE.getRapidConfig();
 		
-		Gdx.app.debug(RapidApp.class.getSimpleName(), "Loading VisUI...");
-		if (rapidConfig.skinAsset != null){
-			VisUI.load(Gdx.files.internal(rapidConfig.skinAsset));
-		}
-		else{
-			VisUI.load();
-		}
 		if(rapidConfig.debugMode){
 			Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
 		}
@@ -63,7 +55,6 @@ public class RapidApp extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		screenNavigator.dispose();
-		VisUI.dispose();
 	}
 
 	@Override

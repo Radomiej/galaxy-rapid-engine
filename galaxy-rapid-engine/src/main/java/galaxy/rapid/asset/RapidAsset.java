@@ -78,13 +78,22 @@ public enum RapidAsset {
 		return newSpineAssetModel;
 	}
 
+	public void loadSprite(String resourcePath){
+		Sprite sprite = new Sprite(new Texture(resourcePath));
+		spriteMap.put(resourcePath, sprite);
+	}
+	
 	public Sprite getSprite(String regionName) {
-		return spriteMap.get(regionName);
+		Sprite loadingSprite = spriteMap.get(regionName);
+		if(loadingSprite == null){
+			loadSprite(regionName);
+			loadingSprite = spriteMap.get(regionName);
+		}
+		return loadingSprite;
 	}
 
 	public void loadSpine(String spineAssetsName) {
-		final String spineAtlasFullName = "spine/" + spineAssetsName + "-"
-				+ RapidConfiguration.INSTANCE.getScale().name().toLowerCase() + ".atlas";
+		final String spineAtlasFullName = "spine/" + spineAssetsName + ".atlas";
 		final String jsonFullName = "spine/" + spineAssetsName + ".json";
 		Gdx.app.log("RapidAsset" , "spineAtlas: " + spineAtlasFullName);
 		Gdx.app.log("RapidAsset" , "jsonData: " + jsonFullName);
@@ -95,7 +104,7 @@ public enum RapidAsset {
 	}
 
 	private String addFullNameAtlas(String prefix, String spineAtlas) {
-		return prefix + "/" + spineAtlas + "-" + RapidConfiguration.INSTANCE.getScale().name().toLowerCase();
+		return prefix + "/" + spineAtlas;
 	}
 	
 	public void unloadSpine(String spineAssetsName){

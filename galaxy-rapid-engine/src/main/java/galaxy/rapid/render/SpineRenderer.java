@@ -8,7 +8,6 @@ import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
 
-import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.SpineComponent;
@@ -26,11 +25,9 @@ public enum SpineRenderer implements Renderer {
 
 	public void render(Entity e, Batch batch) {
 		ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class, e.getWorld());
-//		ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class, e.getWorld());
 		ComponentMapper<SpineComponent> spineMapper = ComponentMapper.getFor(SpineComponent.class, e.getWorld());
 		ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class, e.getWorld());
 
-//		BodyComponent body = bodyMapper.get(e);
 		PositionComponent position = positionMapper.get(e);
 		RenderComponent render = renderMapper.get(e);
 		SpineComponent spine = spineMapper.get(e);
@@ -39,8 +36,8 @@ public enum SpineRenderer implements Renderer {
 
 		skeleton.setFlipX(render.isFlipX());
 		
-		float posX = position.getPosition().x * RapidConfiguration.INSTANCE.getGameRatio();
-		float posY = position.getPosition().y * RapidConfiguration.INSTANCE.getGameRatio();
+		float posX = position.getPosition().x;
+		float posY = position.getPosition().y;
 		
 		skeleton.setPosition(posX, posY);
 //		skeleton.setBonesToSetupPose();

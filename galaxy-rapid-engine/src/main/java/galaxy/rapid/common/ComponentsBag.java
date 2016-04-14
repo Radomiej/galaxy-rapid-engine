@@ -5,8 +5,6 @@ import java.util.Set;
 
 import com.artemis.Component;
 
-import galaxy.rapid.components.BodyComponent;
-
 public class ComponentsBag {
 	private Set<Component> components;
 

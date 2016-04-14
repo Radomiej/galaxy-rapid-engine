@@ -16,8 +16,9 @@ import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.systems.DeleteEventSystem;
+import galaxy.rapid.systems.PhysicRectangleColliderSystem;
+import galaxy.rapid.systems.PhysicSystem;
 import galaxy.rapid.systems.RenderSystem;
-import galaxy.rapid.systems.SpriteBodyToBodySystem;
 import galaxy.rapid.systems.TickEventSystem;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
@@ -29,6 +30,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 	protected InputMultiplexer inputMultiplexer;
 	protected OrthographicCamera camera;
 	protected PolygonSpriteBatch spriteBatch;
+	protected RapidBus rapidBus;
 
 	public void render(float delta) {
 		world.setDelta(MathUtils.clamp(delta, 0, MIN_DELTA));
@@ -42,7 +44,8 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 	@Override
 	protected void create() {
 		
-
+		rapidBus = new RapidBus();
+		
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
@@ -54,15 +57,18 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		spriteBatch = new PolygonSpriteBatch();
 
 		WorldConfiguration worldConfiguration = new WorldConfiguration();	
-		processBeforeWorldConfiguration(worldConfiguration);	
+		
 		worldConfiguration.setSystem(UuidEntityManager.class);
 		worldConfiguration.setSystem(GroupManager.class);	
 		worldConfiguration.setSystem(RenderableManager.class);	
 		worldConfiguration.setSystem(TickEventSystem.class);
 		worldConfiguration.setSystem(DeleteEventSystem.class);
-		worldConfiguration.setSystem(SpriteBodyToBodySystem.class);
+		processBeforePhysicWorldConfiguration(worldConfiguration);
+		worldConfiguration.setSystem(PhysicSystem.class);
+		worldConfiguration.setSystem(PhysicRectangleColliderSystem.class);
+		processBeforeRenderWorldConfiguration(worldConfiguration);
 		worldConfiguration.setSystem(new RenderSystem());
-		worldConfiguration.register(new RapidBus());	
+		worldConfiguration.register(rapidBus);	
 		worldConfiguration.register(camera);
 		worldConfiguration.register(inputMultiplexer);
 		worldConfiguration.register(spriteBatch);
@@ -73,7 +79,10 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		injectWorld(world);
 	}	
 
-	protected void processBeforeWorldConfiguration(WorldConfiguration worldConfiguration) {
+	protected void processBeforeRenderWorldConfiguration(WorldConfiguration worldConfiguration) {
+	}
+
+	protected void processBeforePhysicWorldConfiguration(WorldConfiguration worldConfiguration) {
 	}
 
 	protected abstract void processWorldConfiguration(WorldConfiguration worldConfiguration);
