@@ -21,6 +21,7 @@ import galaxy.rapid.common.UuidHelper;
 import galaxy.rapid.components.Box2dComponent;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.RectangleColliderComponent;
+import galaxy.rapid.event.AddRectangleColliderComponent;
 import galaxy.rapid.event.RemoveRectangleColliderComponent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.physic.BodyCreator;
@@ -80,7 +81,14 @@ public class PhysicRectangleColliderSystem extends EntityProcessingSystem {
 	}
 
 	
-
+	@Subscribe
+	public void addComponentEvent(AddRectangleColliderComponent addComponent) {
+		UUID uuid = UuidHelper.getUuidFromEntity(addComponent.entity);
+		addComponent.entity.edit().add(addComponent.rectangleColliderComponent);
+		colliderToEntityMap.put(addComponent.rectangleColliderComponent, uuid);
+		Gdx.app.log("PhysicRectangleColliderSystem", "Add Fixture Event");
+	}
+	
 	@Subscribe
 	public void removeComponentEvent(RemoveRectangleColliderComponent removeComponent) {
 		UUID uuid = colliderToEntityMap.get(removeComponent.rectangleColliderComponent);
