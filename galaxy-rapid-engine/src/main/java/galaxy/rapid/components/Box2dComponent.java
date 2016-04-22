@@ -5,9 +5,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class Box2dComponent extends Component {
+	private boolean kinematic;
 	private Body body;
 	private Fixture rectangleFixture;
-	private Object userData;
+	private Object userData, fixtureData;
 	
 	public Body getBody() {
 		return body;
@@ -78,6 +79,22 @@ public class Box2dComponent extends Component {
 
 	public void setUserData(Object userData) {
 		this.userData = userData;
+	}
+
+	public Object getFixtureData() {
+		return fixtureData;
+	}
+
+	public void setFixtureData(Object fixtureData) {
+		this.fixtureData = fixtureData;
+	}
+
+	public boolean isKinematic() {
+		return kinematic;
+	}
+
+	public void setKinematic(boolean kinematic) {
+		this.kinematic = kinematic;
 	}
 
 }

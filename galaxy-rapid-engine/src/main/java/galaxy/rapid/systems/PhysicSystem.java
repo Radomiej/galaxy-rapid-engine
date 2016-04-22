@@ -39,6 +39,7 @@ public class PhysicSystem extends EntityProcessingSystem {
 	private ComponentMapper<Box2dComponent> box2dMapper;
 	private ComponentMapper<PositionComponent> positionMapper;
 
+	@Wire
 	private World physicWorld;
 	@Wire
 	private RapidBus rapidBus;
@@ -49,7 +50,6 @@ public class PhysicSystem extends EntityProcessingSystem {
 
 	@Override
 	protected void initialize() {
-		physicWorld = new World(new Vector2(0, -10), true);
 		rapidBus.register(this);
 	}
 
@@ -57,7 +57,7 @@ public class PhysicSystem extends EntityProcessingSystem {
 	public void inserted(Entity e) {
 		Box2dComponent box2d = box2dMapper.get(e);
 		PositionComponent position = positionMapper.get(e);
-		Body body = BodyCreator.getBody(position.getPosition(), physicWorld);
+		Body body = BodyCreator.getBody(position.getPosition(), physicWorld, box2d.isKinematic());
 		body.setUserData(box2d.getUserData());
 		box2d.setBody(body);
 	}

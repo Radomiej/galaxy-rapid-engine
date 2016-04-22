@@ -37,20 +37,21 @@ public enum RapidAsset {
 		manager.setLoader(SkeletonData.class, new SkeletonDataLoader());
 	}
 
-	public void loadSound(String sound){
+	public void loadSound(String sound) {
 		String assetName = "sounds/" + sound;
 		manager.load(assetName, Sound.class);
 	}
-	
+
 	/**
-	 * @param fileName path do texture with assets[root] folder
+	 * @param fileName
+	 *            path do texture with assets[root] folder
 	 */
 	public void loadTexture(String fileName) {
 		manager.load(fileName, Texture.class);
 	}
 
 	private void loadSprite() {
-		Gdx.app.log("RapidAsset" , "Loading all sprites in current avaiable in device memory");
+		Gdx.app.log("RapidAsset", "Loading all sprites in current avaiable in device memory");
 		for (MultiTextureAtlas multiTextureAtlas : atlasMap.values()) {
 			multiTextureAtlas.signAllAssets(spriteMap);
 		}
@@ -65,7 +66,7 @@ public enum RapidAsset {
 
 	public SpineAssetModel getSpine(String skeletonAssetName, final String skinName) {
 		final String jsonFullName = "spine/" + skeletonAssetName + ".json";
-		
+
 		SkeletonData skeletonData = manager.get(jsonFullName, SkeletonData.class);
 		SpineAssetModel newSpineAssetModel = new SpineAssetModel();
 		newSpineAssetModel.setSkeleton(new Skeleton(skeletonData));
@@ -78,14 +79,18 @@ public enum RapidAsset {
 		return newSpineAssetModel;
 	}
 
-	public void loadSprite(String resourcePath){
-		Sprite sprite = new Sprite(new Texture(resourcePath));
-		spriteMap.put(resourcePath, sprite);
+	public void loadSprite(String resourcePath) {
+		try {
+			Sprite sprite = new Sprite(new Texture(resourcePath));
+			spriteMap.put(resourcePath, sprite);
+		} catch (Exception exd) {
+
+		}
 	}
-	
+
 	public Sprite getSprite(String regionName) {
 		Sprite loadingSprite = spriteMap.get(regionName);
-		if(loadingSprite == null){
+		if (loadingSprite == null) {
 			loadSprite(regionName);
 			loadingSprite = spriteMap.get(regionName);
 		}
@@ -95,8 +100,8 @@ public enum RapidAsset {
 	public void loadSpine(String spineAssetsName) {
 		final String spineAtlasFullName = "spine/" + spineAssetsName + ".atlas";
 		final String jsonFullName = "spine/" + spineAssetsName + ".json";
-		Gdx.app.log("RapidAsset" , "spineAtlas: " + spineAtlasFullName);
-		Gdx.app.log("RapidAsset" , "jsonData: " + jsonFullName);
+		Gdx.app.log("RapidAsset", "spineAtlas: " + spineAtlasFullName);
+		Gdx.app.log("RapidAsset", "jsonData: " + jsonFullName);
 
 		SkeletonDataLoaderParameter parameter = new SkeletonDataLoaderParameter(spineAtlasFullName, 1);
 		manager.load(jsonFullName, SkeletonData.class, parameter);
@@ -106,25 +111,25 @@ public enum RapidAsset {
 	private String addFullNameAtlas(String prefix, String spineAtlas) {
 		return prefix + "/" + spineAtlas;
 	}
-	
-	public void unloadSpine(String spineAssetsName){
+
+	public void unloadSpine(String spineAssetsName) {
 		final String jsonFullName = "spine/" + spineAssetsName + ".json";
 		manager.unload(jsonFullName);
 	}
-	
-	public void unloadTextureAtlas(String textureAtlasAsset){
+
+	public void unloadTextureAtlas(String textureAtlasAsset) {
 		MultiTextureAtlas multiTextureAtlas = atlasMap.get(textureAtlasAsset);
 		multiTextureAtlas.dispose();
 		atlasMap.remove(textureAtlasAsset);
 	}
-	
-	public void unloadSound(String sound){
+
+	public void unloadSound(String sound) {
 		String assetName = "sounds/" + sound;
 		manager.unload(assetName);
 	}
-	
+
 	public boolean loadedComplete() {
-		if(manager.update()){
+		if (manager.update()) {
 			loadSprite();
 			return true;
 		}

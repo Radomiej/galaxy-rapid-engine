@@ -1,6 +1,5 @@
 package galaxy.rapid.screen;
 
-import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.UuidEntityManager;
@@ -10,6 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 
 import galaxy.rapid.common.EntityEngine;
 import galaxy.rapid.configuration.RapidConfiguration;
@@ -27,6 +28,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 	public static final float MIN_DELTA = 1 / 15f;
 
 	protected EntityEngine world;
+	protected World physicWorld;
 	protected InputMultiplexer inputMultiplexer;
 	protected OrthographicCamera camera;
 	protected PolygonSpriteBatch spriteBatch;
@@ -56,6 +58,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		inputMultiplexer = (InputMultiplexer) Gdx.input.getInputProcessor();
 		spriteBatch = new PolygonSpriteBatch();
 
+		physicWorld = new World(new Vector2(0, -10), true);
 		WorldConfiguration worldConfiguration = new WorldConfiguration();	
 		
 		worldConfiguration.setSystem(UuidEntityManager.class);
@@ -68,6 +71,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		worldConfiguration.setSystem(PhysicRectangleColliderSystem.class);
 		processBeforeRenderWorldConfiguration(worldConfiguration);
 		worldConfiguration.setSystem(new RenderSystem());
+		worldConfiguration.register(physicWorld);
 		worldConfiguration.register(rapidBus);	
 		worldConfiguration.register(camera);
 		worldConfiguration.register(inputMultiplexer);

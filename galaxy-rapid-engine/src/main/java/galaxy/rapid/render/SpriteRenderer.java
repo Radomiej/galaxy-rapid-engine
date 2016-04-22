@@ -30,8 +30,17 @@ public enum SpriteRenderer implements Renderer {
 		String assetName = spriteComponent.getSpriteAsset();
 		Sprite sprite = RapidAsset.INSTANCE.getSprite(assetName);
 
-		float posX = position.getPosition().x;
-		float posY = position.getPosition().y;
+		if(sprite == null) {
+			Gdx.app.error("SpriteRender", "Couldn`t load sprite: " + assetName);
+			return;
+		}
+		
+		sprite.setScale(position.getScale().x, position.getScale().y);
+		float sizeX = sprite.getWidth();
+		float sizeY = sprite.getHeight();
+		
+		float posX = position.getPosition().x - sizeX / 2;
+		float posY = position.getPosition().y - sizeY / 2;
 		
 		
 //		System.out.println("GR: " + RapidConfiguration.INSTANCE.getGameRatio());
@@ -42,7 +51,7 @@ public enum SpriteRenderer implements Renderer {
 //		System.out.println("originX: " + originX + " originX: " + originX);
 		sprite.setPosition(posX, posY);
 //		sprite.setSize(sizeX, sizeY);
-//		sprite.setOrigin(originX, originY);
+		sprite.setOrigin(sizeX / 2, sizeY / 2);
 		sprite.setRotation(position.getRotation());
 		sprite.draw(batch);
 	}
