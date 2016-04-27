@@ -21,8 +21,8 @@ public enum ShapeRenderer implements Renderer {
 	}
 
 	public void render(Entity e, Batch batch) {
-		ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class, e.getWorld());
-		ComponentMapper<ShapeComponent> shapeMapper = ComponentMapper.getFor(ShapeComponent.class, e.getWorld());
+		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class, e.getWorld());
+		ComponentMapper<ShapeComponent> shapeMapper = (ComponentMapper<ShapeComponent>) ComponentMapper.getFor(ShapeComponent.class, e.getWorld());
 		
 		PositionComponent position = positionMapper.get(e);
 		ShapeComponent shape = shapeMapper.get(e);

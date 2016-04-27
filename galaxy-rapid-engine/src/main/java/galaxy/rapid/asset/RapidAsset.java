@@ -1,7 +1,9 @@
 package galaxy.rapid.asset;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -10,6 +12,9 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.AnimationStateData;
 import com.esotericsoftware.spine.Skeleton;
@@ -24,14 +29,16 @@ public enum RapidAsset {
 
 	private volatile AssetManager manager;
 	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(10);
-	private Map<String, MultiTextureAtlas> atlasMap = new HashMap<String, MultiTextureAtlas>(10);
+//	private Map<String, MultiTextureAtlas> atlasMap = new HashMap<String, MultiTextureAtlas>(10);
+//	private Map<String, Sprite> atlasesSpriteMap = new HashMap<String, Sprite>(10);
+	private Set<String> atlases = new HashSet<String>();
 	private FileHandleResolver handleResolver;
 
 	private RapidAsset() {
 		handleResolver = new RapidFileHandleResolver();
-		if (RapidConfiguration.INSTANCE.isDebugMode()) {
-			handleResolver = new InternalFileHandleResolver();
-		}
+//		if (RapidConfiguration.INSTANCE.isDebugMode()) {
+//			handleResolver = new InternalFileHandleResolver();
+//		}
 
 		manager = new AssetManager(handleResolver);
 		manager.setLoader(SkeletonData.class, new SkeletonDataLoader());
@@ -50,18 +57,27 @@ public enum RapidAsset {
 		manager.load(fileName, Texture.class);
 	}
 
-	private void loadSprite() {
-		Gdx.app.log("RapidAsset", "Loading all sprites in current avaiable in device memory");
-		for (MultiTextureAtlas multiTextureAtlas : atlasMap.values()) {
-			multiTextureAtlas.signAllAssets(spriteMap);
-		}
-	}
+//	private void loadSprite() {
+//		Gdx.app.log("RapidAsset", "Loading all sprites in current avaiable in device memory");
+//		for (MultiTextureAtlas multiTextureAtlas : atlasMap.values()) {
+//			multiTextureAtlas.signAllAssets(spriteMap);
+//		}
+//	}
 
-	public void loadTextureAtlas(final String textureAtlasAsset) {
-		String atlasFullName = addFullNameAtlas("images", textureAtlasAsset);
-		MultiTextureAtlas multiTextureAtlas = new MultiTextureAtlas(atlasFullName);
-		multiTextureAtlas.findAllAtlas(handleResolver, manager);
-		atlasMap.put(textureAtlasAsset, multiTextureAtlas);
+	public void loadTextureAtlas(final String textureAtlasPath) {
+//		MultiTextureAtlas multiTextureAtlas = new MultiTextureAtlas(textureAtlasAsset);
+//		multiTextureAtlas.findAllAtlas(handleResolver, manager);
+		manager.load(textureAtlasPath, TextureAtlas.class);
+		manager.finishLoadingAsset(textureAtlasPath);
+		TextureAtlas atlas = manager.get(textureAtlasPath);
+		Array<AtlasRegion> regions = atlas.getRegions();
+		for(AtlasRegion region : regions){
+			String spriteName = region.name;
+			System.out.println("Region: " + spriteName);
+			spriteMap.put(textureAtlasPath + "#" + spriteName, atlas.createSprite(spriteName));
+		}
+		
+		atlases.add(textureAtlasPath);
 	}
 
 	public SpineAssetModel getSpine(String skeletonAssetName, final String skinName) {
@@ -89,10 +105,20 @@ public enum RapidAsset {
 	}
 
 	public Sprite getSprite(String regionName) {
+		System.out.println("getSprite: " + spriteMap.get(regionName));
 		Sprite loadingSprite = spriteMap.get(regionName);
 		if (loadingSprite == null) {
 			loadSprite(regionName);
-			loadingSprite = spriteMap.get(regionName);
+//			loadingSprite = spriteMap.get(regionName);
+		}
+		return loadingSprite;
+	}
+
+	public Sprite getAtlasSprite(String assetName) {
+		Sprite loadingSprite = spriteMap.get(assetName);
+		if (loadingSprite == null) {
+			loadTextureAtlas(assetName.split("#")[0]);
+			loadingSprite = spriteMap.get(loadingSprite);
 		}
 		return loadingSprite;
 	}
@@ -108,34 +134,24 @@ public enum RapidAsset {
 
 	}
 
-	private String addFullNameAtlas(String prefix, String spineAtlas) {
-		return prefix + "/" + spineAtlas;
-	}
-
 	public void unloadSpine(String spineAssetsName) {
 		final String jsonFullName = "spine/" + spineAssetsName + ".json";
 		manager.unload(jsonFullName);
 	}
 
 	public void unloadTextureAtlas(String textureAtlasAsset) {
-		MultiTextureAtlas multiTextureAtlas = atlasMap.get(textureAtlasAsset);
-		multiTextureAtlas.dispose();
-		atlasMap.remove(textureAtlasAsset);
+//		MultiTextureAtlas multiTextureAtlas = atlasMap.get(textureAtlasAsset);
+//		multiTextureAtlas.dispose();
+		TextureAtlas atlas = manager.get(textureAtlasAsset);
+		atlas.dispose();
+		atlases.remove(textureAtlasAsset);
 	}
 
 	public void unloadSound(String sound) {
 		String assetName = "sounds/" + sound;
 		manager.unload(assetName);
 	}
-
-	public boolean loadedComplete() {
-		if (manager.update()) {
-			loadSprite();
-			return true;
-		}
-		return false;
-	}
-
+	
 	public float getProgress() {
 		return manager.getProgress();
 	}

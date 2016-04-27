@@ -24,9 +24,9 @@ public enum SpineRenderer implements Renderer {
 	}
 
 	public void render(Entity e, Batch batch) {
-		ComponentMapper<RenderComponent> renderMapper = ComponentMapper.getFor(RenderComponent.class, e.getWorld());
-		ComponentMapper<SpineComponent> spineMapper = ComponentMapper.getFor(SpineComponent.class, e.getWorld());
-		ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class, e.getWorld());
+		ComponentMapper<RenderComponent> renderMapper = (ComponentMapper<RenderComponent>) ComponentMapper.getFor(RenderComponent.class, e.getWorld());
+		ComponentMapper<SpineComponent> spineMapper = (ComponentMapper<SpineComponent>) ComponentMapper.getFor(SpineComponent.class, e.getWorld());
+		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class, e.getWorld());
 
 		PositionComponent position = positionMapper.get(e);
 		RenderComponent render = renderMapper.get(e);

@@ -21,7 +21,7 @@ public class MultiTextureAtlas {
 	private AssetManager manager;
 	/**
 	 * 
-	 * @param fullName this is name in format [atlas-simple-name][scale-name]
+	 * @param fullName this is name in format [full-path-in-resources]/[atlas-name].[extansion]
 	 */
 	public MultiTextureAtlas(String fullName) {
 		this.fullName = fullName;
@@ -31,7 +31,7 @@ public class MultiTextureAtlas {
 		this.manager = manager;
 		int startIndex = 0;
 		while(true){
-			final String searchAtlas = fullName + startIndex + ".atlas";
+			final String searchAtlas = fullName + startIndex ;//+ ".atlas";
 			FileHandle fileAtlas = fileHandleResolver.resolve(searchAtlas);
 			if(fileAtlas.exists()){
 				atlases.add(searchAtlas);

@@ -4,6 +4,7 @@ import com.artemis.Component;
 
 public class SpriteComponent extends Component {
 	private String spriteAsset;
+	private boolean isAtlas;
 
 	public SpriteComponent() {
 	}
@@ -21,6 +22,14 @@ public class SpriteComponent extends Component {
 	}
 
 	
+	public boolean isAtlas() {
+		return isAtlas;
+	}
+
+	public void setAtlas(boolean isAtlas) {
+		this.isAtlas = isAtlas;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -23,7 +23,7 @@ public enum EmptyRenderer implements Renderer {
 	}
 
 	public void render(Entity e, Batch batch) {
-		ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class,
+		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class,
 				e.getWorld());
 
 		PositionComponent position = positionMapper.get(e);
