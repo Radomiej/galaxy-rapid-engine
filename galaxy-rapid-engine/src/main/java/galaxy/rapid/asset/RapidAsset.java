@@ -81,9 +81,10 @@ public enum RapidAsset {
 	}
 
 	public SpineAssetModel getSpine(String skeletonAssetName, final String skinName) {
-		final String jsonFullName = "spine/" + skeletonAssetName + ".json";
-
+		final String jsonFullName = skeletonAssetName;
+		manager.finishLoadingAsset(jsonFullName);
 		SkeletonData skeletonData = manager.get(jsonFullName, SkeletonData.class);
+		
 		SpineAssetModel newSpineAssetModel = new SpineAssetModel();
 		newSpineAssetModel.setSkeleton(new Skeleton(skeletonData));
 		newSpineAssetModel.getSkeleton().setSkin(skinName);
@@ -97,19 +98,27 @@ public enum RapidAsset {
 
 	public void loadSprite(String resourcePath) {
 		try {
-			Sprite sprite = new Sprite(new Texture(resourcePath));
+			manager.load(resourcePath, Texture.class);
+			manager.finishLoadingAsset(resourcePath);
+			Sprite sprite = new Sprite((Texture) manager.get(resourcePath));
 			spriteMap.put(resourcePath, sprite);
 		} catch (Exception exd) {
 
 		}
 	}
 
-	public Sprite getSprite(String regionName) {
-		System.out.println("getSprite: " + spriteMap.get(regionName));
-		Sprite loadingSprite = spriteMap.get(regionName);
+	public Sprite getSprite(String spritePath) {
+//		System.out.println("getSprite: " + spritePath + " instance: "+ spriteMap.get(spritePath));
+		if(spritePath == null || spritePath.equals("null")){
+			Gdx.app.error("AssetManager", "try get null sprite");
+			return null;
+		}
+		
+		Sprite loadingSprite = spriteMap.get(spritePath);
 		if (loadingSprite == null) {
-			loadSprite(regionName);
-//			loadingSprite = spriteMap.get(regionName);
+//			loadSprite(spritePath);
+			manager.finishLoadingAsset(spritePath);
+			loadingSprite = spriteMap.get(spritePath);
 		}
 		return loadingSprite;
 	}
@@ -123,9 +132,10 @@ public enum RapidAsset {
 		return loadingSprite;
 	}
 
-	public void loadSpine(String spineAssetsName) {
-		final String spineAtlasFullName = "spine/" + spineAssetsName + ".atlas";
-		final String jsonFullName = "spine/" + spineAssetsName + ".json";
+	public void loadSpine(String spineAssetsPath) {
+		
+		final String spineAtlasFullName = spineAssetsPath.replace(".json", ".atlas");
+		final String jsonFullName = spineAssetsPath;
 		Gdx.app.log("RapidAsset", "spineAtlas: " + spineAtlasFullName);
 		Gdx.app.log("RapidAsset", "jsonData: " + jsonFullName);
 
@@ -135,7 +145,7 @@ public enum RapidAsset {
 	}
 
 	public void unloadSpine(String spineAssetsName) {
-		final String jsonFullName = "spine/" + spineAssetsName + ".json";
+		final String jsonFullName = spineAssetsName;
 		manager.unload(jsonFullName);
 	}
 

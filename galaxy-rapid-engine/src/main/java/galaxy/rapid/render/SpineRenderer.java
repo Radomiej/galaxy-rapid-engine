@@ -2,8 +2,11 @@ package galaxy.rapid.render;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonRenderer;
@@ -17,16 +20,19 @@ public enum SpineRenderer implements Renderer {
 	INSTANCE;
 
 	private SkeletonRenderer renderer;
-	
+
 	private SpineRenderer() {
 		renderer = new SkeletonRenderer();
 		renderer.setPremultipliedAlpha(true);
 	}
 
 	public void render(Entity e, Batch batch) {
-		ComponentMapper<RenderComponent> renderMapper = (ComponentMapper<RenderComponent>) ComponentMapper.getFor(RenderComponent.class, e.getWorld());
-		ComponentMapper<SpineComponent> spineMapper = (ComponentMapper<SpineComponent>) ComponentMapper.getFor(SpineComponent.class, e.getWorld());
-		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class, e.getWorld());
+		ComponentMapper<RenderComponent> renderMapper = (ComponentMapper<RenderComponent>) ComponentMapper
+				.getFor(RenderComponent.class, e.getWorld());
+		ComponentMapper<SpineComponent> spineMapper = (ComponentMapper<SpineComponent>) ComponentMapper
+				.getFor(SpineComponent.class, e.getWorld());
+		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper
+				.getFor(PositionComponent.class, e.getWorld());
 
 		PositionComponent position = positionMapper.get(e);
 		RenderComponent render = renderMapper.get(e);
@@ -35,21 +41,27 @@ public enum SpineRenderer implements Renderer {
 		Skeleton skeleton = spine.getSkeleton();
 
 		skeleton.setFlipX(render.isFlipX());
-		
+
 		float posX = position.getPosition().x;
 		float posY = position.getPosition().y;
-		
+
 		skeleton.setPosition(posX, posY);
-//		skeleton.setBonesToSetupPose();
-//		skeleton.setSlotsToSetupPose();
-//		System.out.println("Rotacja spine: " + body.getRotation());
+		// skeleton.setBonesToSetupPose();
+		// skeleton.setSlotsToSetupPose();
+		// System.out.println("Rotacja spine: " + body.getRotation());
 		skeleton.getRootBone().setRotation(position.getRotation());
 		skeleton.getColor().a = 1;
 		state.update(e.getWorld().getDelta());
 		state.apply(skeleton);
 		skeleton.updateWorldTransform();
-
-		renderer.draw((PolygonSpriteBatch)batch, skeleton);
+		
+		int blendDst = batch.getBlendDstFunc();
+		int blendSrc = batch.getBlendSrcFunc();
+//		Matrix4 oldMatrix = batch.getProjectionMatrix().cpy();
+//		batch.setProjectionMatrix(oldMatrix.cpy().rotate(0, 0, 1, position.getRotation()));
+		renderer.draw((PolygonSpriteBatch) batch, skeleton);
+		batch.setBlendFunction(blendSrc, blendDst);
+//		batch.setProjectionMatrix(oldMatrix);
 	}
 
 }

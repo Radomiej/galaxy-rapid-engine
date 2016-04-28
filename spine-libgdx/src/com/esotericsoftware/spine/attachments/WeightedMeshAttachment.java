@@ -42,7 +42,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.NumberUtils;
 
 /** Attachment that displays a texture region. */
-public class SkinnedMeshAttachment extends Attachment {
+public class WeightedMeshAttachment extends Attachment implements FfdAttachment {
 	private TextureRegion region;
 	private String path;
 	private int[] bones;
@@ -51,12 +51,14 @@ public class SkinnedMeshAttachment extends Attachment {
 	private float[] worldVertices;
 	private final Color color = new Color(1, 1, 1, 1);
 	private int hullLength;
+	private WeightedMeshAttachment parentMesh;
+	private boolean inheritFFD;
 
 	// Nonessential.
-	private int[] edges;
+	private short[] edges;
 	private float width, height;
 
-	public SkinnedMeshAttachment (String name) {
+	public WeightedMeshAttachment (String name) {
 		super(name);
 	}
 
@@ -99,7 +101,8 @@ public class SkinnedMeshAttachment extends Attachment {
 		}
 	}
 
-	public void updateWorldVertices (Slot slot, boolean premultipliedAlpha) {
+	/** @return The updated world vertices. */
+	public float[] updateWorldVertices (Slot slot, boolean premultipliedAlpha) {
 		Skeleton skeleton = slot.getSkeleton();
 		Color skeletonColor = skeleton.getColor();
 		Color meshColor = slot.getColor();
@@ -126,8 +129,8 @@ public class SkinnedMeshAttachment extends Attachment {
 				for (; v < nn; v++, b += 3) {
 					Bone bone = (Bone)skeletonBones[bones[v]];
 					float vx = weights[b], vy = weights[b + 1], weight = weights[b + 2];
-					wx += (vx * bone.getM00() + vy * bone.getM01() + bone.getWorldX()) * weight;
-					wy += (vx * bone.getM10() + vy * bone.getM11() + bone.getWorldY()) * weight;
+					wx += (vx * bone.getA() + vy * bone.getB() + bone.getWorldX()) * weight;
+					wy += (vx * bone.getC() + vy * bone.getD() + bone.getWorldY()) * weight;
 				}
 				worldVertices[w] = wx + x;
 				worldVertices[w + 1] = wy + y;
@@ -141,14 +144,19 @@ public class SkinnedMeshAttachment extends Attachment {
 				for (; v < nn; v++, b += 3, f += 2) {
 					Bone bone = (Bone)skeletonBones[bones[v]];
 					float vx = weights[b] + ffd[f], vy = weights[b + 1] + ffd[f + 1], weight = weights[b + 2];
-					wx += (vx * bone.getM00() + vy * bone.getM01() + bone.getWorldX()) * weight;
-					wy += (vx * bone.getM10() + vy * bone.getM11() + bone.getWorldY()) * weight;
+					wx += (vx * bone.getA() + vy * bone.getB() + bone.getWorldX()) * weight;
+					wy += (vx * bone.getC() + vy * bone.getD() + bone.getWorldY()) * weight;
 				}
 				worldVertices[w] = wx + x;
 				worldVertices[w + 1] = wy + y;
 				worldVertices[w + 2] = color;
 			}
 		}
+		return worldVertices;
+	}
+
+	public boolean applyFFD (Attachment sourceAttachment) {
+		return this == sourceAttachment || (inheritFFD && parentMesh == sourceAttachment);
 	}
 
 	public float[] getWorldVertices () {
@@ -212,11 +220,11 @@ public class SkinnedMeshAttachment extends Attachment {
 		this.hullLength = hullLength;
 	}
 
-	public void setEdges (int[] edges) {
+	public void setEdges (short[] edges) {
 		this.edges = edges;
 	}
 
-	public int[] getEdges () {
+	public short[] getEdges () {
 		return edges;
 	}
 
@@ -234,5 +242,33 @@ public class SkinnedMeshAttachment extends Attachment {
 
 	public void setHeight (float height) {
 		this.height = height;
+	}
+
+	/** Returns the source mesh if this is a linked mesh, else returns null. */
+	public WeightedMeshAttachment getParentMesh () {
+		return parentMesh;
+	}
+
+	/** @param parentMesh May be null. */
+	public void setParentMesh (WeightedMeshAttachment parentMesh) {
+		this.parentMesh = parentMesh;
+		if (parentMesh != null) {
+			bones = parentMesh.bones;
+			weights = parentMesh.weights;
+			regionUVs = parentMesh.regionUVs;
+			triangles = parentMesh.triangles;
+			hullLength = parentMesh.hullLength;
+			edges = parentMesh.edges;
+			width = parentMesh.width;
+			height = parentMesh.height;
+		}
+	}
+
+	public boolean getInheritFFD () {
+		return inheritFFD;
+	}
+
+	public void setInheritFFD (boolean inheritFFD) {
+		this.inheritFFD = inheritFFD;
 	}
 }

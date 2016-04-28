@@ -30,7 +30,7 @@ public enum SpriteRenderer implements Renderer {
 		SpriteComponent spriteComponent = spriteMapper.get(e);
 		String assetName = spriteComponent.getSpriteAsset();
 		Sprite sprite = null;
-		if (spriteComponent.isAtlas()) {
+		if (spriteComponent.isAtlas() || assetName.contains("#")) {
 			sprite = RapidAsset.INSTANCE.getAtlasSprite(assetName);
 		} else {
 			sprite = RapidAsset.INSTANCE.getSprite(assetName);
