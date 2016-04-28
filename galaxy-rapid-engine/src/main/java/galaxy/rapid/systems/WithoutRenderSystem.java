@@ -1,19 +1,16 @@
 package galaxy.rapid.systems;
 
 import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.render.EmptyRenderer;
 
 public class WithoutRenderSystem extends EntityProcessingSystem {
 
-	ComponentMapper<BodyComponent> bodyMapper;
 	
 	@Wire
 	private SpriteBatch spriteBatch;	

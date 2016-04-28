@@ -5,10 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public class PositionComponent extends Component{
 	private Vector2 position;
+	private Vector2 scale;
 	private float rotation;
 
 	public PositionComponent() {
 		position = new Vector2();
+		scale = new Vector2(1, 1);
 	}
 	
 	public Vector2 getPosition() {
@@ -59,5 +61,13 @@ public class PositionComponent extends Component{
 		if (Float.floatToIntBits(rotation) != Float.floatToIntBits(other.rotation))
 			return false;
 		return true;
+	}
+
+	public Vector2 getScale() {
+		return scale;
+	}
+
+	public void setScale(Vector2 scale) {
+		this.scale = scale;
 	}
 }

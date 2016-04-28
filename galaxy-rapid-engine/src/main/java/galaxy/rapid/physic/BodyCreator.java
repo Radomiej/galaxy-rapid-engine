@@ -8,12 +8,16 @@ import com.badlogic.gdx.physics.box2d.World;
 
 
 public class BodyCreator {
-	public static Body getBody(Vector2 position, World physicWorld){
+	public static Body getBody(Vector2 position, World physicWorld, boolean kinematic){
 		// First we create a body definition
 		BodyDef bodyDef = new BodyDef();
 		// We set our body to dynamic, for something like ground which doesn't
 		// move we would set it to StaticBody
-		bodyDef.type = BodyType.DynamicBody;
+		if(kinematic){
+			bodyDef.type = BodyType.KinematicBody;
+		}else{
+			bodyDef.type = BodyType.DynamicBody;
+		}
 		bodyDef.position.set(position);
 		// Create our body in the world using our body definition
 		Body body = physicWorld.createBody(bodyDef);

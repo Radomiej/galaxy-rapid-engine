@@ -1,6 +1,7 @@
 package galaxy.rapid.physic;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.RefCountedContainer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -12,11 +13,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 
-import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.PositionComponent;
+import galaxy.rapid.components.RectangleColliderComponent;
 
 public class Box2dFactory {
-
+/*
 	public static Fixture createCircle(World world, BodyComponent bodyComponent, PositionComponent positionComponent) {
 
 		// Set our body's starting position in the world
@@ -79,25 +80,15 @@ public class Box2dFactory {
 		
 		return vectores;
 	}
-
-	public static Fixture createRectangle(World world, BodyComponent bodyComponent, PositionComponent positionComponent) {
-		// First we create a body definition
-		BodyDef bodyDef = new BodyDef();
-		// We set our body to dynamic, for something like ground which doesn't
-		// move we would set it to StaticBody
-		bodyDef.type = BodyType.DynamicBody;
-		// Set our body's starting position in the world
-		Vector2 position = new Vector2(positionComponent.getPosition());
-		bodyDef.position.set(position);
-
-		// Create our body in the world using our body definition
-		Body body = world.createBody(bodyDef);
-		body.setLinearDamping(0.2f);
-		body.setAngularDamping(1);
+*/
+	public static Fixture createRectangle(World world, PositionComponent positionComponent,
+			RectangleColliderComponent rectangleColliderComponent,Body body) {
+//		body.setLinearDamping(0.2f);
+		//		body.setAngularDamping(1);
 		// body.setFixedRotation(true);
 		// Create a circle shape and set its radius to 6
 		PolygonShape rectangle = new PolygonShape();
-		rectangle.setAsBox(bodyComponent.getSize().x / 2, bodyComponent.getSize().y / 2);
+		rectangle.setAsBox(rectangleColliderComponent.getWidth() / 2, rectangleColliderComponent.getHeight() / 2);
 
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
@@ -114,7 +105,7 @@ public class Box2dFactory {
 		rectangle.dispose();
 		return fixture;
 	}
-
+/*
 	public static void createGround(World world) {
 		// Create our body definition
 		BodyDef groundBodyDef = new BodyDef();
@@ -156,4 +147,5 @@ public class Box2dFactory {
 
 		return fixture;
 	}
+	*/
 }

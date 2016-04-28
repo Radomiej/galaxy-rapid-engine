@@ -6,8 +6,6 @@ import java.util.Set;
 
 import com.artemis.Component;
 
-import galaxy.rapid.components.BodyComponent;
-
 public class HashComponentsBag {
 	private HashMap<Class, Component> componentsMap;
 

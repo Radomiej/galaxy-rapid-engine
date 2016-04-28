@@ -6,11 +6,14 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
+import galaxy.rapid.asset.AssetQueue;
 import galaxy.rapid.eventbus.RapidBus;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class ScreenNavigator {
 	private Screen currentScreen;
+	private AssetQueue currentAssetQueue;
+
 	private Map<Class<? extends Screen>, Screen> activeOldScreens;
 	private RapidBus eventBus;
 
@@ -22,7 +25,7 @@ public class ScreenNavigator {
 		this.eventBus = eventBus;
 		this.eventBus.register(this);
 		activeOldScreens = new HashMap<Class<? extends Screen>, Screen>();
-		Gdx.app.log("ScreenNavigator" , "Initialize ScreenNavigator complete.");
+		Gdx.app.log("ScreenNavigator", "Initialize ScreenNavigator complete.");
 		changeScreen(startScreen, false);
 	}
 
@@ -39,6 +42,9 @@ public class ScreenNavigator {
 			currentScreen.hide();
 			if (dispose) {
 				currentScreen.dispose();
+				if (currentAssetQueue != null) {
+					currentAssetQueue.unloadAll();
+				}
 			} else {
 				activeOldScreens.put(currentScreen.getClass(), currentScreen);
 			}
@@ -47,9 +53,10 @@ public class ScreenNavigator {
 
 	@Subscribe
 	public void changeScreen(ChangeScreenEvent changeEvent) {
-		Gdx.app.log("ScreenNavigator" , "Incoming change screen event: ");
+		Gdx.app.log("ScreenNavigator", "Incoming change screen event: ");
 		try {
 			changeScreen(changeEvent.getNewScene(), changeEvent.isDisposeCurrent());
+			currentAssetQueue = changeEvent.getAssetQueue();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,9 +64,10 @@ public class ScreenNavigator {
 	}
 
 	public void changeScreen(Screen newScene, boolean disposeOld) {
-		Gdx.app.debug("ScreenNavigator" ,"Initial changeScene...");
+		Gdx.app.debug("ScreenNavigator", "Initial changeScene...");
 		if (currentScreen != null && newScene.getClass().equals(currentScreen.getClass()) && !disposeOld) {
-			Gdx.app.error("ScreenNavigator" ,"Invoke change without disposeOld=true, for the same Screen Class object`s!");
+			Gdx.app.error("ScreenNavigator",
+					"Invoke change without disposeOld=true, for the same Screen Class object`s!");
 			return;
 		}
 

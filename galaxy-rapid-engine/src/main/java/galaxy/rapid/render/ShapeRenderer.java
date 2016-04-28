@@ -1,16 +1,16 @@
 package galaxy.rapid.render;
 
+import java.util.List;
+
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
-import galaxy.rapid.asset.RapidAsset;
-import galaxy.rapid.components.BodyComponent;
 import galaxy.rapid.components.PositionComponent;
-import galaxy.rapid.configuration.RapidConfiguration;
+import galaxy.rapid.components.ShapeComponent;
 
 public enum ShapeRenderer implements Renderer {
 	INSTANCE;
@@ -21,34 +21,30 @@ public enum ShapeRenderer implements Renderer {
 	}
 
 	public void render(Entity e, Batch batch) {
-		ComponentMapper<BodyComponent> bodyMapper = ComponentMapper.getFor(BodyComponent.class, e.getWorld());
-		ComponentMapper<PositionComponent> positionMapper = ComponentMapper.getFor(PositionComponent.class, e.getWorld());
+		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class, e.getWorld());
+		ComponentMapper<ShapeComponent> shapeMapper = (ComponentMapper<ShapeComponent>) ComponentMapper.getFor(ShapeComponent.class, e.getWorld());
 		
-		BodyComponent body = bodyMapper.get(e);
 		PositionComponent position = positionMapper.get(e);
+		ShapeComponent shape = shapeMapper.get(e);
 		
-		if(body == null || position == null) return;
-		
-		float sizeX = body.getSize().x;
-		float sizeY = body.getSize().y ;
-		sizeX *= RapidConfiguration.INSTANCE.getGameRatio();
-		sizeY *= RapidConfiguration.INSTANCE.getGameRatio();
-		
-		float originX = body.getOrigin().x ;
-		float originY = body.getOrigin().y;
-		originX *= RapidConfiguration.INSTANCE.getGameRatio();
-		originY *= RapidConfiguration.INSTANCE.getGameRatio();
-		
-		float posX = position.getPosition().x - originX;
-		float posY = position.getPosition().y - originY;
-		posX *= RapidConfiguration.INSTANCE.getGameRatio();
-		posY *= RapidConfiguration.INSTANCE.getGameRatio();
-
+		if (position == null) {
+			Gdx.app.error("ShapeRenderer", "PositionComponent doesn`t exist!");
+			return;
+		}
+	
+		batch.end();
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+		shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+		shapeRenderer.updateMatrices();
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.rect(posX, posY, originX, originY, sizeX, sizeY, 1, 1, position.getRotation());
+		List<Vector2> positions = shape.getPolygonPoints();
+		
+		for(int x = 1; x < positions.size(); x++){
+			shapeRenderer.line(positions.get(x - 1), positions.get(x));
+		}
+		
 		shapeRenderer.end();
-
+		batch.begin();
 	}
 
 }

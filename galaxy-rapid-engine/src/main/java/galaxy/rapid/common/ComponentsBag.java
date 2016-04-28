@@ -5,8 +5,6 @@ import java.util.Set;
 
 import com.artemis.Component;
 
-import galaxy.rapid.components.BodyComponent;
-
 public class ComponentsBag {
 	private Set<Component> components;
 
@@ -66,5 +64,13 @@ public class ComponentsBag {
 
 	public void addComponent(Component component) {
 		components.add(component);
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ComponentsBag [" + (components != null ? "components=" + components : "") + "]";
 	}
 }
