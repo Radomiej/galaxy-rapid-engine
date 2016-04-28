@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
+import galaxy.rapid.camera.RapidCamera;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.ShapeComponent;
 import galaxy.rapid.components.SpineComponent;
@@ -38,7 +39,7 @@ public class RenderSystem extends BaseSystem {
 	private Box2DDebugRenderer debugRenderer;
 	private boolean debugRender = false;
 	@Wire
-	private OrthographicCamera camera;
+	private RapidCamera camera;
 	@Wire
 	private RapidBus rapidBus;
 	
@@ -50,7 +51,8 @@ public class RenderSystem extends BaseSystem {
 
 	@Override
 	protected void begin() {
-		polygonBatch.setProjectionMatrix(camera.combined);
+		SpineRenderer.INSTANCE.prepareCamera(camera);
+		polygonBatch.setProjectionMatrix(camera.getCombined());
 		polygonBatch.begin();
 	}
 
@@ -79,7 +81,7 @@ public class RenderSystem extends BaseSystem {
 	protected void end() {
 		polygonBatch.end();
 		if (debugRender) {
-			debugRenderer.render(physicSystem.getPhysicWorld(), camera.combined);
+			debugRenderer.render(physicSystem.getPhysicWorld(), camera.getCombined());
 		}
 	}
 

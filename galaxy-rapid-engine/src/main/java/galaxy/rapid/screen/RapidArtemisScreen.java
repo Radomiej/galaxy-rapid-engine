@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import galaxy.rapid.camera.RapidCamera;
 import galaxy.rapid.common.EntityEngine;
 import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.eventbus.RapidBus;
@@ -30,7 +31,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 	protected EntityEngine world;
 	protected World physicWorld;
 	protected InputMultiplexer inputMultiplexer;
-	protected OrthographicCamera camera;
+	protected RapidCamera camera;
 	protected PolygonSpriteBatch spriteBatch;
 	protected RapidBus rapidBus;
 
@@ -51,10 +52,11 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 
-		camera = new OrthographicCamera(w, w * (h / w));
-		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-		camera.update();
-
+		OrthographicCamera cameraRaw = new OrthographicCamera(w, w * (h / w));
+		cameraRaw.position.set(cameraRaw.viewportWidth / 2f, cameraRaw.viewportHeight / 2f, 0);
+		cameraRaw.update();
+		camera = new RapidCamera(cameraRaw);
+		
 		inputMultiplexer = (InputMultiplexer) Gdx.input.getInputProcessor();
 		spriteBatch = new PolygonSpriteBatch();
 
