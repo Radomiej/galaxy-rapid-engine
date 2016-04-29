@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
@@ -70,13 +71,10 @@ public enum SpineRenderer implements Renderer {
 
 		camera.setPosition(posX, posY);
 		camera.setRotation(mainCamera.getRotation() + position.getRotation());
+		Vector2 reverseScale = new Vector2(1 / position.getScale().x, 1 / position.getScale().y);
+		camera.setViewport(mainCamera.getViewport().scl(reverseScale));
 		camera.update();
-		// batch.setTransformMatrix(oldTransMatrix.cpy().setTranslation(0, 0,
-		// 0.00000f));
-		// batch.setTransformMatrix(oldTransMatrix.cpy().rotate(axis.mul(oldTransMatrix),
-		// position.getRotation()));
-		// batch.setProjectionMatrix(oldProjMatrix.cpy().rotate(axis.mul(oldProjMatrix),
-		// position.getRotation()));
+		
 		batch.setProjectionMatrix(camera.getCombined());
 		renderer.draw((PolygonSpriteBatch) batch, skeleton);
 		batch.setBlendFunction(blendSrc, blendDst);
