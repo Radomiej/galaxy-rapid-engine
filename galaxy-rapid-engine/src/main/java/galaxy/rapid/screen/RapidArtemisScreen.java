@@ -17,6 +17,7 @@ import galaxy.rapid.common.EntityEngine;
 import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
+import galaxy.rapid.systems.BeforePhysicSystem;
 import galaxy.rapid.systems.DeleteEventSystem;
 import galaxy.rapid.systems.PhysicRectangleColliderSystem;
 import galaxy.rapid.systems.PhysicSystem;
@@ -69,6 +70,7 @@ public abstract class RapidArtemisScreen extends RapidScreen {
 		worldConfiguration.setSystem(TickEventSystem.class);
 		worldConfiguration.setSystem(DeleteEventSystem.class);
 		processBeforePhysicWorldConfiguration(worldConfiguration);
+		worldConfiguration.setSystem(BeforePhysicSystem.class);
 		worldConfiguration.setSystem(PhysicSystem.class);
 		worldConfiguration.setSystem(PhysicRectangleColliderSystem.class);
 		processBeforeRenderWorldConfiguration(worldConfiguration);
