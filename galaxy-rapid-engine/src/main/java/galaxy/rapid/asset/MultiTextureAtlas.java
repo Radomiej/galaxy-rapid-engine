@@ -54,7 +54,7 @@ public class MultiTextureAtlas {
 		for(String atlasName : atlases){
 			TextureAtlas atlas = manager.get(atlasName);
 			if(atlas.findRegion(regionName) != null){
-				Gdx.app.log("ScreenNavigator" , "Znaleziono texture: " + regionName + " w " + atlas.toString());
+				Gdx.app.log("MultiTextureAtlas" , "Znaleziono texture: " + regionName + " w " + atlas.toString());
 				return atlas.createSprite(regionName);
 			}
 		}
@@ -67,7 +67,7 @@ public class MultiTextureAtlas {
 			Array<AtlasRegion> regions = atlas.getRegions();
 			for(AtlasRegion region : regions){
 				String spriteName = region.name;
-				System.out.println("Region: " + spriteName);
+//				System.out.println("Region: " + spriteName);
 				assetsInAtlases.add(spriteName);
 				spriteMap.put(spriteName, atlas.createSprite(spriteName));
 			}
