@@ -92,7 +92,12 @@ public class PhysicRectangleColliderSystem extends EntityProcessingSystem {
 	@Subscribe
 	public void removeComponentEvent(RemoveRectangleColliderComponent removeComponent) {
 		UUID uuid = colliderToEntityMap.get(removeComponent.rectangleColliderComponent);
-		UuidHelper.getEntityFromUuid(uuid, world).edit().remove(removeComponent.rectangleColliderComponent.getClass());
+		Entity entity = UuidHelper.getEntityFromUuid(uuid, world);
+		if(entity == null) {
+			Gdx.app.error("UuidHelper.getEntityFromUuid", "Cannot find entity for this uuid: " + uuid);
+			return;
+		}
+		entity.edit().remove(removeComponent.rectangleColliderComponent.getClass());
 		colliderToEntityMap.remove(removeComponent.rectangleColliderComponent);
 		Gdx.app.log("PhysicRectangleColliderSystem", "Remove Fixture Event");
 	}
