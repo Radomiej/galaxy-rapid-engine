@@ -30,6 +30,7 @@ public enum RapidAsset {
 
 	private volatile AssetManager manager;
 	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(10);
+	private Map<String, Sprite> spriteMemoryMap = new HashMap<String, Sprite>(10);
 //	private Map<String, MultiTextureAtlas> atlasMap = new HashMap<String, MultiTextureAtlas>(10);
 //	private Map<String, Sprite> atlasesSpriteMap = new HashMap<String, Sprite>(10);
 	private Set<String> atlases = new HashSet<String>();
@@ -74,7 +75,7 @@ public enum RapidAsset {
 		Array<AtlasRegion> regions = atlas.getRegions();
 		for(AtlasRegion region : regions){
 			String spriteName = region.name;
-			System.out.println("Region: " + spriteName);
+//			System.out.println("Region: " + spriteName);
 			spriteMap.put(textureAtlasPath + "#" + spriteName, atlas.createSprite(spriteName));
 		}
 		
@@ -173,5 +174,13 @@ public enum RapidAsset {
 
 	public BitmapFont getBitmapFont(String fontResource) {
 		return null;
+	}
+
+	public void addMemoryTexture(String spriteName, Sprite sprite) {
+		spriteMemoryMap.put(spriteName, sprite);	
+	}
+	
+	public Sprite getMemorySprite(String spriteName){
+		return spriteMemoryMap.get(spriteName);
 	}
 }

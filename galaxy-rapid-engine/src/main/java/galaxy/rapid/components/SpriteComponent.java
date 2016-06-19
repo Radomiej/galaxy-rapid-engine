@@ -6,8 +6,9 @@ import galaxy.rapid.asset.RapidAsset;
 
 public class SpriteComponent extends Component {
 	private String spriteAsset;
-	private boolean isAtlas;
-
+	private boolean atlas;
+	private boolean memory;
+	
 	public SpriteComponent() {
 	}
 
@@ -25,11 +26,11 @@ public class SpriteComponent extends Component {
 
 	
 	public boolean isAtlas() {
-		return isAtlas;
+		return atlas;
 	}
 
 	public void setAtlas(boolean isAtlas) {
-		this.isAtlas = isAtlas;
+		this.atlas = isAtlas;
 	}
 
 	@Override
@@ -60,5 +61,13 @@ public class SpriteComponent extends Component {
 	@Override
 	public String toString() {
 		return "SpriteComponent [spriteAsset=" + spriteAsset + "]";
+	}
+
+	public boolean isMemory() {
+		return memory;
+	}
+
+	public void setMemory(boolean memory) {
+		this.memory = memory;
 	}
 }

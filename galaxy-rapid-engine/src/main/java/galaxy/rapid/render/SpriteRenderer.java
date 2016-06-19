@@ -32,7 +32,9 @@ public enum SpriteRenderer implements Renderer {
 		Sprite sprite = null;
 		if (spriteComponent.isAtlas() || assetName.contains("#")) {
 			sprite = RapidAsset.INSTANCE.getAtlasSprite(assetName);
-		} else {
+		} else if(spriteComponent.isMemory() || assetName.contains("%")){
+			sprite = RapidAsset.INSTANCE.getMemorySprite(assetName);
+		}else {
 			sprite = RapidAsset.INSTANCE.getSprite(assetName);
 		}
 
