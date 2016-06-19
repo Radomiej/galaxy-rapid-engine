@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.artemis.Component;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class ShapeComponent extends Component {
 	private List<Vector2> polygonPoints = new ArrayList<Vector2>();
-
+	private ShapeType shapeType = ShapeType.Filled;
+	
 	public List<Vector2> getPolygonPoints() {
 		return polygonPoints;
 	}
@@ -54,6 +56,14 @@ public class ShapeComponent extends Component {
 	@Override
 	public String toString() {
 		return "ShapeComponent [polygonPoints=" + polygonPoints + "]";
+	}
+
+	public ShapeType getShapeType() {
+		return shapeType;
+	}
+
+	public void setShapeType(ShapeType shapeType) {
+		this.shapeType = shapeType;
 	}
 	
 }

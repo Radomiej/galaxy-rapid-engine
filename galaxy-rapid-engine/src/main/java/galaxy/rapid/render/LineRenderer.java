@@ -12,11 +12,11 @@ import com.badlogic.gdx.math.Vector2;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.ShapeComponent;
 
-public enum ShapeRenderer implements Renderer {
+public enum LineRenderer implements Renderer {
 	INSTANCE;
 	private com.badlogic.gdx.graphics.glutils.ShapeRenderer shapeRenderer;
 
-	private ShapeRenderer() {
+	private LineRenderer() {
 		shapeRenderer = new com.badlogic.gdx.graphics.glutils.ShapeRenderer();
 	}
 

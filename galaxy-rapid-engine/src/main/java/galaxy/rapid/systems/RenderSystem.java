@@ -19,7 +19,7 @@ import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.render.EmptyRenderer;
 import galaxy.rapid.render.Renderer;
-import galaxy.rapid.render.ShapeRenderer;
+import galaxy.rapid.render.LineRenderer;
 import galaxy.rapid.render.SpineRenderer;
 import galaxy.rapid.render.SpriteRenderer;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -69,7 +69,7 @@ public class RenderSystem extends BaseSystem {
 		if (spriteMapper.has(e)) {
 			return SpriteRenderer.INSTANCE;
 		} else if (shapeMapper.has(e)) {
-			return ShapeRenderer.INSTANCE;
+			return LineRenderer.INSTANCE;
 		} else if (spineMapper.has(e)) {
 			return SpineRenderer.INSTANCE;
 		} else {
