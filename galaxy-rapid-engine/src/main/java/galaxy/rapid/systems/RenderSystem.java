@@ -14,6 +14,7 @@ import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.ShapeComponent;
 import galaxy.rapid.components.SpineComponent;
 import galaxy.rapid.components.SpriteComponent;
+import galaxy.rapid.components.TextComponent;
 import galaxy.rapid.event.PhysicDebugEnterChangeEvent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
@@ -22,6 +23,7 @@ import galaxy.rapid.render.Renderer;
 import galaxy.rapid.render.LineRenderer;
 import galaxy.rapid.render.SpineRenderer;
 import galaxy.rapid.render.SpriteRenderer;
+import galaxy.rapid.render.TextRenderer;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class RenderSystem extends BaseSystem {
@@ -30,6 +32,7 @@ public class RenderSystem extends BaseSystem {
 	private ComponentMapper<SpriteComponent> spriteMapper;
 	private ComponentMapper<SpineComponent> spineMapper;
 	private ComponentMapper<ShapeComponent> shapeMapper;
+	private ComponentMapper<TextComponent> textMapper;
 
 	private RenderableManager renderableManager;
 	@Wire
@@ -72,6 +75,8 @@ public class RenderSystem extends BaseSystem {
 			return LineRenderer.INSTANCE;
 		} else if (spineMapper.has(e)) {
 			return SpineRenderer.INSTANCE;
+		}else if (textMapper.has(e)) {
+			return TextRenderer.INSTANCE;
 		} else {
 			return EmptyRenderer.INSTANCE;
 		}

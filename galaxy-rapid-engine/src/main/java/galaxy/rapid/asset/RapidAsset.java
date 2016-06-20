@@ -173,7 +173,8 @@ public enum RapidAsset {
 	}
 
 	public BitmapFont getBitmapFont(String fontResource) {
-		return null;
+		manager.finishLoadingAsset(fontResource);
+		return manager.get(fontResource);
 	}
 
 	public void addMemoryTexture(String spriteName, Sprite sprite) {
@@ -182,5 +183,9 @@ public enum RapidAsset {
 	
 	public Sprite getMemorySprite(String spriteName){
 		return spriteMemoryMap.get(spriteName);
+	}
+
+	public void loadBitmapFont(String fontResource) {
+		manager.load(fontResource, BitmapFont.class);
 	}
 }
