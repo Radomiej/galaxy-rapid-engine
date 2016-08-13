@@ -119,6 +119,7 @@ public enum RapidAsset {
 		Sprite loadingSprite = spriteMap.get(spritePath);
 		if (loadingSprite == null) {
 //			loadSprite(spritePath);
+			Gdx.app.error("AssetManager", "get sprite: " + spritePath);
 			manager.finishLoadingAsset(spritePath);
 			loadingSprite = spriteMap.get(spritePath);
 		}
@@ -177,15 +178,15 @@ public enum RapidAsset {
 		return manager.get(fontResource);
 	}
 
-	public void addMemoryTexture(String spriteName, Sprite sprite) {
+	public void loadBitmapFont(String fontResource) {
+		manager.load(fontResource, BitmapFont.class);
+	}
+
+	public void addMemorySprite(String spriteName, Sprite sprite) {
 		spriteMemoryMap.put(spriteName, sprite);	
 	}
 	
 	public Sprite getMemorySprite(String spriteName){
 		return spriteMemoryMap.get(spriteName);
-	}
-
-	public void loadBitmapFont(String fontResource) {
-		manager.load(fontResource, BitmapFont.class);
 	}
 }

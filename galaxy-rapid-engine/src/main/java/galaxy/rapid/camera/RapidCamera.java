@@ -60,4 +60,13 @@ public class RapidCamera {
 		camera.viewportWidth = viewport.x;
 		camera.viewportHeight = viewport.y;
 	}
+
+	public void setZoom(float zoom) {
+		camera.zoom = zoom;
+		update();
+	}
+
+	public float getZoom() {
+		return camera.zoom;
+	}
 }
