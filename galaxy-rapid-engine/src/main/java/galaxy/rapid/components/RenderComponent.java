@@ -16,6 +16,7 @@ public class RenderComponent extends Component {
 	private Color color;
 	private boolean flipX, flipY;
 
+	private boolean render;
 	private int layer;
 	private int orderZ;
 
@@ -140,6 +141,14 @@ public class RenderComponent extends Component {
 		if (widthOffset != other.widthOffset)
 			return false;
 		return true;
+	}
+
+	public boolean isRender() {
+		return render;
+	}
+
+	public void setRender(boolean render) {
+		this.render = render;
 	}
 
 }

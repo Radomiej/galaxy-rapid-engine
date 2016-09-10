@@ -64,7 +64,8 @@ public class RenderSystem extends BaseSystem {
 		for (Entity e : renderableManager.getRendererObjects()) {
 			Renderer renderer = getRendererForEntity(e);
 			// if(renderer == ShapeRenderer.INSTANCE) continue;
-			renderer.render(e, polygonBatch);
+			RenderComponent renderComponent = renderMapper.get(e);
+			if(renderComponent.isRender()) renderer.render(e, polygonBatch);
 		}
 	}
 
