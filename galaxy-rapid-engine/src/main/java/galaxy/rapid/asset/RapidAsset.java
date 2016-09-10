@@ -104,24 +104,25 @@ public enum RapidAsset {
 			manager.finishLoadingAsset(resourcePath);
 			Sprite sprite = new Sprite((Texture) manager.get(resourcePath));
 			spriteMap.put(resourcePath, sprite);
+			Gdx.app.error("AssetManager", "put sprite: " + resourcePath);
 		} catch (Exception exd) {
-
+			exd.printStackTrace();
 		}
 	}
 
-	public Sprite getSprite(String spritePath) {
+	public Sprite getSprite(String resourcePath) {
 //		System.out.println("getSprite: " + spritePath + " instance: "+ spriteMap.get(spritePath));
-		if(spritePath == null || spritePath.equals("null")){
+		if(resourcePath == null || resourcePath.equals("null")){
 			Gdx.app.error("AssetManager", "try get null sprite");
 			return null;
 		}
 		
-		Sprite loadingSprite = spriteMap.get(spritePath);
+		Sprite loadingSprite = spriteMap.get(resourcePath);
 		if (loadingSprite == null) {
-//			loadSprite(spritePath);
-			Gdx.app.error("AssetManager", "get sprite: " + spritePath);
-			manager.finishLoadingAsset(spritePath);
-			loadingSprite = spriteMap.get(spritePath);
+//			loadSprite(resourcePath);
+			Gdx.app.error("AssetManager", "get sprite: " + resourcePath);
+			manager.finishLoadingAsset(resourcePath);
+			loadingSprite = spriteMap.get(resourcePath);
 		}
 		return loadingSprite;
 	}
