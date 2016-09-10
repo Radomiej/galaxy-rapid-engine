@@ -17,27 +17,13 @@ public class RenderComponent extends Component {
 	private boolean flipX, flipY;
 
 	private boolean render;
-	private int layer;
 	private int orderZ;
 
 	public RenderComponent() {
 	}
 
 	public RenderComponent(int orderZ) {
-		this(orderZ, 0);
-	}
-
-	public RenderComponent(int orderZ, int layer) {
-		this.layer = layer;
 		this.orderZ = orderZ;
-	}
-
-	public int getLayout() {
-		return layer;
-	}
-
-	public void setLayout(int layout) {
-		this.layer = layout;
 	}
 
 	public int getOrderZ() {
@@ -88,6 +74,9 @@ public class RenderComponent extends Component {
 		this.color = color;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -97,13 +86,16 @@ public class RenderComponent extends Component {
 		result = prime * result + (flipX ? 1231 : 1237);
 		result = prime * result + (flipY ? 1231 : 1237);
 		result = prime * result + ((heightOffset == null) ? 0 : heightOffset.hashCode());
-		result = prime * result + layer;
 		result = prime * result + orderZ;
+		result = prime * result + (render ? 1231 : 1237);
 		result = prime * result + ((renderBody == null) ? 0 : renderBody.hashCode());
 		result = prime * result + ((widthOffset == null) ? 0 : widthOffset.hashCode());
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -129,9 +121,9 @@ public class RenderComponent extends Component {
 			return false;
 		if (heightOffset != other.heightOffset)
 			return false;
-		if (layer != other.layer)
-			return false;
 		if (orderZ != other.orderZ)
+			return false;
+		if (render != other.render)
 			return false;
 		if (renderBody == null) {
 			if (other.renderBody != null)

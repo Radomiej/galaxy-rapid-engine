@@ -22,16 +22,15 @@ public class RenderableManager extends Manager {
 
 	private ComponentMapper<RenderComponent> renderMapper;
 	private RenderComparator comparator = new RenderComparator();
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void initialize() {
 		super.initialize();
-		entities = new ArrayList<Entity>();//new TreeSet<Entity>(new RenderComparator());
+		entities = new ArrayList<Entity>();// new TreeSet<Entity>(new
+											// RenderComparator());
 		bodySubscription = asm.get(Aspect.all(RenderComponent.class));
 	}
-
-	
 
 	private void getSortedEntities() {
 		entities.clear();
@@ -40,8 +39,8 @@ public class RenderableManager extends Manager {
 			int entityId = bag.get(i);
 			Entity entity = world.getEntity(entityId);
 			entities.add(entity);
-		}		
-		
+		}
+
 		Collections.sort(entities, comparator);
 	}
 
@@ -49,16 +48,13 @@ public class RenderableManager extends Manager {
 		getSortedEntities();
 		return entities;
 	}
-	
-	private class RenderComparator implements Comparator<Entity>{
+
+	private class RenderComparator implements Comparator<Entity> {
 		public int compare(Entity o1, Entity o2) {
-			
+
 			RenderComponent render1 = renderMapper.get(o1);
 			RenderComponent render2 = renderMapper.get(o2);
-			if(render1.getLayout() == render2.getLayout()){
-				return render1.getOrderZ() - render2.getOrderZ();
-			}
-			return render1.getLayout() - render2.getLayout();
-		}		
+			return render1.getOrderZ() - render2.getOrderZ();
+		}
 	}
 }
