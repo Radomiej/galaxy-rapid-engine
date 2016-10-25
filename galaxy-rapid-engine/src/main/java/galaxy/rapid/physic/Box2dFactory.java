@@ -88,8 +88,8 @@ public class Box2dFactory {
 		// body.setFixedRotation(true);
 		// Create a circle shape and set its radius to 6
 		PolygonShape rectangle = new PolygonShape();
-		rectangle.setAsBox(rectangleColliderComponent.getWidth() / 2, rectangleColliderComponent.getHeight() / 2);
-
+		rectangle.setAsBox(rectangleColliderComponent.getWidth() / 2, rectangleColliderComponent.getHeight() / 2, new Vector2(rectangleColliderComponent.getOffsetX(), rectangleColliderComponent.getOffsetY()), 0);
+		
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = rectangle;
@@ -99,7 +99,7 @@ public class Box2dFactory {
 
 		// Create our fixture and attach it to the body
 		Fixture fixture = body.createFixture(fixtureDef);
-
+		
 		// Remember to dispose of any shapes after you're done with them!
 		// BodyDef and FixtureDef don't need disposing, but shapes do.
 		rectangle.dispose();

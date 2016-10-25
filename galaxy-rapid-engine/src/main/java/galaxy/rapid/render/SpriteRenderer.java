@@ -44,12 +44,24 @@ public enum SpriteRenderer implements Renderer {
 		}
 
 		sprite.setScale(position.getScale().x, position.getScale().y);
-		float sizeX = sprite.getWidth();
-		float sizeY = sprite.getHeight();
+		
 
-		float posX = position.getPosition().x - sizeX / 2;
-		float posY = position.getPosition().y - sizeY / 2;
+		float posX = position.getPosition().x;
+		float posY = position.getPosition().y;
 
+		float sizeX = sprite.getWidth() ;
+		float sizeY = sprite.getHeight() ;
+		
+		if(spriteComponent.isTop()){
+			posY += (sizeY / 2) * position.getScale().y ;
+		}else if(spriteComponent.isBottom()){
+			posY -= (sizeY / 2) * position.getScale().y;
+		}
+		if(spriteComponent.isLeft()){
+			posX -= sizeX / 2 * position.getScale().x;
+		}else if(spriteComponent.isRight()){
+			posX += sizeX / 2 * position.getScale().x;
+		}
 		// System.out.println("GR: " +
 		// RapidConfiguration.INSTANCE.getGameRatio());
 		//
@@ -57,10 +69,11 @@ public enum SpriteRenderer implements Renderer {
 		// System.out.println("posX: " + posX + " posY: " + posY);
 		// System.out.println("sizeX: " + sizeX + " sizeY: " + sizeY);
 		// System.out.println("originX: " + originX + " originX: " + originX);
-		sprite.setPosition(posX, posY);
+//		sprite.setPosition(posX, posY);
 		// sprite.setSize(sizeX, sizeY);
-		sprite.setOrigin(sizeX / 2, sizeY / 2);
+		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.setRotation(position.getRotation());
+		sprite.setCenter(posX, posY);
 		sprite.draw(batch);
 	}
 

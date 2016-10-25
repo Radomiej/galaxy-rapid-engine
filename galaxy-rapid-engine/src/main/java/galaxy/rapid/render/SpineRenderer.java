@@ -27,6 +27,7 @@ public enum SpineRenderer implements Renderer {
 	private RapidCamera camera = new RapidCamera(new OrthographicCamera(640, 480));
 	private RapidCamera mainCamera;
 	private Matrix4 oldProjMatrix;
+	
 	private SpineRenderer() {
 		renderer = new SkeletonRenderer<PolygonSpriteBatch>();
 		renderer.setPremultipliedAlpha(true);

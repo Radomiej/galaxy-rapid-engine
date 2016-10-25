@@ -4,11 +4,16 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 
 import galaxy.rapid.asset.RapidAsset;
+import galaxy.rapid.camera.RapidCamera;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.SpriteComponent;
 import galaxy.rapid.components.TextComponent;
@@ -17,6 +22,16 @@ import galaxy.rapid.configuration.RapidConfiguration;
 public enum TextRenderer implements Renderer {
 	INSTANCE;
 
+	private RapidCamera camera = new RapidCamera(new OrthographicCamera(640, 480));
+	private RapidCamera mainCamera;
+	private Matrix4 oldProjMatrix;
+	
+	public void prepareCamera(RapidCamera mainCamera){
+		this.mainCamera = mainCamera;
+		oldProjMatrix = mainCamera.getCombined();
+		camera.setViewport(mainCamera.getViewport());
+	}
+	
 	public void render(Entity e, Batch batch) {
 		ComponentMapper<TextComponent> textMapper = (ComponentMapper<TextComponent>) ComponentMapper.getFor(TextComponent.class, e.getWorld());
 		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class,
@@ -48,8 +63,17 @@ public enum TextRenderer implements Renderer {
 		float posX = position.getPosition().x - sizeX / 2;
 		float posY = position.getPosition().y - sizeY / 2;
 
+		camera.setPosition(posX, posY);
+		camera.setRotation(mainCamera.getRotation() + position.getRotation());
+		Vector2 reverseScale = new Vector2(1 / position.getScale().x, 1 / position.getScale().y);
+		camera.setViewport(mainCamera.getViewport().scl(reverseScale));
+		camera.update();
+		
+		batch.setProjectionMatrix(camera.getCombined());
 		bitmapFont.setColor(textComponent.getColor());
 		bitmapFont.draw(batch, textToDraw, posX, posY);
+		batch.setProjectionMatrix(oldProjMatrix);
+		
 	}
 
 }

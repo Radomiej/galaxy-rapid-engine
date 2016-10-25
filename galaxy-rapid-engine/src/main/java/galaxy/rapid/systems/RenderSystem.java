@@ -55,6 +55,7 @@ public class RenderSystem extends BaseSystem {
 	@Override
 	protected void begin() {
 		SpineRenderer.INSTANCE.prepareCamera(camera);
+		TextRenderer.INSTANCE.prepareCamera(camera);
 		polygonBatch.setProjectionMatrix(camera.getCombined());
 		polygonBatch.begin();
 	}

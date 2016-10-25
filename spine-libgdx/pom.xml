@@ -7,10 +7,17 @@
 
 	<distributionManagement>
 		<repository>
-			<id>silver-maven-ftp</id>
-			<url>ftp://serwer1557980.home.pl/maven</url>
+			<id>fpsystem-maven-ftp</id>
+			<url>ftp://ns364990.ovh.net</url>
 		</repository>
 	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>fpsystem-maven-ftp</id>
+			<url>ftp://ns364990.ovh.net</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>

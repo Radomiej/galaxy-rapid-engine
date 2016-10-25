@@ -52,6 +52,10 @@ public class RapidCamera {
 		return camera.unproject(vector3);
 	}
 
+	public Vector3 project(Vector3 vector3) {
+		return camera.project(vector3);
+	}
+
 	public Vector2 getViewport() {
 		return new Vector2(camera.viewportWidth, camera.viewportHeight);
 	}

@@ -15,8 +15,8 @@ public class RenderComponent extends Component {
 	private RenderBody renderBody;
 	private Color color;
 	private boolean flipX, flipY;
-
-	private boolean render;
+	private float scaleX, scaleY;
+	private boolean render = true;
 	private int orderZ;
 
 	public RenderComponent() {
@@ -141,6 +141,34 @@ public class RenderComponent extends Component {
 
 	public void setRender(boolean render) {
 		this.render = render;
+	}
+
+	/**
+	 * @return the scaleX
+	 */
+	public float getScaleX() {
+		return scaleX;
+	}
+
+	/**
+	 * @param scaleX the scaleX to set
+	 */
+	public void setScaleX(float scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	/**
+	 * @return the scaleY
+	 */
+	public float getScaleY() {
+		return scaleY;
+	}
+
+	/**
+	 * @param scaleY the scaleY to set
+	 */
+	public void setScaleY(float scaleY) {
+		this.scaleY = scaleY;
 	}
 
 }

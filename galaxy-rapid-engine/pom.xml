@@ -11,10 +11,11 @@
 
 	<distributionManagement>
 		<repository>
-			<id>silver-maven-ftp</id>
-			<url>ftp://serwer1557980.home.pl/maven</url>
+			<id>fpsystem-maven-ftp</id>
+			<url>ftp://ns364990.ovh.net</url>
 		</repository>
 	</distributionManagement>
+
 
 	<repositories>
 		<repository>
@@ -22,9 +23,8 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 		<repository>
-			<id>maven-repo</id>
-			<name>SilverRepo</name>
-			<url>http://maven.ra-studio.ovh</url>
+			<id>fpsystem-maven-ftp</id>
+			<url>ftp://ns364990.ovh.net</url>
 		</repository>
 	</repositories>
 
@@ -59,13 +59,13 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>1.9.2</version>
+			<version>1.9.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-freetype</artifactId>
-			<version>1.9.2</version>
+			<version>1.9.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx-box2d</artifactId>
-			<version>1.9.2</version>
+			<version>1.9.4</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

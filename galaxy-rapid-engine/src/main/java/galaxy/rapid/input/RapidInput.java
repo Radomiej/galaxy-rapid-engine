@@ -26,7 +26,7 @@ public class RapidInput implements InputProcessor{
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+//		System.out.print("Key Code: " + keycode);
 		return false;
 	}
 
@@ -38,7 +38,7 @@ public class RapidInput implements InputProcessor{
 
 	@Override
 	public boolean keyTyped(char character) {
-		System.out.println("Key Typed: " + character);
+//		System.out.println(" Key Typed: " + character);
 		return false;
 	}
 
