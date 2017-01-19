@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>galaxy.rapid</groupId>
 	<artifactId>galaxy-rapid-engine</artifactId>
-	<version>0.3.1-SNAPSHOT</version>
+	<version>0.4.0</version>
 
 	<properties>
 		<targetJdk>1.6</targetJdk>
@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>1.9.4</version>
+			<version>1.9.5</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
