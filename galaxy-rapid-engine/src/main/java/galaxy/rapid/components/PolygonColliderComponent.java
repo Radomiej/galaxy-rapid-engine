@@ -1,59 +1,25 @@
 package galaxy.rapid.components;
 
 import com.artemis.Component;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-public class RectangleColliderComponent extends Component implements ColliderComponent{
+public class PolygonColliderComponent extends Component implements ColliderComponent{
 	private long seedHash = System.nanoTime();
-	private float width, height;
+	private Array<Vector2> vertex;
 	private float offsetX = 0, offsetY = 0;
-	/**
-	 * @return the width
-	 */
-	public float getWidth() {
-		return width;
-	}
-
-	/**
-	 * @param width
-	 *            the width to set
-	 */
-	public void setWidth(float width) {
-		this.width = width;
-	}
-
-	/**
-	 * @return the height
-	 */
-	public float getHeight() {
-		return height;
-	}
-
-	/**
-	 * @param height
-	 *            the height to set
-	 */
-	public void setHeight(float height) {
-		this.height = height;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Float.floatToIntBits(height);
 		result = prime * result + Float.floatToIntBits(offsetX);
 		result = prime * result + Float.floatToIntBits(offsetY);
 		result = prime * result + (int) (seedHash ^ (seedHash >>> 32));
-		result = prime * result + Float.floatToIntBits(width);
+		result = prime * result + ((vertex == null) ? 0 : vertex.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -62,16 +28,17 @@ public class RectangleColliderComponent extends Component implements ColliderCom
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		RectangleColliderComponent other = (RectangleColliderComponent) obj;
-		if (Float.floatToIntBits(height) != Float.floatToIntBits(other.height))
-			return false;
+		PolygonColliderComponent other = (PolygonColliderComponent) obj;
 		if (Float.floatToIntBits(offsetX) != Float.floatToIntBits(other.offsetX))
 			return false;
 		if (Float.floatToIntBits(offsetY) != Float.floatToIntBits(other.offsetY))
 			return false;
 		if (seedHash != other.seedHash)
 			return false;
-		if (Float.floatToIntBits(width) != Float.floatToIntBits(other.width))
+		if (vertex == null) {
+			if (other.vertex != null)
+				return false;
+		} else if (!vertex.equals(other.vertex))
 			return false;
 		return true;
 	}
@@ -117,4 +84,14 @@ public class RectangleColliderComponent extends Component implements ColliderCom
 	public void setOffsetY(float offsetY) {
 		this.offsetY = offsetY;
 	}
+
+	public Array<Vector2> getVertex() {
+		return vertex;
+	}
+
+	public void setVertex(Array<Vector2> vertex) {
+		this.vertex = vertex;
+	}
+
+	
 }

@@ -3,11 +3,13 @@ package galaxy.rapid.render;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.PositionComponent;
+import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.SpriteComponent;
 import galaxy.rapid.configuration.RapidConfiguration;
 
@@ -18,9 +20,11 @@ public enum SpriteRenderer implements Renderer {
 		ComponentMapper<SpriteComponent> spriteMapper = (ComponentMapper<SpriteComponent>) ComponentMapper.getFor(SpriteComponent.class, e.getWorld());
 		ComponentMapper<PositionComponent> positionMapper = (ComponentMapper<PositionComponent>) ComponentMapper.getFor(PositionComponent.class,
 				e.getWorld());
-
+		ComponentMapper<RenderComponent> renderMapper = (ComponentMapper<RenderComponent>) ComponentMapper.getFor(RenderComponent.class, e.getWorld());
+		
 		// BodyComponent body = bodyMapper.get(e);
 		PositionComponent position = positionMapper.get(e);
+		RenderComponent render = renderMapper.get(e);
 
 		if (position == null) {
 			Gdx.app.error("SpriteRenderer", "PositionComponent doesn`t exist!");
@@ -28,6 +32,7 @@ public enum SpriteRenderer implements Renderer {
 		}
 
 		SpriteComponent spriteComponent = spriteMapper.get(e);
+		
 		String assetName = spriteComponent.getSpriteAsset();
 		Sprite sprite = null;
 		if (spriteComponent.isAtlas() || assetName.contains("#")) {
@@ -71,10 +76,14 @@ public enum SpriteRenderer implements Renderer {
 		// System.out.println("originX: " + originX + " originX: " + originX);
 //		sprite.setPosition(posX, posY);
 		// sprite.setSize(sizeX, sizeY);
+		
 		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.setRotation(position.getRotation());
 		sprite.setCenter(posX, posY);
+		Color old = sprite.getColor();
+		sprite.setColor(render.getColor());
 		sprite.draw(batch);
+		sprite.setColor(old);
 	}
 
 }

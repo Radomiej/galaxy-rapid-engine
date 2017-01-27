@@ -23,7 +23,7 @@ import galaxy.rapid.components.Box2dComponent;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.RectangleColliderComponent;
 import galaxy.rapid.event.RemoveBox2dComponentEvent;
-import galaxy.rapid.event.RemoveRectangleColliderComponent;
+import galaxy.rapid.event.RemoveColliderComponent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.physic.BodyCreator;
 import net.mostlyoriginal.api.event.common.Subscribe;

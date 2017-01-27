@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 public class Box2dComponent extends Component {
 	private boolean kinematic;
 	private Body body;
-	private Fixture rectangleFixture;
+	private Fixture fixture;
 	private Object userData, fixtureData;
 	
 	public Body getBody() {
@@ -25,11 +25,11 @@ public class Box2dComponent extends Component {
 	}
 
 	public Fixture getRectangleFixture() {
-		return rectangleFixture;
+		return fixture;
 	}
 
-	public void setRectangleFixture(Fixture rectangleFixture) {
-		this.rectangleFixture = rectangleFixture;
+	public void setFixture(Fixture rectangleFixture) {
+		this.fixture = rectangleFixture;
 	}
 
 	/*
@@ -42,7 +42,7 @@ public class Box2dComponent extends Component {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((body == null) ? 0 : body.hashCode());
-		result = prime * result + ((rectangleFixture == null) ? 0 : rectangleFixture.hashCode());
+		result = prime * result + ((fixture == null) ? 0 : fixture.hashCode());
 		return result;
 	}
 
@@ -65,10 +65,10 @@ public class Box2dComponent extends Component {
 				return false;
 		} else if (!body.equals(other.body))
 			return false;
-		if (rectangleFixture == null) {
-			if (other.rectangleFixture != null)
+		if (fixture == null) {
+			if (other.fixture != null)
 				return false;
-		} else if (!rectangleFixture.equals(other.rectangleFixture))
+		} else if (!fixture.equals(other.fixture))
 			return false;
 		return true;
 	}
