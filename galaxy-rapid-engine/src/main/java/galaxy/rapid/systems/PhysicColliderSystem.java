@@ -79,11 +79,10 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 			PolygonColliderComponent polygonCollider = polygonColliderMapper.get(e);
 			fixture = Box2dFactory.createPolygon(physicSystem.getPhysicWorld(), position,
 					polygonCollider, body);
-			Gdx.app.log("PhysicColliderSystem", "Added Fixture Polygon");
 		}
 		fixture.setUserData(box2d.getFixtureData());
-		box2d.setFixture(fixture);
-		Gdx.app.log("PhysicColliderSystem", "Added Fixture");
+		box2d.setFixtureData(fixture);
+		Gdx.app.debug("PhysicColliderSystem", "Added Fixture");
 	}
 
 	@Override
@@ -100,7 +99,7 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 		Box2dComponent box2d = box2dMapper.get(e);
 		Fixture removeFixture = box2d.getRectangleFixture();
 		box2d.getBody().destroyFixture(removeFixture);
-		Gdx.app.log("PhysicColliderSystem", "Remove Fixture");
+		Gdx.app.debug("PhysicColliderSystem", "Remove Fixture");
 	}
 
 	@Subscribe
@@ -108,7 +107,6 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 		UUID uuid = UuidHelper.getUuidFromEntity(addComponent.entity);
 		addComponent.entity.edit().add((Component) addComponent.colliderComponent);
 		colliderToEntityMap.put(addComponent.colliderComponent, uuid);
-		Gdx.app.log("PhysicColliderSystem", "Add Fixture Event");
 	}
 
 	@Subscribe
@@ -121,6 +119,5 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 		}
 		entity.edit().remove(((Component)removeComponent.colliderComponent).getClass());
 		colliderToEntityMap.remove(removeComponent.colliderComponent);
-		Gdx.app.log("PhysicColliderSystem", "Remove Fixture Event");
 	}
 }

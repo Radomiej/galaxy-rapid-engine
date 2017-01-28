@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -46,9 +47,23 @@ public enum RapidAsset {
 		manager.setLoader(SkeletonData.class, new SkeletonDataLoader());
 	}
 
-	public void loadSound(String sound) {
-		String assetName = "sounds/" + sound;
+	public void loadSound(String path) {
+		String assetName = path;
 		manager.load(assetName, Sound.class);
+	}
+	
+	public void loadMusic(String path) {
+		manager.load(path, Music.class);
+	}
+
+	public Sound getSound(String resourcePath) {
+		manager.finishLoadingAsset(resourcePath);
+		return manager.get(resourcePath, Sound.class);
+	}
+
+	public Music getMusic(String resourcePath) {
+		manager.finishLoadingAsset(resourcePath);
+		return manager.get(resourcePath, Music.class);
 	}
 
 	/**
@@ -104,7 +119,7 @@ public enum RapidAsset {
 			manager.finishLoadingAsset(resourcePath);
 			Sprite sprite = new Sprite((Texture) manager.get(resourcePath));
 			spriteMap.put(resourcePath, sprite);
-			Gdx.app.log("AssetManager", "put sprite: " + resourcePath);
+//			Gdx.app.debug("AssetManager", "put sprite: " + resourcePath);
 		} catch (Exception exd) {
 			exd.printStackTrace();
 		}

@@ -2,28 +2,20 @@ package galaxy.rapid.systems;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import com.artemis.Aspect;
-import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
-import galaxy.rapid.common.UuidHelper;
 import galaxy.rapid.components.Box2dComponent;
 import galaxy.rapid.components.PositionComponent;
-import galaxy.rapid.components.RectangleColliderComponent;
 import galaxy.rapid.event.RemoveBox2dComponentEvent;
-import galaxy.rapid.event.RemoveColliderComponent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.physic.BodyCreator;
 import net.mostlyoriginal.api.event.common.Subscribe;
@@ -44,6 +36,7 @@ public class PhysicSystem extends EntityProcessingSystem {
 	@Wire
 	private RapidBus rapidBus;
 
+	@SuppressWarnings("unchecked")
 	public PhysicSystem() {
 		super(Aspect.all(Box2dComponent.class, PositionComponent.class));
 	}
@@ -57,7 +50,7 @@ public class PhysicSystem extends EntityProcessingSystem {
 	public void inserted(Entity e) {
 		Box2dComponent box2d = box2dMapper.get(e);
 		PositionComponent position = positionMapper.get(e);
-		Body body = BodyCreator.getBody(position.getPosition(), physicWorld, box2d.isKinematic());
+		Body body = BodyCreator.getBody(position.getPosition(), physicWorld, box2d.getBodyType());
 		body.setUserData(box2d.getUserData());
 		box2d.setBody(body);
 	}

@@ -2,13 +2,14 @@ package galaxy.rapid.components;
 
 import com.artemis.Component;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class Box2dComponent extends Component {
-	private boolean kinematic;
 	private Body body;
 	private Fixture fixture;
 	private Object userData, fixtureData;
+	private BodyType bodyType = BodyType.DynamicBody;
 	
 	public Body getBody() {
 		return body;
@@ -26,10 +27,6 @@ public class Box2dComponent extends Component {
 
 	public Fixture getRectangleFixture() {
 		return fixture;
-	}
-
-	public void setFixture(Fixture rectangleFixture) {
-		this.fixture = rectangleFixture;
 	}
 
 	/*
@@ -89,12 +86,28 @@ public class Box2dComponent extends Component {
 		this.fixtureData = fixtureData;
 	}
 
-	public boolean isKinematic() {
-		return kinematic;
+	public Fixture getFixture() {
+		return fixture;
 	}
 
-	public void setKinematic(boolean kinematic) {
-		this.kinematic = kinematic;
+	public boolean isKinematic() {
+		return bodyType == BodyType.KinematicBody;
+	}
+	
+	public boolean isDynamic() {
+		return bodyType == BodyType.DynamicBody;
+	}
+	
+	public boolean isStatic() {
+		return bodyType == BodyType.StaticBody;
+	}
+
+	public BodyType getBodyType() {
+		return bodyType;
+	}
+
+	public void setBodyType(BodyType bodyType) {
+		this.bodyType = bodyType;
 	}
 
 }
