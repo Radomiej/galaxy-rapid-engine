@@ -1,6 +1,5 @@
 package galaxy.rapid.components;
 
-import java.nio.channels.NetworkChannel;
 import java.util.UUID;
 
 import com.artemis.Component;
@@ -10,6 +9,7 @@ public class TargetComponent extends Component{
 
 	public TargetComponent() {
 	}
+	
 	public TargetComponent(UUID uuidFromEntity) {
 		target = uuidFromEntity;
 	}

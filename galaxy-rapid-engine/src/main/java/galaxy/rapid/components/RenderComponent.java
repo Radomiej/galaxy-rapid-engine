@@ -5,12 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import galaxy.rapid.common.RenderBody;
-import galaxy.rapid.common.RenderOffset;
 
 public class RenderComponent extends Component {
-	// TODO zrobi wsparcie do foramtowania spritów
-	private RenderOffset widthOffset = RenderOffset.CENTER;
-	private RenderOffset heightOffset = RenderOffset.CENTER;
 	private Vector2 cornerPosition = new Vector2();
 	private RenderBody renderBody;
 	private Color color;
@@ -50,22 +46,6 @@ public class RenderComponent extends Component {
 		this.flipY = flipY;
 	}
 
-	public RenderOffset getWidthOffset() {
-		return widthOffset;
-	}
-
-	public void setWidthOffset(RenderOffset widthOffset) {
-		this.widthOffset = widthOffset;
-	}
-
-	public RenderOffset getHeightOffset() {
-		return heightOffset;
-	}
-
-	public void setHeightOffset(RenderOffset heightOffset) {
-		this.heightOffset = heightOffset;
-	}
-
 	public Color getColor() {
 		return color;
 	}
@@ -74,9 +54,6 @@ public class RenderComponent extends Component {
 		this.color = color;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -85,17 +62,14 @@ public class RenderComponent extends Component {
 		result = prime * result + ((cornerPosition == null) ? 0 : cornerPosition.hashCode());
 		result = prime * result + (flipX ? 1231 : 1237);
 		result = prime * result + (flipY ? 1231 : 1237);
-		result = prime * result + ((heightOffset == null) ? 0 : heightOffset.hashCode());
 		result = prime * result + orderZ;
 		result = prime * result + (render ? 1231 : 1237);
 		result = prime * result + ((renderBody == null) ? 0 : renderBody.hashCode());
-		result = prime * result + ((widthOffset == null) ? 0 : widthOffset.hashCode());
+		result = prime * result + Float.floatToIntBits(scaleX);
+		result = prime * result + Float.floatToIntBits(scaleY);
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -119,8 +93,6 @@ public class RenderComponent extends Component {
 			return false;
 		if (flipY != other.flipY)
 			return false;
-		if (heightOffset != other.heightOffset)
-			return false;
 		if (orderZ != other.orderZ)
 			return false;
 		if (render != other.render)
@@ -130,7 +102,9 @@ public class RenderComponent extends Component {
 				return false;
 		} else if (!renderBody.equals(other.renderBody))
 			return false;
-		if (widthOffset != other.widthOffset)
+		if (Float.floatToIntBits(scaleX) != Float.floatToIntBits(other.scaleX))
+			return false;
+		if (Float.floatToIntBits(scaleY) != Float.floatToIntBits(other.scaleY))
 			return false;
 		return true;
 	}

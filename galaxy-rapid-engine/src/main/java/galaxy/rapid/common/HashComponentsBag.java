@@ -7,8 +7,10 @@ import java.util.Set;
 import com.artemis.Component;
 
 public class HashComponentsBag {
+	@SuppressWarnings("rawtypes")
 	private HashMap<Class, Component> componentsMap;
 
+	@SuppressWarnings("rawtypes")
 	public HashComponentsBag() {
 		componentsMap = new HashMap<Class, Component>();
 	}

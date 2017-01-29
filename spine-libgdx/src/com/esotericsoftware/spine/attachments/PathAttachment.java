@@ -30,71 +30,54 @@
 
 package com.esotericsoftware.spine.attachments;
 
-import com.esotericsoftware.spine.Slot;
+import com.badlogic.gdx.graphics.Color;
+import com.esotericsoftware.spine.PathConstraint;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
+/** An attachment whose vertices make up a composite Bezier curve.
+ * <p>
+ * See {@link PathConstraint} and <a href="http://esotericsoftware.com/spine-paths">Paths</a> in the Spine User Guide. */
+public class PathAttachment extends VertexAttachment {
+	float[] lengths;
+	boolean closed, constantSpeed;
 
-/** Attachment that displays various texture regions over time. */
-public class RegionSequenceAttachment extends RegionAttachment {
-	private Mode mode;
-	private float frameTime;
-	private TextureRegion[] regions;
+	// Nonessential.
+	final Color color = new Color(1, 0.5f, 0, 1);
 
-	public RegionSequenceAttachment (String name) {
+	public PathAttachment (String name) {
 		super(name);
 	}
 
-	public float[] updateWorldVertices (Slot slot, boolean premultipliedAlpha) {
-		if (regions == null) throw new IllegalStateException("Regions have not been set: " + this);
-
-		int frameIndex = (int)(slot.getAttachmentTime() / frameTime);
-		switch (mode) {
-		case forward:
-			frameIndex = Math.min(regions.length - 1, frameIndex);
-			break;
-		case forwardLoop:
-			frameIndex = frameIndex % regions.length;
-			break;
-		case pingPong:
-			frameIndex = frameIndex % (regions.length << 1);
-			if (frameIndex >= regions.length) frameIndex = regions.length - 1 - (frameIndex - regions.length);
-			break;
-		case random:
-			frameIndex = MathUtils.random(regions.length - 1);
-			break;
-		case backward:
-			frameIndex = Math.max(regions.length - frameIndex - 1, 0);
-			break;
-		case backwardLoop:
-			frameIndex = frameIndex % regions.length;
-			frameIndex = regions.length - frameIndex - 1;
-			break;
-		}
-		setRegion(regions[frameIndex]);
-
-		return super.updateWorldVertices(slot, premultipliedAlpha);
+	/** If true, the start and end knots are connected. */
+	public boolean getClosed () {
+		return closed;
 	}
 
-	public TextureRegion[] getRegions () {
-		if (regions == null) throw new IllegalStateException("Regions have not been set: " + this);
-		return regions;
+	public void setClosed (boolean closed) {
+		this.closed = closed;
 	}
 
-	public void setRegions (TextureRegion[] regions) {
-		this.regions = regions;
+	/** If true, additional calculations are performed to make calculating positions along the path more accurate. If false, fewer
+	 * calculations are performed but calculating positions along the path is less accurate. */
+	public boolean getConstantSpeed () {
+		return constantSpeed;
 	}
 
-	/** Sets the time in seconds each frame is shown. */
-	public void setFrameTime (float frameTime) {
-		this.frameTime = frameTime;
+	public void setConstantSpeed (boolean constantSpeed) {
+		this.constantSpeed = constantSpeed;
 	}
 
-	public void setMode (Mode mode) {
-		this.mode = mode;
+	/** The lengths along the path in the setup pose from the start of the path to the end of each Bezier curve. */
+	public float[] getLengths () {
+		return lengths;
 	}
 
-	static public enum Mode {
-		forward, backward, forwardLoop, backwardLoop, pingPong, random
+	public void setLengths (float[] lengths) {
+		this.lengths = lengths;
+	}
+
+	/** The color of the path as it was in Spine. Available only when nonessential data was exported. Paths are not usually
+	 * rendered at runtime. */
+	public Color getColor () {
+		return color;
 	}
 }

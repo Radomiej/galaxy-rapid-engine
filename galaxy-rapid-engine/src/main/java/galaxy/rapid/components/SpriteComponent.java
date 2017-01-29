@@ -2,8 +2,6 @@ package galaxy.rapid.components;
 
 import com.artemis.Component;
 
-import galaxy.rapid.asset.RapidAsset;
-
 public class SpriteComponent extends Component {
 	private String spriteAsset;
 	private boolean atlas;

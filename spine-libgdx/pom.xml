@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>spine-libgdx-external</groupId>
 	<artifactId>spine-libgdx-external</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 
 	<distributionManagement>
 		<repository>
@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>1.7.0</version>
+			<version>1.9.5</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -32,7 +32,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
-				<version>1.0-beta-7</version>
+				<version>2.1</version>
 			</extension>
 		</extensions>
 		<sourceDirectory>src</sourceDirectory>
