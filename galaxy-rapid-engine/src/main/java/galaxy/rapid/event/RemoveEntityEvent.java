@@ -19,7 +19,6 @@ public class RemoveEntityEvent implements Event {
 	}
 
 	public void setRemoveEntity(Entity removeEntity) {
-		System.out.println("Otrzymano zdazenie usuniecia entity");
 		this.removeEntity = removeEntity;
 	}
 

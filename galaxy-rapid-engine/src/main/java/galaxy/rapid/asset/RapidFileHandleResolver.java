@@ -19,7 +19,7 @@ public class RapidFileHandleResolver implements FileHandleResolver {
 				return getFirstExternalNextInternalAssetFileHandle(fileName);
 			}
 		} catch (Exception e) {
-			System.out.println("Brak pliku: " + fileName);
+			Gdx.app.error(RapidFileHandleResolver.class.getSimpleName(), "Brak pliku: " + fileName);
 		}
 		return null;
 	}

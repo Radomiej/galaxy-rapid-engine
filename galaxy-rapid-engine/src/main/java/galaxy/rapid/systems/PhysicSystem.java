@@ -76,6 +76,7 @@ public class PhysicSystem extends EntityProcessingSystem {
 			if(box2d == boxToRemove){
 				physicWorld.destroyBody(box2d.getBody());
 				e.edit().remove(boxToRemove);
+				box2d.setRemoved(true);
 				return;
 			}
 		}
@@ -86,7 +87,7 @@ public class PhysicSystem extends EntityProcessingSystem {
 
 	@Override
 	public void removed(Entity e) {
-		Gdx.app.log("PhysicRectangleColliderSystem", "Remove Fixture Event");
+//		Gdx.app.log("PhysicColliderSystem", "Remove Fixture Event");
 	}
 
 	public World getPhysicWorld() {

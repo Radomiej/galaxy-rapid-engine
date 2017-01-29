@@ -10,7 +10,8 @@ public class Box2dComponent extends Component {
 	private Fixture fixture;
 	private Object userData, fixtureData;
 	private BodyType bodyType = BodyType.DynamicBody;
-	
+	private boolean removed;
+
 	public Body getBody() {
 		return body;
 	}
@@ -25,9 +26,6 @@ public class Box2dComponent extends Component {
 		return info;
 	}
 
-	public Fixture getRectangleFixture() {
-		return fixture;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -93,11 +91,11 @@ public class Box2dComponent extends Component {
 	public boolean isKinematic() {
 		return bodyType == BodyType.KinematicBody;
 	}
-	
+
 	public boolean isDynamic() {
 		return bodyType == BodyType.DynamicBody;
 	}
-	
+
 	public boolean isStatic() {
 		return bodyType == BodyType.StaticBody;
 	}
@@ -108,6 +106,18 @@ public class Box2dComponent extends Component {
 
 	public void setBodyType(BodyType bodyType) {
 		this.bodyType = bodyType;
+	}
+
+	public boolean isRemoved() {
+		return removed;
+	}
+
+	public void setRemoved(boolean remove) {
+		this.removed = remove;
+	}
+
+	public void setFixture(Fixture fixture) {
+		this.fixture = fixture;
 	}
 
 }

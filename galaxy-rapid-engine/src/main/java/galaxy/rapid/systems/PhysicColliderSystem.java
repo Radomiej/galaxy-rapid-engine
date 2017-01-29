@@ -63,7 +63,6 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 		Box2dComponent box2d = box2dMapper.get(e);
 		PositionComponent position = positionMapper.get(e);
 		Body body = box2d.getBody();
-		
 		Fixture fixture = null;
 		if(rectangleColliderMapper.has(e)){
 			RectangleColliderComponent rectangleCollider = rectangleColliderMapper.get(e);
@@ -81,7 +80,7 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 					polygonCollider, body);
 		}
 		fixture.setUserData(box2d.getFixtureData());
-		box2d.setFixtureData(fixture);
+		box2d.setFixture(fixture);
 		Gdx.app.debug("PhysicColliderSystem", "Added Fixture");
 	}
 
@@ -97,7 +96,11 @@ public class PhysicColliderSystem extends EntityProcessingSystem {
 	@Override
 	public void removed(Entity e) {
 		Box2dComponent box2d = box2dMapper.get(e);
-		Fixture removeFixture = box2d.getRectangleFixture();
+		if(box2d.isRemoved()){
+			return;
+		}
+		
+		Fixture removeFixture = box2d.getFixture();
 		box2d.getBody().destroyFixture(removeFixture);
 		Gdx.app.debug("PhysicColliderSystem", "Remove Fixture");
 	}
