@@ -1,8 +1,6 @@
 package galaxy.rapid.event;
 
-import net.mostlyoriginal.api.event.common.Event;
-
-public class PhysicDebugEnterChangeEvent implements Event {
+public class PhysicDebugEnterChangeEvent implements RapidEvent {
 	public final boolean enableDebugRender;
 
 	public PhysicDebugEnterChangeEvent(boolean debugRender) {

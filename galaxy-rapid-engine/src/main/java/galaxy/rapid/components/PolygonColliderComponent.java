@@ -1,10 +1,9 @@
 package galaxy.rapid.components;
 
-import com.artemis.Component;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class PolygonColliderComponent extends Component implements ColliderComponent{
+public class PolygonColliderComponent extends ColliderComponentImpl{
 	private long seedHash = System.nanoTime();
 	private Array<Vector2> vertex;
 	private float offsetX = 0, offsetY = 0;

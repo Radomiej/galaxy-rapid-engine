@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.google.common.eventbus.Subscribe;
 
 import galaxy.rapid.common.UuidHelper;
 import galaxy.rapid.components.Box2dComponent;
@@ -26,7 +27,6 @@ import galaxy.rapid.event.RemoveBox2dComponentEvent;
 import galaxy.rapid.event.RemoveColliderComponent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.physic.BodyCreator;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class BeforePhysicSystem extends EntityProcessingSystem {
 
@@ -39,6 +39,7 @@ public class BeforePhysicSystem extends EntityProcessingSystem {
 	@Wire
 	private RapidBus rapidBus;
 
+	@SuppressWarnings("unchecked")
 	public BeforePhysicSystem() {
 		super(Aspect.all(Box2dComponent.class, PositionComponent.class));
 	}
@@ -75,7 +76,7 @@ public class BeforePhysicSystem extends EntityProcessingSystem {
 		return physicWorld;
 	}
 
-	@Subscribe
+	@Subscribe()
 	public void removeComponentEvent(RemoveBox2dComponentEvent removeComponent) {
 		componentsToRemove.add(removeComponent.box2dComponent);
 		Gdx.app.log("PhysicSystem", "Remove Body");

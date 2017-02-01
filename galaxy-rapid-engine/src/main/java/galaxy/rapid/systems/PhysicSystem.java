@@ -12,13 +12,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.google.common.eventbus.Subscribe;
 
 import galaxy.rapid.components.Box2dComponent;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.event.RemoveBox2dComponentEvent;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.physic.BodyCreator;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class PhysicSystem extends EntityProcessingSystem {
 

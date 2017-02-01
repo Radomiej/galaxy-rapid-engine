@@ -2,7 +2,7 @@ package galaxy.rapid.components;
 
 import com.artemis.Component;
 
-public class RectangleColliderComponent extends Component implements ColliderComponent{
+public class RectangleColliderComponent extends ColliderComponentImpl{
 	private long seedHash = System.nanoTime();
 	private float width, height;
 	private float offsetX = 0, offsetY = 0;

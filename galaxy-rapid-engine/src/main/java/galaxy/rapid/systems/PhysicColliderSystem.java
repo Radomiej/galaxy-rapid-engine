@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+
 import com.artemis.Aspect;
 import com.artemis.BaseSystem;
 import com.artemis.Component;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.google.common.eventbus.Subscribe;
 
 import galaxy.rapid.common.UuidHelper;
 import galaxy.rapid.components.Box2dComponent;
@@ -31,7 +33,6 @@ import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.physic.BodyCreator;
 import galaxy.rapid.physic.Box2dFactory;
 import galaxy.rapid.physic.FixtureCreatorStrategy;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class PhysicColliderSystem extends EntityProcessingSystem {
 

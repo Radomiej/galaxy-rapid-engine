@@ -7,14 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import galaxy.rapid.camera.RapidCamera;
 import galaxy.rapid.common.EntityEngine;
-import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.eventbus.RapidBus;
 import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.systems.BeforePhysicSystem;
@@ -23,7 +21,6 @@ import galaxy.rapid.systems.PhysicColliderSystem;
 import galaxy.rapid.systems.PhysicSystem;
 import galaxy.rapid.systems.RenderSystem;
 import galaxy.rapid.systems.TickEventSystem;
-import net.mostlyoriginal.api.event.common.EventSystem;
 
 public abstract class RapidArtemisScreen extends RapidScreen {
 

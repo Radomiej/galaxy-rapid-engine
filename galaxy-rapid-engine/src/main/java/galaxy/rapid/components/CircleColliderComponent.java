@@ -2,7 +2,7 @@ package galaxy.rapid.components;
 
 import com.artemis.Component;
 
-public class CircleColliderComponent extends Component implements ColliderComponent {
+public class CircleColliderComponent extends ColliderComponentImpl {
 	private long seedHash = System.nanoTime();
 	private float radius;
 	private float offsetX = 0, offsetY = 0;

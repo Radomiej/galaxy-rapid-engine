@@ -3,9 +3,8 @@ package galaxy.rapid.event;
 import com.artemis.Entity;
 
 import galaxy.rapid.components.ColliderComponent;
-import net.mostlyoriginal.api.event.common.Event;
 
-public class AddColliderComponent implements Event{
+public class AddColliderComponent implements RapidEvent{
 	public final ColliderComponent colliderComponent;
 	public final Entity entity;
 	

@@ -2,6 +2,7 @@ package galaxy.rapid.screen;
 
 import com.badlogic.gdx.Screen;
 
+import galaxy.rapid.event.ChangeScreenEvent;
 import galaxy.rapid.eventbus.RapidBus;
 
 public abstract class RapidScreen implements Screen, EventBusInjector {

@@ -83,9 +83,9 @@ public class Box2dFactory {
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = rectangle;
-		fixtureDef.density = 0.3f;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0.3f; // Make it bounce a little bit
+		fixtureDef.density = rectangleColliderComponent.getDensity();
+		fixtureDef.friction = rectangleColliderComponent.getFriction();
+		fixtureDef.restitution = rectangleColliderComponent.getRestitution(); // Make it bounce a little bit
 
 		// Create our fixture and attach it to the body
 		Fixture fixture = body.createFixture(fixtureDef);
@@ -137,9 +137,9 @@ public class Box2dFactory {
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = circle;
-		fixtureDef.density = 0.3f;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0.3f; // Make it bounce a little bit
+		fixtureDef.density = circleCollider.getDensity();
+		fixtureDef.friction = circleCollider.getFriction();
+		fixtureDef.restitution = circleCollider.getRestitution(); // Make it bounce a little bit
 
 		// Create our fixture and attach it to the body
 		Fixture fixture = body.createFixture(fixtureDef);
@@ -149,19 +149,19 @@ public class Box2dFactory {
 		circle.dispose();
 		return fixture;
 	}
-	
+
 	public static Fixture createPolygon(World physicWorld, PositionComponent position,
 			PolygonColliderComponent polygonCollider, Body body) {
 		PolygonShape polygon = new PolygonShape();
 		polygon.set(polygonCollider.getVertex().toArray());
-		
+
 		// Create a fixture definition to apply our shape to
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = polygon;
-		fixtureDef.density = 0.3f;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0.3f; // Make it bounce a little bit
-
+		fixtureDef.density = polygonCollider.getDensity();
+		fixtureDef.friction = polygonCollider.getFriction();
+		fixtureDef.restitution = polygonCollider.getRestitution(); // Make it bounce a little bit
+		
 		// Create our fixture and attach it to the body
 		Fixture fixture = body.createFixture(fixtureDef);
 
