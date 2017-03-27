@@ -59,9 +59,9 @@ public enum TextRenderer implements Renderer {
 		
 		float sizeX = bitmapFont.getSpaceWidth() * textToDraw.length();
 		float sizeY = bitmapFont.getLineHeight();
-
-		float posX = position.getPosition().x - sizeX / 2;
-		float posY = position.getPosition().y - sizeY / 2;
+		
+		float posX = position.getPosition().x - sizeX / 2 + mainCamera.getPosition().x;
+		float posY = position.getPosition().y - sizeY / 2 + mainCamera.getPosition().y;
 
 		camera.setPosition(posX, posY);
 		camera.setRotation(mainCamera.getRotation() + position.getRotation());
@@ -69,9 +69,9 @@ public enum TextRenderer implements Renderer {
 		camera.setViewport(mainCamera.getViewport().scl(reverseScale));
 		camera.update();
 		
-		batch.setProjectionMatrix(camera.getCombined());
+		batch.setProjectionMatrix(mainCamera.getCombined());
 		bitmapFont.setColor(textComponent.getColor());
-		bitmapFont.draw(batch, textToDraw, posX, posY);
+		bitmapFont.draw(batch, textToDraw, position.getPosition().x - sizeX / 2, position.getPosition().y + sizeY / 4);
 		batch.setProjectionMatrix(oldProjMatrix);
 		
 	}

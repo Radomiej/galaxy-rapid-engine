@@ -58,7 +58,6 @@ public class IkConstraint implements Constraint {
 		target = skeleton.findBone(data.target.name);
 	}
 
-	/** Copy constructor. */
 	public IkConstraint (IkConstraint constraint, Skeleton skeleton) {
 		if (constraint == null) throw new IllegalArgumentException("constraint cannot be null.");
 		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
@@ -71,7 +70,6 @@ public class IkConstraint implements Constraint {
 		bendDirection = constraint.bendDirection;
 	}
 
-	/** Applies the constraint to the constrained bones. */
 	public void apply () {
 		update();
 	}
@@ -93,12 +91,10 @@ public class IkConstraint implements Constraint {
 		return data.order;
 	}
 
-	/** The bones that will be modified by this IK constraint. */
 	public Array<Bone> getBones () {
 		return bones;
 	}
 
-	/** The bone that is the IK target. */
 	public Bone getTarget () {
 		return target;
 	}
@@ -107,7 +103,6 @@ public class IkConstraint implements Constraint {
 		this.target = target;
 	}
 
-	/** A percentage (0-1) that controls the mix between the constrained and unconstrained rotations. */
 	public float getMix () {
 		return mix;
 	}
@@ -116,7 +111,6 @@ public class IkConstraint implements Constraint {
 		this.mix = mix;
 	}
 
-	/** Controls the bend direction of the IK bones, either 1 or -1. */
 	public int getBendDirection () {
 		return bendDirection;
 	}
@@ -125,7 +119,6 @@ public class IkConstraint implements Constraint {
 		this.bendDirection = bendDirection;
 	}
 
-	/** The IK constraint's setup pose data. */
 	public IkConstraintData getData () {
 		return data;
 	}
@@ -134,7 +127,6 @@ public class IkConstraint implements Constraint {
 		return data.name;
 	}
 
-	/** Applies 1 bone IK. The target is specified in the world coordinate system. */
 	static public void apply (Bone bone, float targetX, float targetY, float alpha) {
 		if (!bone.appliedValid) bone.updateAppliedTransform();
 		Bone p = bone.parent;
@@ -150,8 +142,6 @@ public class IkConstraint implements Constraint {
 			bone.ashearY);
 	}
 
-	/** Applies 2 bone IK. The target is specified in the world coordinate system.
-	 * @param child A direct descendant of the parent bone. */
 	static public void apply (Bone parent, Bone child, float targetX, float targetY, int bendDir, float alpha) {
 		if (alpha == 0) {
 			child.updateWorldTransform();

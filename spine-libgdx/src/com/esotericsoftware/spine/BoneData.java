@@ -44,7 +44,6 @@ public class BoneData {
 	// Nonessential.
 	final Color color = new Color(0.61f, 0.61f, 0.61f, 1);
 
-	/** @param parent May be null. */
 	public BoneData (int index, String name, BoneData parent) {
 		if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
@@ -53,8 +52,6 @@ public class BoneData {
 		this.parent = parent;
 	}
 
-	/** Copy constructor.
-	 * @param parent May be null. */
 	public BoneData (BoneData bone, BoneData parent) {
 		if (bone == null) throw new IllegalArgumentException("bone cannot be null.");
 		index = bone.index;
@@ -70,22 +67,18 @@ public class BoneData {
 		shearY = bone.shearY;
 	}
 
-	/** The index of the bone in {@link Skeleton#getBones()}. */
 	public int getIndex () {
 		return index;
 	}
 
-	/** The name of the bone, which is unique within the skeleton. */
 	public String getName () {
 		return name;
 	}
 
-	/** @return May be null. */
 	public BoneData getParent () {
 		return parent;
 	}
 
-	/** The bone's length. */
 	public float getLength () {
 		return length;
 	}
@@ -94,7 +87,6 @@ public class BoneData {
 		this.length = length;
 	}
 
-	/** The local x translation. */
 	public float getX () {
 		return x;
 	}
@@ -103,7 +95,6 @@ public class BoneData {
 		this.x = x;
 	}
 
-	/** The local y translation. */
 	public float getY () {
 		return y;
 	}
@@ -117,7 +108,6 @@ public class BoneData {
 		this.y = y;
 	}
 
-	/** The local rotation. */
 	public float getRotation () {
 		return rotation;
 	}
@@ -126,7 +116,6 @@ public class BoneData {
 		this.rotation = rotation;
 	}
 
-	/** The local scaleX. */
 	public float getScaleX () {
 		return scaleX;
 	}
@@ -135,7 +124,6 @@ public class BoneData {
 		this.scaleX = scaleX;
 	}
 
-	/** The local scaleY. */
 	public float getScaleY () {
 		return scaleY;
 	}
@@ -149,7 +137,6 @@ public class BoneData {
 		this.scaleY = scaleY;
 	}
 
-	/** The local shearX. */
 	public float getShearX () {
 		return shearX;
 	}
@@ -158,7 +145,6 @@ public class BoneData {
 		this.shearX = shearX;
 	}
 
-	/** The local shearX. */
 	public float getShearY () {
 		return shearY;
 	}
@@ -167,7 +153,6 @@ public class BoneData {
 		this.shearY = shearY;
 	}
 
-	/** The transform mode for how parent world transforms affect this bone. */
 	public TransformMode getTransformMode () {
 		return transformMode;
 	}
@@ -176,8 +161,6 @@ public class BoneData {
 		this.transformMode = transformMode;
 	}
 
-	/** The color of the bone as it was in Spine. Available only when nonessential data was exported. Bones are not usually
-	 * rendered at runtime. */
 	public Color getColor () {
 		return color;
 	}
@@ -186,7 +169,6 @@ public class BoneData {
 		return name;
 	}
 
-	/** Determines how a bone inherits world transforms from parent bones. */
 	static public enum TransformMode {
 		normal, onlyTranslation, noRotationOrReflection, noScale, noScaleOrReflection;
 

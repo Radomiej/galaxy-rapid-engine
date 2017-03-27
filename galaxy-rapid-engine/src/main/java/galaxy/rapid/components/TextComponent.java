@@ -7,7 +7,7 @@ public class TextComponent extends Component {
 
 	private String bitmapAsset;
 	private String text;
-	private Color color = Color.WHITE;
+	private Color color = Color.BLACK;
 	
 	public void setBitmapAsset(String resourcePath) {
 		this.bitmapAsset = resourcePath;

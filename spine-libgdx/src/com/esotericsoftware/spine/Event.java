@@ -75,12 +75,10 @@ public class Event {
 		this.stringValue = stringValue;
 	}
 
-	/** The animation time this event was keyed. */
 	public float getTime () {
 		return time;
 	}
 
-	/** The events's setup pose data. */
 	public EventData getData () {
 		return data;
 	}

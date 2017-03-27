@@ -68,7 +68,6 @@ public class EventData {
 		this.stringValue = stringValue;
 	}
 
-	/** The name of the event, which is unique within the skeleton. */
 	public String getName () {
 		return name;
 	}

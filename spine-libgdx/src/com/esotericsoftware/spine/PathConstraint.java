@@ -70,7 +70,6 @@ public class PathConstraint implements Constraint {
 		translateMix = data.translateMix;
 	}
 
-	/** Copy constructor. */
 	public PathConstraint (PathConstraint constraint, Skeleton skeleton) {
 		if (constraint == null) throw new IllegalArgumentException("constraint cannot be null.");
 		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
@@ -85,7 +84,6 @@ public class PathConstraint implements Constraint {
 		translateMix = constraint.translateMix;
 	}
 
-	/** Applies the constraint to the constrained bones. */
 	public void apply () {
 		update();
 	}
@@ -427,7 +425,6 @@ public class PathConstraint implements Constraint {
 		return data.order;
 	}
 
-	/** The position along the path. */
 	public float getPosition () {
 		return position;
 	}
@@ -436,7 +433,6 @@ public class PathConstraint implements Constraint {
 		this.position = position;
 	}
 
-	/** The spacing between bones. */
 	public float getSpacing () {
 		return spacing;
 	}
@@ -445,7 +441,6 @@ public class PathConstraint implements Constraint {
 		this.spacing = spacing;
 	}
 
-	/** A percentage (0-1) that controls the mix between the constrained and unconstrained rotations. */
 	public float getRotateMix () {
 		return rotateMix;
 	}
@@ -454,7 +449,6 @@ public class PathConstraint implements Constraint {
 		this.rotateMix = rotateMix;
 	}
 
-	/** A percentage (0-1) that controls the mix between the constrained and unconstrained translations. */
 	public float getTranslateMix () {
 		return translateMix;
 	}
@@ -463,12 +457,10 @@ public class PathConstraint implements Constraint {
 		this.translateMix = translateMix;
 	}
 
-	/** The bones that will be modified by this path constraint. */
 	public Array<Bone> getBones () {
 		return bones;
 	}
 
-	/** The slot whose path attachment will be used to constrained the bones. */
 	public Slot getTarget () {
 		return target;
 	}
@@ -477,7 +469,6 @@ public class PathConstraint implements Constraint {
 		this.target = target;
 	}
 
-	/** The path constraint's setup pose data. */
 	public PathConstraintData getData () {
 		return data;
 	}

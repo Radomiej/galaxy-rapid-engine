@@ -30,10 +30,12 @@ public enum RapidAsset {
 	INSTANCE;
 
 	private volatile AssetManager manager;
-	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(10);
-	private Map<String, Sprite> spriteMemoryMap = new HashMap<String, Sprite>(10);
+	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(64);
+	private Map<String, Sprite> spriteMemoryMap = new HashMap<String, Sprite>(64);
 //	private Map<String, MultiTextureAtlas> atlasMap = new HashMap<String, MultiTextureAtlas>(10);
 //	private Map<String, Sprite> atlasesSpriteMap = new HashMap<String, Sprite>(10);
+	private Map<String, BitmapFont> fontsMap = new HashMap<String, BitmapFont>(32);
+	
 	private Set<String> atlases = new HashSet<String>();
 	private FileHandleResolver handleResolver;
 
@@ -197,12 +199,26 @@ public enum RapidAsset {
 	}
 
 	public BitmapFont getBitmapFont(String fontResource) {
+		if(fontsMap.containsKey(fontResource)){
+			return fontsMap.get(fontResource);
+		}
 		manager.finishLoadingAsset(fontResource);
 		return manager.get(fontResource);
 	}
-
+	public boolean isBitmapFontLoaded(String fontResource){
+		if(fontsMap.containsKey(fontResource)){
+			return true;
+		}
+		return manager.isLoaded(fontResource);
+	}
+	
 	public void loadBitmapFont(String fontResource) {
+		if(isBitmapFontLoaded(fontResource)) return;
 		manager.load(fontResource, BitmapFont.class);
+	}
+	
+	public void putBitmapFont(String fontFile, BitmapFont font){
+		fontsMap.put(fontFile, font);
 	}
 
 	public void addMemorySprite(String spriteName, Sprite sprite) {
