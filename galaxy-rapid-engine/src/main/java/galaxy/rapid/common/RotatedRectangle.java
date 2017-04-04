@@ -179,8 +179,18 @@ public class RotatedRectangle {
 		return collisionRectangle;
 	}
 
-	public void setCollisionRectangle(Rectangle collisionRectangle) {
-		this.collisionRectangle = collisionRectangle;
+	public void setBounds(Rectangle boundRectangle) {
+		this.collisionRectangle.set(boundRectangle);
+	}
+	
+	public void setBounds(float x, float y, float width, float height) {
+		collisionRectangle.setSize(width, height);
+		collisionRectangle.setPosition(x, y);
+	}
+	
+	public void setCenterBounds(float centerX, float centerY, float width, float height) {
+		collisionRectangle.setSize(width, height);
+		collisionRectangle.setCenter(centerX, centerY);
 	}
 
 	public float getRotation() {
