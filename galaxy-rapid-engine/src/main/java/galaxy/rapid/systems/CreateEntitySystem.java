@@ -3,10 +3,10 @@ package galaxy.rapid.systems;
 import com.artemis.BaseSystem;
 import com.artemis.annotations.Wire;
 import com.artemis.utils.EntityBuilder;
+import com.google.common.eventbus.Subscribe;
 
 import galaxy.rapid.event.CreateEntityEvent;
 import galaxy.rapid.eventbus.RapidBus;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class CreateEntitySystem extends BaseSystem {
 
@@ -28,7 +28,7 @@ public class CreateEntitySystem extends BaseSystem {
 		eventBus.unregister(this);
 	}
 	
-	@Subscribe
+	@Subscribe()
 	public void entityCreateEventListener(CreateEntityEvent createEntityEvent){		
 		new EntityBuilder(world).with(createEntityEvent.getComponentsBag().getComponentsTab()).build();
 	}

@@ -2,12 +2,13 @@ package galaxy.rapid.screen;
 
 import com.badlogic.gdx.Screen;
 
+import galaxy.rapid.event.ChangeScreenEvent;
 import galaxy.rapid.eventbus.RapidBus;
 
 public abstract class RapidScreen implements Screen, EventBusInjector {
 	private boolean initialize = false;
 
-	protected RapidBus eventBus;
+	protected RapidBus masterEventBus;
 
 	public void show() {
 		if (!initialize) {
@@ -31,11 +32,11 @@ public abstract class RapidScreen implements Screen, EventBusInjector {
 	}
 
 	public void injectEventBus(RapidBus globalEventBus) {
-		eventBus = globalEventBus;
+		masterEventBus = globalEventBus;
 	}
 	
 	protected void changeScreen(Screen screen){
 		ChangeScreenEvent changeScreenEvent = new ChangeScreenEvent(screen);
-		eventBus.post(changeScreenEvent);
+		masterEventBus.post(changeScreenEvent);
 	}
 }

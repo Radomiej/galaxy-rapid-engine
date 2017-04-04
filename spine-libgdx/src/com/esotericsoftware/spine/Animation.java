@@ -1,32 +1,31 @@
 /******************************************************************************
- * Spine Runtimes Software License
- * Version 2.3
- * 
- * Copyright (c) 2013-2015, Esoteric Software
+ * Spine Runtimes Software License v2.5
+ *
+ * Copyright (c) 2013-2016, Esoteric Software
  * All rights reserved.
- * 
- * You are granted a perpetual, non-exclusive, non-sublicensable and
- * non-transferable license to use, install, execute and perform the Spine
- * Runtimes Software (the "Software") and derivative works solely for personal
- * or internal use. Without the written permission of Esoteric Software (see
- * Section 2 of the Spine Software License Agreement), you may not (a) modify,
- * translate, adapt or otherwise create derivative works, improvements of the
- * Software or develop new applications using the Software or (b) remove,
- * delete, alter or obscure any trademarks or any copyright, trademark, patent
+ *
+ * You are granted a perpetual, non-exclusive, non-sublicensable, and
+ * non-transferable license to use, install, execute, and perform the Spine
+ * Runtimes software and derivative works solely for personal or internal
+ * use. Without the written permission of Esoteric Software (see Section 2 of
+ * the Spine Software License Agreement), you may not (a) modify, translate,
+ * adapt, or develop new applications using the Spine Runtimes or otherwise
+ * create derivative works or improvements of the Spine Runtimes or (b) remove,
+ * delete, alter, or obscure any trademarks or any copyright, trademark, patent,
  * or other intellectual property or proprietary rights notices on or in the
  * Software, including any copy thereof. Redistributions in binary or source
  * form must include this license and terms.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
  * EVENT SHALL ESOTERIC SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS INTERRUPTION, OR LOSS OF
+ * USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+ * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 package com.esotericsoftware.spine;
@@ -36,12 +35,13 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.esotericsoftware.spine.attachments.Attachment;
-import com.esotericsoftware.spine.attachments.FfdAttachment;
+import com.esotericsoftware.spine.attachments.VertexAttachment;
 
+/** A simple container for a list of timelines and a name. */
 public class Animation {
 	final String name;
-	private final Array<Timeline> timelines;
-	private float duration;
+	final Array<Timeline> timelines;
+	float duration;
 
 	public Animation (String name, Array<Timeline> timelines, float duration) {
 		if (name == null) throw new IllegalArgumentException("name cannot be null.");
@@ -55,7 +55,6 @@ public class Animation {
 		return timelines;
 	}
 
-	/** Returns the duration of the animation in seconds. */
 	public float getDuration () {
 		return duration;
 	}
@@ -64,10 +63,8 @@ public class Animation {
 		this.duration = duration;
 	}
 
-	/** Poses the skeleton at the specified time for this animation.
-	 * @param lastTime The last time the animation was applied.
-	 * @param events Any triggered events are added. */
-	public void apply (Skeleton skeleton, float lastTime, float time, boolean loop, Array<Event> events) {
+	public void apply (Skeleton skeleton, float lastTime, float time, boolean loop, Array<Event> events, float alpha,
+		boolean setupPose, boolean mixingOut) {
 		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
 
 		if (loop && duration != 0) {
@@ -77,24 +74,7 @@ public class Animation {
 
 		Array<Timeline> timelines = this.timelines;
 		for (int i = 0, n = timelines.size; i < n; i++)
-			timelines.get(i).apply(skeleton, lastTime, time, events, 1);
-	}
-
-	/** Poses the skeleton at the specified time for this animation mixed with the current pose.
-	 * @param lastTime The last time the animation was applied.
-	 * @param events Any triggered events are added.
-	 * @param alpha The amount of this animation that affects the current pose. */
-	public void mix (Skeleton skeleton, float lastTime, float time, boolean loop, Array<Event> events, float alpha) {
-		if (skeleton == null) throw new IllegalArgumentException("skeleton cannot be null.");
-
-		if (loop && duration != 0) {
-			time %= duration;
-			if (lastTime > 0) lastTime %= duration;
-		}
-
-		Array<Timeline> timelines = this.timelines;
-		for (int i = 0, n = timelines.size; i < n; i++)
-			timelines.get(i).apply(skeleton, lastTime, time, events, alpha);
+			timelines.get(i).apply(skeleton, lastTime, time, events, alpha, setupPose, mixingOut);
 	}
 
 	public String getName () {
@@ -105,8 +85,6 @@ public class Animation {
 		return name;
 	}
 
-	/** @param target After the first and before the last value.
-	 * @return index of first value greater than the target. */
 	static int binarySearch (float[] values, float target, int step) {
 		int low = 0;
 		int high = values.length / step - 2;
@@ -122,8 +100,6 @@ public class Animation {
 		}
 	}
 
-	/** @param target After the first and before the last value.
-	 * @return index of first value greater than the target. */
 	static int binarySearch (float[] values, float target) {
 		int low = 0;
 		int high = values.length - 2;
@@ -146,15 +122,23 @@ public class Animation {
 	}
 
 	static public interface Timeline {
-		/** Sets the value(s) for the specified time.
-		 * @param events May be null to not collect fired events. */
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha);
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut);
+
+		public int getPropertyId ();
 	}
 
-	/** Base class for frames that use an interpolation bezier curve. */
+	static private enum TimelineType {
+		rotate, translate, scale, shear, //
+		attachment, color, deform, //
+		event, drawOrder, //
+		ikConstraint, transformConstraint, //
+		pathConstraintPosition, pathConstraintSpacing, pathConstraintMix
+	}
+
 	abstract static public class CurveTimeline implements Timeline {
 		static public final float LINEAR = 0, STEPPED = 1, BEZIER = 2;
-		static private final int BEZIER_SEGMENTS = 10, BEZIER_SIZE = BEZIER_SEGMENTS * 2 - 1;
+		static private final int BEZIER_SIZE = 10 * 2 - 1;
 
 		private final float[] curves; // type, x, y, ...
 
@@ -184,16 +168,11 @@ public class Animation {
 			return BEZIER;
 		}
 
-		/** Sets the control handle positions for an interpolation bezier curve used to transition from this keyframe to the next.
-		 * cx1 and cx2 are from 0 to 1, representing the percent of time between the two keyframes. cy1 and cy2 are the percent of
-		 * the difference between the keyframe's values. */
 		public void setCurve (int frameIndex, float cx1, float cy1, float cx2, float cy2) {
-			float subdiv1 = 1f / BEZIER_SEGMENTS, subdiv2 = subdiv1 * subdiv1, subdiv3 = subdiv2 * subdiv1;
-			float pre1 = 3 * subdiv1, pre2 = 3 * subdiv2, pre4 = 6 * subdiv2, pre5 = 6 * subdiv3;
-			float tmp1x = -cx1 * 2 + cx2, tmp1y = -cy1 * 2 + cy2, tmp2x = (cx1 - cx2) * 3 + 1, tmp2y = (cy1 - cy2) * 3 + 1;
-			float dfx = cx1 * pre1 + tmp1x * pre2 + tmp2x * subdiv3, dfy = cy1 * pre1 + tmp1y * pre2 + tmp2y * subdiv3;
-			float ddfx = tmp1x * pre4 + tmp2x * pre5, ddfy = tmp1y * pre4 + tmp2y * pre5;
-			float dddfx = tmp2x * pre5, dddfy = tmp2y * pre5;
+			float tmpx = (-cx1 * 2 + cx2) * 0.03f, tmpy = (-cy1 * 2 + cy2) * 0.03f;
+			float dddfx = ((cx1 - cx2) * 3 + 1) * 0.006f, dddfy = ((cy1 - cy2) * 3 + 1) * 0.006f;
+			float ddfx = tmpx * 2 + dddfx, ddfy = tmpy * 2 + dddfy;
+			float dfx = cx1 * 0.3f + tmpx + dddfx * 0.16666667f, dfy = cy1 * 0.3f + tmpy + dddfy * 0.16666667f;
 
 			int i = frameIndex * BEZIER_SIZE;
 			float[] curves = this.curves;
@@ -213,6 +192,7 @@ public class Animation {
 		}
 
 		public float getCurvePercent (int frameIndex, float percent) {
+			percent = MathUtils.clamp(percent, 0, 1);
 			float[] curves = this.curves;
 			int i = frameIndex * BEZIER_SIZE;
 			float type = curves[i];
@@ -240,19 +220,25 @@ public class Animation {
 	}
 
 	static public class RotateTimeline extends CurveTimeline {
-		static final int PREV_TIME = -2;
-		static final int VALUE = 1;
+		static public final int ENTRIES = 2;
+		static final int PREV_TIME = -2, PREV_ROTATION = -1;
+		static final int ROTATION = 1;
 
 		int boneIndex;
-		final float[] frames; // time, angle, ...
+		final float[] frames; // time, degrees, ...
 
 		public RotateTimeline (int frameCount) {
 			super(frameCount);
 			frames = new float[frameCount << 1];
 		}
 
-		public void setBoneIndex (int boneIndex) {
-			this.boneIndex = boneIndex;
+		public int getPropertyId () {
+			return (TimelineType.rotate.ordinal() << 24) + boneIndex;
+		}
+
+		public void setBoneIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.boneIndex = index;
 		}
 
 		public int getBoneIndex () {
@@ -263,65 +249,73 @@ public class Animation {
 			return frames;
 		}
 
-		/** Sets the time and angle of the specified keyframe. */
-		public void setFrame (int frameIndex, float time, float angle) {
-			frameIndex *= 2;
+		public void setFrame (int frameIndex, float time, float degrees) {
+			frameIndex <<= 1;
 			frames[frameIndex] = time;
-			frames[frameIndex + 1] = angle;
+			frames[frameIndex + ROTATION] = degrees;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
 
 			Bone bone = skeleton.bones.get(boneIndex);
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) bone.rotation = bone.data.rotation;
+				return;
+			}
 
-			if (time >= frames[frames.length - 2]) { // Time is after last frame.
-				float amount = bone.data.rotation + frames[frames.length - 1] - bone.rotation;
-				while (amount > 180)
-					amount -= 360;
-				while (amount < -180)
-					amount += 360;
-				bone.rotation += amount * alpha;
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				if (setupPose)
+					bone.rotation = bone.data.rotation + frames[frames.length + PREV_ROTATION] * alpha;
+				else {
+					float r = bone.data.rotation + frames[frames.length + PREV_ROTATION] - bone.rotation;
+					r -= (16384 - (int)(16384.499999999996 - r / 360)) * 360; // Wrap within -180 and 180.
+					bone.rotation += r * alpha;
+				}
 				return;
 			}
 
 			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time, 2);
-			float prevFrameValue = frames[frame - 1];
+			int frame = binarySearch(frames, time, ENTRIES);
+			float prevRotation = frames[frame + PREV_ROTATION];
 			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-			percent = getCurvePercent((frame >> 1) - 1, percent);
+			float percent = getCurvePercent((frame >> 1) - 1, 1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
 
-			float amount = frames[frame + VALUE] - prevFrameValue;
-			while (amount > 180)
-				amount -= 360;
-			while (amount < -180)
-				amount += 360;
-			amount = bone.data.rotation + (prevFrameValue + amount * percent) - bone.rotation;
-			while (amount > 180)
-				amount -= 360;
-			while (amount < -180)
-				amount += 360;
-			bone.rotation += amount * alpha;
+			float r = frames[frame + ROTATION] - prevRotation;
+			r -= (16384 - (int)(16384.499999999996 - r / 360)) * 360;
+			r = prevRotation + r * percent;
+			if (setupPose) {
+				r -= (16384 - (int)(16384.499999999996 - r / 360)) * 360;
+				bone.rotation = bone.data.rotation + r * alpha;
+			} else {
+				r = bone.data.rotation + r - bone.rotation;
+				r -= (16384 - (int)(16384.499999999996 - r / 360)) * 360;
+				bone.rotation += r * alpha;
+			}
 		}
 	}
 
 	static public class TranslateTimeline extends CurveTimeline {
-		static final int PREV_TIME = -3;
-		static final int X = 1;
-		static final int Y = 2;
+		static public final int ENTRIES = 3;
+		static final int PREV_TIME = -3, PREV_X = -2, PREV_Y = -1;
+		static final int X = 1, Y = 2;
 
 		int boneIndex;
 		final float[] frames; // time, x, y, ...
 
 		public TranslateTimeline (int frameCount) {
 			super(frameCount);
-			frames = new float[frameCount * 3];
+			frames = new float[frameCount * ENTRIES];
 		}
 
-		public void setBoneIndex (int boneIndex) {
-			this.boneIndex = boneIndex;
+		public int getPropertyId () {
+			return (TimelineType.translate.ordinal() << 24) + boneIndex;
+		}
+
+		public void setBoneIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.boneIndex = index;
 		}
 
 		public int getBoneIndex () {
@@ -332,36 +326,49 @@ public class Animation {
 			return frames;
 		}
 
-		/** Sets the time and value of the specified keyframe. */
 		public void setFrame (int frameIndex, float time, float x, float y) {
-			frameIndex *= 3;
+			frameIndex *= ENTRIES;
 			frames[frameIndex] = time;
-			frames[frameIndex + 1] = x;
-			frames[frameIndex + 2] = y;
+			frames[frameIndex + X] = x;
+			frames[frameIndex + Y] = y;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
 
 			Bone bone = skeleton.bones.get(boneIndex);
-
-			if (time >= frames[frames.length - 3]) { // Time is after last frame.
-				bone.x += (bone.data.x + frames[frames.length - 2] - bone.x) * alpha;
-				bone.y += (bone.data.y + frames[frames.length - 1] - bone.y) * alpha;
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					bone.x = bone.data.x;
+					bone.y = bone.data.y;
+				}
 				return;
 			}
 
-			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time, 3);
-			float prevFrameX = frames[frame - 2];
-			float prevFrameY = frames[frame - 1];
-			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-			percent = getCurvePercent(frame / 3 - 1, percent);
+			float x, y;
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				x = frames[frames.length + PREV_X];
+				y = frames[frames.length + PREV_Y];
+			} else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				x = frames[frame + PREV_X];
+				y = frames[frame + PREV_Y];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
 
-			bone.x += (bone.data.x + prevFrameX + (frames[frame + X] - prevFrameX) * percent - bone.x) * alpha;
-			bone.y += (bone.data.y + prevFrameY + (frames[frame + Y] - prevFrameY) * percent - bone.y) * alpha;
+				x += (frames[frame + X] - x) * percent;
+				y += (frames[frame + Y] - y) * percent;
+			}
+			if (setupPose) {
+				bone.x = bone.data.x + x * alpha;
+				bone.y = bone.data.y + y * alpha;
+			} else {
+				bone.x += (bone.data.x + x - bone.x) * alpha;
+				bone.y += (bone.data.y + y - bone.y) * alpha;
+			}
 		}
 	}
 
@@ -370,27 +377,62 @@ public class Animation {
 			super(frameCount);
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+		public int getPropertyId () {
+			return (TimelineType.scale.ordinal() << 24) + boneIndex;
+		}
+
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
 
 			Bone bone = skeleton.bones.get(boneIndex);
-			if (time >= frames[frames.length - 3]) { // Time is after last frame.
-				bone.scaleX += (bone.data.scaleX * frames[frames.length - 2] - bone.scaleX) * alpha;
-				bone.scaleY += (bone.data.scaleY * frames[frames.length - 1] - bone.scaleY) * alpha;
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					bone.scaleX = bone.data.scaleX;
+					bone.scaleY = bone.data.scaleY;
+				}
 				return;
 			}
 
-			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time, 3);
-			float prevFrameX = frames[frame - 2];
-			float prevFrameY = frames[frame - 1];
-			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-			percent = getCurvePercent(frame / 3 - 1, percent);
+			float x, y;
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				x = frames[frames.length + PREV_X] * bone.data.scaleX;
+				y = frames[frames.length + PREV_Y] * bone.data.scaleY;
+			} else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				x = frames[frame + PREV_X];
+				y = frames[frame + PREV_Y];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
 
-			bone.scaleX += (bone.data.scaleX * (prevFrameX + (frames[frame + X] - prevFrameX) * percent) - bone.scaleX) * alpha;
-			bone.scaleY += (bone.data.scaleY * (prevFrameY + (frames[frame + Y] - prevFrameY) * percent) - bone.scaleY) * alpha;
+				x = (x + (frames[frame + X] - x) * percent) * bone.data.scaleX;
+				y = (y + (frames[frame + Y] - y) * percent) * bone.data.scaleY;
+			}
+			if (alpha == 1) {
+				bone.scaleX = x;
+				bone.scaleY = y;
+			} else {
+				float bx, by;
+				if (setupPose) {
+					bx = bone.data.scaleX;
+					by = bone.data.scaleY;
+				} else {
+					bx = bone.scaleX;
+					by = bone.scaleY;
+				}
+				// Mixing out uses sign of setup or current pose, else use sign of key.
+				if (mixingOut) {
+					x = Math.abs(x) * Math.signum(bx);
+					y = Math.abs(y) * Math.signum(by);
+				} else {
+					bx = Math.abs(bx) * Math.signum(x);
+					by = Math.abs(by) * Math.signum(y);
+				}
+				bone.scaleX = bx + (x - bx) * alpha;
+				bone.scaleY = by + (y - by) * alpha;
+			}
 		}
 	}
 
@@ -399,47 +441,69 @@ public class Animation {
 			super(frameCount);
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+		public int getPropertyId () {
+			return (TimelineType.shear.ordinal() << 24) + boneIndex;
+		}
+
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
 
 			Bone bone = skeleton.bones.get(boneIndex);
-			if (time >= frames[frames.length - 3]) { // Time is after last frame.
-				bone.shearX += (bone.data.shearX + frames[frames.length - 2] - bone.shearX) * alpha;
-				bone.shearY += (bone.data.shearY + frames[frames.length - 1] - bone.shearY) * alpha;
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					bone.shearX = bone.data.shearX;
+					bone.shearY = bone.data.shearY;
+				}
 				return;
 			}
 
-			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time, 3);
-			float prevFrameX = frames[frame - 2];
-			float prevFrameY = frames[frame - 1];
-			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-			percent = getCurvePercent(frame / 3 - 1, percent);
+			float x, y;
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				x = frames[frames.length + PREV_X];
+				y = frames[frames.length + PREV_Y];
+			} else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				x = frames[frame + PREV_X];
+				y = frames[frame + PREV_Y];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
 
-			bone.shearX += (bone.data.shearX + (prevFrameX + (frames[frame + X] - prevFrameX) * percent) - bone.shearX) * alpha;
-			bone.shearY += (bone.data.shearY + (prevFrameY + (frames[frame + Y] - prevFrameY) * percent) - bone.shearY) * alpha;
+				x = x + (frames[frame + X] - x) * percent;
+				y = y + (frames[frame + Y] - y) * percent;
+			}
+			if (setupPose) {
+				bone.shearX = bone.data.shearX + x * alpha;
+				bone.shearY = bone.data.shearY + y * alpha;
+			} else {
+				bone.shearX += (bone.data.shearX + x - bone.shearX) * alpha;
+				bone.shearY += (bone.data.shearY + y - bone.shearY) * alpha;
+			}
 		}
 	}
 
 	static public class ColorTimeline extends CurveTimeline {
-		static private final int PREV_TIME = -5;
-		static private final int R = 1;
-		static private final int G = 2;
-		static private final int B = 3;
-		static private final int A = 4;
+		static public final int ENTRIES = 5;
+		static private final int PREV_TIME = -5, PREV_R = -4, PREV_G = -3, PREV_B = -2, PREV_A = -1;
+		static private final int R = 1, G = 2, B = 3, A = 4;
 
 		int slotIndex;
 		private final float[] frames; // time, r, g, b, a, ...
 
 		public ColorTimeline (int frameCount) {
 			super(frameCount);
-			frames = new float[frameCount * 5];
+			frames = new float[frameCount * ENTRIES];
 		}
 
-		public void setSlotIndex (int slotIndex) {
-			this.slotIndex = slotIndex;
+		public int getPropertyId () {
+			return (TimelineType.color.ordinal() << 24) + slotIndex;
+		}
+
+		public void setSlotIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.slotIndex = index;
 		}
 
 		public int getSlotIndex () {
@@ -450,48 +514,55 @@ public class Animation {
 			return frames;
 		}
 
-		/** Sets the time and value of the specified keyframe. */
 		public void setFrame (int frameIndex, float time, float r, float g, float b, float a) {
-			frameIndex *= 5;
+			frameIndex *= ENTRIES;
 			frames[frameIndex] = time;
-			frames[frameIndex + 1] = r;
-			frames[frameIndex + 2] = g;
-			frames[frameIndex + 3] = b;
-			frames[frameIndex + 4] = a;
+			frames[frameIndex + R] = r;
+			frames[frameIndex + G] = g;
+			frames[frameIndex + B] = b;
+			frames[frameIndex + A] = a;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			Slot slot = skeleton.slots.get(slotIndex);
 			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) slot.color.set(slot.data.color);
+				return;
+			}
 
 			float r, g, b, a;
-			if (time >= frames[frames.length - 5]) { // Time is after last frame.
-				int i = frames.length - 1;
-				r = frames[i - 3];
-				g = frames[i - 2];
-				b = frames[i - 1];
-				a = frames[i];
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				int i = frames.length;
+				r = frames[i + PREV_R];
+				g = frames[i + PREV_G];
+				b = frames[i + PREV_B];
+				a = frames[i + PREV_A];
 			} else {
 				// Interpolate between the previous frame and the current frame.
-				int frame = binarySearch(frames, time, 5);
+				int frame = binarySearch(frames, time, ENTRIES);
+				r = frames[frame + PREV_R];
+				g = frames[frame + PREV_G];
+				b = frames[frame + PREV_B];
+				a = frames[frame + PREV_A];
 				float frameTime = frames[frame];
-				float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-				percent = getCurvePercent(frame / 5 - 1, percent);
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
 
-				r = frames[frame - 4];
-				g = frames[frame - 3];
-				b = frames[frame - 2];
-				a = frames[frame - 1];
 				r += (frames[frame + R] - r) * percent;
 				g += (frames[frame + G] - g) * percent;
 				b += (frames[frame + B] - b) * percent;
 				a += (frames[frame + A] - a) * percent;
 			}
-			Color color = skeleton.slots.get(slotIndex).color;
-			if (alpha < 1)
+			if (alpha == 1)
+				slot.color.set(r, g, b, a);
+			else {
+				Color color = slot.color;
+				if (setupPose) color.set(slot.data.color);
 				color.add((r - color.r) * alpha, (g - color.g) * alpha, (b - color.b) * alpha, (a - color.a) * alpha);
-			else
-				color.set(r, g, b, a);
+			}
 		}
 	}
 
@@ -505,16 +576,21 @@ public class Animation {
 			attachmentNames = new String[frameCount];
 		}
 
+		public int getPropertyId () {
+			return (TimelineType.attachment.ordinal() << 24) + slotIndex;
+		}
+
 		public int getFrameCount () {
 			return frames.length;
 		}
 
-		public int getSlotIndex () {
-			return slotIndex;
+		public void setSlotIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.slotIndex = index;
 		}
 
-		public void setSlotIndex (int slotIndex) {
-			this.slotIndex = slotIndex;
+		public int getSlotIndex () {
+			return slotIndex;
 		}
 
 		public float[] getFrames () {
@@ -525,26 +601,169 @@ public class Animation {
 			return attachmentNames;
 		}
 
-		/** Sets the time and value of the specified keyframe. */
 		public void setFrame (int frameIndex, float time, String attachmentName) {
 			frames[frameIndex] = time;
 			attachmentNames[frameIndex] = attachmentName;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) {
-				if (lastTime > time) apply(skeleton, lastTime, Integer.MAX_VALUE, null, 0);
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			Slot slot = skeleton.slots.get(slotIndex);
+			if (mixingOut && setupPose) {
+				String attachmentName = slot.data.attachmentName;
+				slot.setAttachment(attachmentName == null ? null : skeleton.getAttachment(slotIndex, attachmentName));
 				return;
-			} else if (lastTime > time) //
-				lastTime = -1;
+			}
 
-			int frame = (time >= frames[frames.length - 1] ? frames.length : binarySearch(frames, time)) - 1;
-			if (frames[frame] < lastTime) return;
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					String attachmentName = slot.data.attachmentName;
+					slot.setAttachment(attachmentName == null ? null : skeleton.getAttachment(slotIndex, attachmentName));
+				}
+				return;
+			}
 
-			String attachmentName = attachmentNames[frame];
-			skeleton.slots.get(slotIndex)
-				.setAttachment(attachmentName == null ? null : skeleton.getAttachment(slotIndex, attachmentName));
+			int frameIndex;
+			if (time >= frames[frames.length - 1]) // Time is after last frame.
+				frameIndex = frames.length - 1;
+			else
+				frameIndex = binarySearch(frames, time) - 1;
+
+			String attachmentName = attachmentNames[frameIndex];
+			slot.setAttachment(attachmentName == null ? null : skeleton.getAttachment(slotIndex, attachmentName));
+		}
+	}
+
+	static public class DeformTimeline extends CurveTimeline {
+		int slotIndex;
+		VertexAttachment attachment;
+		private final float[] frames; // time, ...
+		private final float[][] frameVertices;
+
+		public DeformTimeline (int frameCount) {
+			super(frameCount);
+			frames = new float[frameCount];
+			frameVertices = new float[frameCount][];
+		}
+
+		public int getPropertyId () {
+			return (TimelineType.deform.ordinal() << 24) + slotIndex;
+		}
+
+		public void setSlotIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.slotIndex = index;
+		}
+
+		public int getSlotIndex () {
+			return slotIndex;
+		}
+
+		public void setAttachment (VertexAttachment attachment) {
+			this.attachment = attachment;
+		}
+
+		public VertexAttachment getAttachment () {
+			return attachment;
+		}
+
+		public float[] getFrames () {
+			return frames;
+		}
+
+		public float[][] getVertices () {
+			return frameVertices;
+		}
+
+		public void setFrame (int frameIndex, float time, float[] vertices) {
+			frames[frameIndex] = time;
+			frameVertices[frameIndex] = vertices;
+		}
+
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> firedEvents, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			Slot slot = skeleton.slots.get(slotIndex);
+			Attachment slotAttachment = slot.attachment;
+			if (!(slotAttachment instanceof VertexAttachment) || !((VertexAttachment)slotAttachment).applyDeform(attachment)) return;
+
+			FloatArray verticesArray = slot.getAttachmentVertices();
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) verticesArray.size = 0;
+				return;
+			}
+
+			float[][] frameVertices = this.frameVertices;
+			int vertexCount = frameVertices[0].length;
+			if (verticesArray.size != vertexCount) alpha = 1; // Don't mix from uninitialized slot vertices.
+			float[] vertices = verticesArray.setSize(vertexCount);
+
+			if (time >= frames[frames.length - 1]) { // Time is after last frame.
+				float[] lastVertices = frameVertices[frames.length - 1];
+				if (alpha == 1) {
+					// Vertex positions or deform offsets, no alpha.
+					System.arraycopy(lastVertices, 0, vertices, 0, vertexCount);
+				} else if (setupPose) {
+					VertexAttachment vertexAttachment = (VertexAttachment)slotAttachment;
+					if (vertexAttachment.getBones() == null) {
+						// Unweighted vertex positions, with alpha.
+						float[] setupVertices = vertexAttachment.getVertices();
+						for (int i = 0; i < vertexCount; i++) {
+							float setup = setupVertices[i];
+							vertices[i] = setup + (lastVertices[i] - setup) * alpha;
+						}
+					} else {
+						// Weighted deform offsets, with alpha.
+						for (int i = 0; i < vertexCount; i++)
+							vertices[i] = lastVertices[i] * alpha;
+					}
+				} else {
+					// Vertex positions or deform offsets, with alpha.
+					for (int i = 0; i < vertexCount; i++)
+						vertices[i] += (lastVertices[i] - vertices[i]) * alpha;
+				}
+				return;
+			}
+
+			// Interpolate between the previous frame and the current frame.
+			int frame = binarySearch(frames, time);
+			float[] prevVertices = frameVertices[frame - 1];
+			float[] nextVertices = frameVertices[frame];
+			float frameTime = frames[frame];
+			float percent = getCurvePercent(frame - 1, 1 - (time - frameTime) / (frames[frame - 1] - frameTime));
+
+			if (alpha == 1) {
+				// Vertex positions or deform offsets, no alpha.
+				for (int i = 0; i < vertexCount; i++) {
+					float prev = prevVertices[i];
+					vertices[i] = prev + (nextVertices[i] - prev) * percent;
+				}
+			} else if (setupPose) {
+				VertexAttachment vertexAttachment = (VertexAttachment)slotAttachment;
+				if (vertexAttachment.getBones() == null) {
+					// Unweighted vertex positions, with alpha.
+					float[] setupVertices = vertexAttachment.getVertices();
+					for (int i = 0; i < vertexCount; i++) {
+						float prev = prevVertices[i], setup = setupVertices[i];
+						vertices[i] = setup + (prev + (nextVertices[i] - prev) * percent - setup) * alpha;
+					}
+				} else {
+					// Weighted deform offsets, with alpha.
+					for (int i = 0; i < vertexCount; i++) {
+						float prev = prevVertices[i];
+						vertices[i] = (prev + (nextVertices[i] - prev) * percent) * alpha;
+					}
+				}
+			} else {
+				// Vertex positions or deform offsets, with alpha.
+				for (int i = 0; i < vertexCount; i++) {
+					float prev = prevVertices[i];
+					vertices[i] += (prev + (nextVertices[i] - prev) * percent - vertices[i]) * alpha;
+				}
+			}
 		}
 	}
 
@@ -555,6 +774,10 @@ public class Animation {
 		public EventTimeline (int frameCount) {
 			frames = new float[frameCount];
 			events = new Event[frameCount];
+		}
+
+		public int getPropertyId () {
+			return TimelineType.event.ordinal() << 24;
 		}
 
 		public int getFrameCount () {
@@ -569,20 +792,20 @@ public class Animation {
 			return events;
 		}
 
-		/** Sets the time of the specified keyframe. */
 		public void setFrame (int frameIndex, Event event) {
 			frames[frameIndex] = event.time;
 			events[frameIndex] = event;
 		}
 
-		/** Fires events for frames > lastTime and <= time. */
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> firedEvents, float alpha) {
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> firedEvents, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
 			if (firedEvents == null) return;
 			float[] frames = this.frames;
 			int frameCount = frames.length;
 
 			if (lastTime > time) { // Fire events after last time for looped animations.
-				apply(skeleton, lastTime, Integer.MAX_VALUE, firedEvents, alpha);
+				apply(skeleton, lastTime, Integer.MAX_VALUE, firedEvents, alpha, setupPose, mixingOut);
 				lastTime = -1f;
 			} else if (lastTime >= frames[frameCount - 1]) // Last time is after last frame.
 				return;
@@ -613,6 +836,10 @@ public class Animation {
 			drawOrders = new int[frameCount][];
 		}
 
+		public int getPropertyId () {
+			return TimelineType.drawOrder.ordinal() << 24;
+		}
+
 		public int getFrameCount () {
 			return frames.length;
 		}
@@ -625,16 +852,26 @@ public class Animation {
 			return drawOrders;
 		}
 
-		/** Sets the time of the specified keyframe.
-		 * @param drawOrder May be null to use bind pose draw order. */
 		public void setFrame (int frameIndex, float time, int[] drawOrder) {
 			frames[frameIndex] = time;
 			drawOrders[frameIndex] = drawOrder;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> firedEvents, float alpha) {
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> firedEvents, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			Array<Slot> drawOrder = skeleton.drawOrder;
+			Array<Slot> slots = skeleton.slots;
+			if (mixingOut && setupPose) {
+				System.arraycopy(slots.items, 0, drawOrder.items, 0, slots.size);
+				return;
+			}
+
 			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) System.arraycopy(slots.items, 0, drawOrder.items, 0, slots.size);
+				return;
+			}
 
 			int frame;
 			if (time >= frames[frames.length - 1]) // Time is after last frame.
@@ -642,8 +879,6 @@ public class Animation {
 			else
 				frame = binarySearch(frames, time) - 1;
 
-			Array<Slot> drawOrder = skeleton.drawOrder;
-			Array<Slot> slots = skeleton.slots;
 			int[] drawOrderToSetupIndex = drawOrders[frame];
 			if (drawOrderToSetupIndex == null)
 				System.arraycopy(slots.items, 0, drawOrder.items, 0, slots.size);
@@ -654,114 +889,26 @@ public class Animation {
 		}
 	}
 
-	static public class FfdTimeline extends CurveTimeline {
-		private final float[] frames; // time, ...
-		private final float[][] frameVertices;
-		int slotIndex;
-		Attachment attachment;
-
-		public FfdTimeline (int frameCount) {
-			super(frameCount);
-			frames = new float[frameCount];
-			frameVertices = new float[frameCount][];
-		}
-
-		public void setSlotIndex (int slotIndex) {
-			this.slotIndex = slotIndex;
-		}
-
-		public int getSlotIndex () {
-			return slotIndex;
-		}
-
-		public void setAttachment (Attachment attachment) {
-			this.attachment = attachment;
-		}
-
-		public Attachment getAttachment () {
-			return attachment;
-		}
-
-		public float[] getFrames () {
-			return frames;
-		}
-
-		public float[][] getVertices () {
-			return frameVertices;
-		}
-
-		/** Sets the time of the specified keyframe. */
-		public void setFrame (int frameIndex, float time, float[] vertices) {
-			frames[frameIndex] = time;
-			frameVertices[frameIndex] = vertices;
-		}
-
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> firedEvents, float alpha) {
-			Slot slot = skeleton.slots.get(slotIndex);
-			Attachment slotAttachment = slot.getAttachment();
-			if (!(slotAttachment instanceof FfdAttachment) || !((FfdAttachment)slotAttachment).applyFFD(attachment)) return;
-
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
-
-			float[][] frameVertices = this.frameVertices;
-			int vertexCount = frameVertices[0].length;
-
-			FloatArray verticesArray = slot.getAttachmentVertices();
-			if (verticesArray.size != vertexCount) alpha = 1; // Don't mix from uninitialized slot vertices.
-			verticesArray.size = 0;
-			verticesArray.ensureCapacity(vertexCount);
-			verticesArray.size = vertexCount;
-			float[] vertices = verticesArray.items;
-
-			if (time >= frames[frames.length - 1]) { // Time is after last frame.
-				float[] lastVertices = frameVertices[frames.length - 1];
-				if (alpha < 1) {
-					for (int i = 0; i < vertexCount; i++)
-						vertices[i] += (lastVertices[i] - vertices[i]) * alpha;
-				} else
-					System.arraycopy(lastVertices, 0, vertices, 0, vertexCount);
-				return;
-			}
-
-			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time);
-			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame - 1] - frameTime), 0, 1);
-			percent = getCurvePercent(frame - 1, percent);
-
-			float[] prevVertices = frameVertices[frame - 1];
-			float[] nextVertices = frameVertices[frame];
-			if (alpha < 1) {
-				for (int i = 0; i < vertexCount; i++) {
-					float prev = prevVertices[i];
-					vertices[i] += (prev + (nextVertices[i] - prev) * percent - vertices[i]) * alpha;
-				}
-			} else {
-				for (int i = 0; i < vertexCount; i++) {
-					float prev = prevVertices[i];
-					vertices[i] = prev + (nextVertices[i] - prev) * percent;
-				}
-			}
-		}
-	}
-
 	static public class IkConstraintTimeline extends CurveTimeline {
-		static private final int PREV_TIME = -3;
-		static private final int PREV_MIX = -2;
-		static private final int PREV_BEND_DIRECTION = -1;
-		static private final int MIX = 1;
+		static public final int ENTRIES = 3;
+		static private final int PREV_TIME = -3, PREV_MIX = -2, PREV_BEND_DIRECTION = -1;
+		static private final int MIX = 1, BEND_DIRECTION = 2;
 
 		int ikConstraintIndex;
 		private final float[] frames; // time, mix, bendDirection, ...
 
 		public IkConstraintTimeline (int frameCount) {
 			super(frameCount);
-			frames = new float[frameCount * 3];
+			frames = new float[frameCount * ENTRIES];
 		}
 
-		public void setIkConstraintIndex (int ikConstraint) {
-			this.ikConstraintIndex = ikConstraint;
+		public int getPropertyId () {
+			return (TimelineType.ikConstraint.ordinal() << 24) + ikConstraintIndex;
+		}
+
+		public void setIkConstraintIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.ikConstraintIndex = index;
 		}
 
 		public int getIkConstraintIndex () {
@@ -772,59 +919,74 @@ public class Animation {
 			return frames;
 		}
 
-		/** Sets the time, mix and bend direction of the specified keyframe. */
 		public void setFrame (int frameIndex, float time, float mix, int bendDirection) {
-			frameIndex *= 3;
+			frameIndex *= ENTRIES;
 			frames[frameIndex] = time;
-			frames[frameIndex + 1] = mix;
-			frames[frameIndex + 2] = bendDirection;
+			frames[frameIndex + MIX] = mix;
+			frames[frameIndex + BEND_DIRECTION] = bendDirection;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
 
 			IkConstraint constraint = skeleton.ikConstraints.get(ikConstraintIndex);
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					constraint.mix = constraint.data.mix;
+					constraint.bendDirection = constraint.data.bendDirection;
+				}
+				return;
+			}
 
-			if (time >= frames[frames.length - 3]) { // Time is after last frame.
-				constraint.mix += (frames[frames.length + PREV_MIX] - constraint.mix) * alpha;
-				constraint.bendDirection = (int)frames[frames.length + PREV_BEND_DIRECTION];
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				if (setupPose) {
+					constraint.mix = constraint.data.mix + (frames[frames.length + PREV_MIX] - constraint.data.mix) * alpha;
+					constraint.bendDirection = mixingOut ? constraint.data.bendDirection
+						: (int)frames[frames.length + PREV_BEND_DIRECTION];
+				} else {
+					constraint.mix += (frames[frames.length + PREV_MIX] - constraint.mix) * alpha;
+					if (!mixingOut) constraint.bendDirection = (int)frames[frames.length + PREV_BEND_DIRECTION];
+				}
 				return;
 			}
 
 			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time, 3);
-			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-			percent = getCurvePercent(frame / 3 - 1, percent);
-
+			int frame = binarySearch(frames, time, ENTRIES);
 			float mix = frames[frame + PREV_MIX];
-			constraint.mix += (mix + (frames[frame + MIX] - mix) * percent - constraint.mix) * alpha;
-			constraint.bendDirection = (int)frames[frame + PREV_BEND_DIRECTION];
+			float frameTime = frames[frame];
+			float percent = getCurvePercent(frame / ENTRIES - 1, 1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
+
+			if (setupPose) {
+				constraint.mix = constraint.data.mix + (mix + (frames[frame + MIX] - mix) * percent - constraint.data.mix) * alpha;
+				constraint.bendDirection = mixingOut ? constraint.data.bendDirection : (int)frames[frame + PREV_BEND_DIRECTION];
+			} else {
+				constraint.mix += (mix + (frames[frame + MIX] - mix) * percent - constraint.mix) * alpha;
+				if (!mixingOut) constraint.bendDirection = (int)frames[frame + PREV_BEND_DIRECTION];
+			}
 		}
 	}
 
 	static public class TransformConstraintTimeline extends CurveTimeline {
-		static private final int PREV_TIME = -5;
-		static private final int PREV_ROTATE_MIX = -4;
-		static private final int PREV_TRANSLATE_MIX = -3;
-		static private final int PREV_SCALE_MIX = -2;
-		static private final int PREV_SHEAR_MIX = -1;
-		static private final int ROTATE_MIX = 1;
-		static private final int TRANSLATE_MIX = 2;
-		static private final int SCALE_MIX = 3;
-		static private final int SHEAR_MIX = 4;
+		static public final int ENTRIES = 5;
+		static private final int PREV_TIME = -5, PREV_ROTATE = -4, PREV_TRANSLATE = -3, PREV_SCALE = -2, PREV_SHEAR = -1;
+		static private final int ROTATE = 1, TRANSLATE = 2, SCALE = 3, SHEAR = 4;
 
 		int transformConstraintIndex;
 		private final float[] frames; // time, rotate mix, translate mix, scale mix, shear mix, ...
 
 		public TransformConstraintTimeline (int frameCount) {
 			super(frameCount);
-			frames = new float[frameCount * 5];
+			frames = new float[frameCount * ENTRIES];
 		}
 
-		public void setTransformConstraintIndex (int ikConstraint) {
-			this.transformConstraintIndex = ikConstraint;
+		public int getPropertyId () {
+			return (TimelineType.transformConstraint.ordinal() << 24) + transformConstraintIndex;
+		}
+
+		public void setTransformConstraintIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.transformConstraintIndex = index;
 		}
 
 		public int getTransformConstraintIndex () {
@@ -835,46 +997,251 @@ public class Animation {
 			return frames;
 		}
 
-		/** Sets the time and mixes of the specified keyframe. */
 		public void setFrame (int frameIndex, float time, float rotateMix, float translateMix, float scaleMix, float shearMix) {
-			frameIndex *= 5;
+			frameIndex *= ENTRIES;
 			frames[frameIndex] = time;
-			frames[frameIndex + 1] = rotateMix;
-			frames[frameIndex + 2] = translateMix;
-			frames[frameIndex + 3] = scaleMix;
-			frames[frameIndex + 4] = shearMix;
+			frames[frameIndex + ROTATE] = rotateMix;
+			frames[frameIndex + TRANSLATE] = translateMix;
+			frames[frameIndex + SCALE] = scaleMix;
+			frames[frameIndex + SHEAR] = shearMix;
 		}
 
-		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha) {
-			float[] frames = this.frames;
-			if (time < frames[0]) return; // Time is before first frame.
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
 
 			TransformConstraint constraint = skeleton.transformConstraints.get(transformConstraintIndex);
-
-			if (time >= frames[frames.length - 5]) { // Time is after last frame.
-				int i = frames.length - 1;
-				constraint.rotateMix += (frames[i - 3] - constraint.rotateMix) * alpha;
-				constraint.translateMix += (frames[i - 2] - constraint.translateMix) * alpha;
-				constraint.scaleMix += (frames[i - 1] - constraint.scaleMix) * alpha;
-				constraint.shearMix += (frames[i] - constraint.shearMix) * alpha;
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					TransformConstraintData data = constraint.data;
+					constraint.rotateMix = data.rotateMix;
+					constraint.translateMix = data.translateMix;
+					constraint.scaleMix = data.scaleMix;
+					constraint.shearMix = data.shearMix;
+				}
 				return;
 			}
 
-			// Interpolate between the previous frame and the current frame.
-			int frame = binarySearch(frames, time, 5);
-			float frameTime = frames[frame];
-			float percent = MathUtils.clamp(1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime), 0, 1);
-			percent = getCurvePercent(frame / 5 - 1, percent);
+			float rotate, translate, scale, shear;
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				int i = frames.length;
+				rotate = frames[i + PREV_ROTATE];
+				translate = frames[i + PREV_TRANSLATE];
+				scale = frames[i + PREV_SCALE];
+				shear = frames[i + PREV_SHEAR];
+			} else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				rotate = frames[frame + PREV_ROTATE];
+				translate = frames[frame + PREV_TRANSLATE];
+				scale = frames[frame + PREV_SCALE];
+				shear = frames[frame + PREV_SHEAR];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
 
-			float rotate = frames[frame + PREV_ROTATE_MIX];
-			float translate = frames[frame + PREV_TRANSLATE_MIX];
-			float scale = frames[frame + PREV_SCALE_MIX];
-			float shear = frames[frame + PREV_SHEAR_MIX];
-			constraint.rotateMix += (rotate + (frames[frame + ROTATE_MIX] - rotate) * percent - constraint.rotateMix) * alpha;
-			constraint.translateMix += (translate + (frames[frame + TRANSLATE_MIX] - translate) * percent - constraint.translateMix)
-				* alpha;
-			constraint.scaleMix += (scale + (frames[frame + SCALE_MIX] - scale) * percent - constraint.scaleMix) * alpha;
-			constraint.shearMix += (shear + (frames[frame + SHEAR_MIX] - shear) * percent - constraint.shearMix) * alpha;
+				rotate += (frames[frame + ROTATE] - rotate) * percent;
+				translate += (frames[frame + TRANSLATE] - translate) * percent;
+				scale += (frames[frame + SCALE] - scale) * percent;
+				shear += (frames[frame + SHEAR] - shear) * percent;
+			}
+			if (setupPose) {
+				TransformConstraintData data = constraint.data;
+				constraint.rotateMix = data.rotateMix + (rotate - data.rotateMix) * alpha;
+				constraint.translateMix = data.translateMix + (translate - data.translateMix) * alpha;
+				constraint.scaleMix = data.scaleMix + (scale - data.scaleMix) * alpha;
+				constraint.shearMix = data.shearMix + (shear - data.shearMix) * alpha;
+			} else {
+				constraint.rotateMix += (rotate - constraint.rotateMix) * alpha;
+				constraint.translateMix += (translate - constraint.translateMix) * alpha;
+				constraint.scaleMix += (scale - constraint.scaleMix) * alpha;
+				constraint.shearMix += (shear - constraint.shearMix) * alpha;
+			}
+		}
+	}
+
+	static public class PathConstraintPositionTimeline extends CurveTimeline {
+		static public final int ENTRIES = 2;
+		static final int PREV_TIME = -2, PREV_VALUE = -1;
+		static final int VALUE = 1;
+
+		int pathConstraintIndex;
+
+		final float[] frames; // time, position, ...
+
+		public PathConstraintPositionTimeline (int frameCount) {
+			super(frameCount);
+			frames = new float[frameCount * ENTRIES];
+		}
+
+		public int getPropertyId () {
+			return (TimelineType.pathConstraintPosition.ordinal() << 24) + pathConstraintIndex;
+		}
+
+		public void setPathConstraintIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.pathConstraintIndex = index;
+		}
+
+		public int getPathConstraintIndex () {
+			return pathConstraintIndex;
+		}
+
+		public float[] getFrames () {
+			return frames;
+		}
+
+		public void setFrame (int frameIndex, float time, float position) {
+			frameIndex *= ENTRIES;
+			frames[frameIndex] = time;
+			frames[frameIndex + VALUE] = position;
+		}
+
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			PathConstraint constraint = skeleton.pathConstraints.get(pathConstraintIndex);
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) constraint.position = constraint.data.position;
+				return;
+			}
+
+			float position;
+			if (time >= frames[frames.length - ENTRIES]) // Time is after last frame.
+				position = frames[frames.length + PREV_VALUE];
+			else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				position = frames[frame + PREV_VALUE];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
+
+				position += (frames[frame + VALUE] - position) * percent;
+			}
+			if (setupPose)
+				constraint.position = constraint.data.position + (position - constraint.data.position) * alpha;
+			else
+				constraint.position += (position - constraint.position) * alpha;
+		}
+	}
+
+	static public class PathConstraintSpacingTimeline extends PathConstraintPositionTimeline {
+		public PathConstraintSpacingTimeline (int frameCount) {
+			super(frameCount);
+		}
+
+		public int getPropertyId () {
+			return (TimelineType.pathConstraintSpacing.ordinal() << 24) + pathConstraintIndex;
+		}
+
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			PathConstraint constraint = skeleton.pathConstraints.get(pathConstraintIndex);
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) constraint.spacing = constraint.data.spacing;
+				return;
+			}
+
+			float spacing;
+			if (time >= frames[frames.length - ENTRIES]) // Time is after last frame.
+				spacing = frames[frames.length + PREV_VALUE];
+			else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				spacing = frames[frame + PREV_VALUE];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
+
+				spacing += (frames[frame + VALUE] - spacing) * percent;
+			}
+
+			if (setupPose)
+				constraint.spacing = constraint.data.spacing + (spacing - constraint.data.spacing) * alpha;
+			else
+				constraint.spacing += (spacing - constraint.spacing) * alpha;
+		}
+	}
+
+	static public class PathConstraintMixTimeline extends CurveTimeline {
+		static public final int ENTRIES = 3;
+		static private final int PREV_TIME = -3, PREV_ROTATE = -2, PREV_TRANSLATE = -1;
+		static private final int ROTATE = 1, TRANSLATE = 2;
+
+		int pathConstraintIndex;
+
+		private final float[] frames; // time, rotate mix, translate mix, ...
+
+		public PathConstraintMixTimeline (int frameCount) {
+			super(frameCount);
+			frames = new float[frameCount * ENTRIES];
+		}
+
+		public int getPropertyId () {
+			return (TimelineType.pathConstraintMix.ordinal() << 24) + pathConstraintIndex;
+		}
+
+		public void setPathConstraintIndex (int index) {
+			if (index < 0) throw new IllegalArgumentException("index must be >= 0.");
+			this.pathConstraintIndex = index;
+		}
+
+		public int getPathConstraintIndex () {
+			return pathConstraintIndex;
+		}
+
+		public float[] getFrames () {
+			return frames;
+		}
+
+		public void setFrame (int frameIndex, float time, float rotateMix, float translateMix) {
+			frameIndex *= ENTRIES;
+			frames[frameIndex] = time;
+			frames[frameIndex + ROTATE] = rotateMix;
+			frames[frameIndex + TRANSLATE] = translateMix;
+		}
+
+		public void apply (Skeleton skeleton, float lastTime, float time, Array<Event> events, float alpha, boolean setupPose,
+			boolean mixingOut) {
+
+			PathConstraint constraint = skeleton.pathConstraints.get(pathConstraintIndex);
+			float[] frames = this.frames;
+			if (time < frames[0]) { // Time is before first frame.
+				if (setupPose) {
+					constraint.rotateMix = constraint.data.rotateMix;
+					constraint.translateMix = constraint.data.translateMix;
+				}
+				return;
+			}
+
+			float rotate, translate;
+			if (time >= frames[frames.length - ENTRIES]) { // Time is after last frame.
+				rotate = frames[frames.length + PREV_ROTATE];
+				translate = frames[frames.length + PREV_TRANSLATE];
+			} else {
+				// Interpolate between the previous frame and the current frame.
+				int frame = binarySearch(frames, time, ENTRIES);
+				rotate = frames[frame + PREV_ROTATE];
+				translate = frames[frame + PREV_TRANSLATE];
+				float frameTime = frames[frame];
+				float percent = getCurvePercent(frame / ENTRIES - 1,
+					1 - (time - frameTime) / (frames[frame + PREV_TIME] - frameTime));
+
+				rotate += (frames[frame + ROTATE] - rotate) * percent;
+				translate += (frames[frame + TRANSLATE] - translate) * percent;
+			}
+
+			if (setupPose) {
+				constraint.rotateMix = constraint.data.rotateMix + (rotate - constraint.data.rotateMix) * alpha;
+				constraint.translateMix = constraint.data.translateMix + (translate - constraint.data.translateMix) * alpha;
+			} else {
+				constraint.rotateMix += (rotate - constraint.rotateMix) * alpha;
+				constraint.translateMix += (translate - constraint.translateMix) * alpha;
+			}
 		}
 	}
 }

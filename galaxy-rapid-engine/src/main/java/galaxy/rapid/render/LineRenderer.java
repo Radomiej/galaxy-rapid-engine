@@ -5,6 +5,7 @@ import java.util.List;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -12,11 +13,11 @@ import com.badlogic.gdx.math.Vector2;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.ShapeComponent;
 
-public enum ShapeRenderer implements Renderer {
+public enum LineRenderer implements Renderer {
 	INSTANCE;
 	private com.badlogic.gdx.graphics.glutils.ShapeRenderer shapeRenderer;
 
-	private ShapeRenderer() {
+	private LineRenderer() {
 		shapeRenderer = new com.badlogic.gdx.graphics.glutils.ShapeRenderer();
 	}
 
@@ -31,20 +32,24 @@ public enum ShapeRenderer implements Renderer {
 			Gdx.app.error("ShapeRenderer", "PositionComponent doesn`t exist!");
 			return;
 		}
-	
+		
 		batch.end();
 		shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
 		shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
 		shapeRenderer.updateMatrices();
-		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(shape.getColor());
+		shapeRenderer.begin(ShapeType.Filled);
 		List<Vector2> positions = shape.getPolygonPoints();
-		
 		for(int x = 1; x < positions.size(); x++){
-			shapeRenderer.line(positions.get(x - 1), positions.get(x));
+			Vector2 endPosition = positions.get(x);
+			shapeRenderer.rectLine(positions.get(x - 1),endPosition , shape.getWidth());
+			shapeRenderer.circle(endPosition.x, endPosition.y, shape.getWidth() / 2);
 		}
 		
+		shapeRenderer.setColor(Color.WHITE);
 		shapeRenderer.end();
 		batch.begin();
+		
 	}
 
 }

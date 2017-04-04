@@ -1,31 +1,46 @@
 package galaxy.rapid.eventbus;
 
-import net.mostlyoriginal.api.event.common.Event;
-import net.mostlyoriginal.api.event.common.EventSystem;
+import com.google.common.eventbus.EventBus;
+
+import galaxy.rapid.event.RapidEvent;
 
 public class RapidBus {
-	private EventSystem eventSystem;
-	private String name = "Default";
-
+	private String name;
+	private EventBus eventBus;
+	
+	/**
+	 * Create new instance of EventBus with "Default" name
+	 */
 	public RapidBus() {
-		eventSystem = new EventSystem();
+		this("Default");
 	}
 
+	/**
+	 * Create new instance of EventBus
+	 * @param name
+	 */
 	public RapidBus(String name) {
-		this();
-		this.name = name;
+		this.setName(name);
+		eventBus = new EventBus();
 	}
 
-	public void post(Event event) {
-		eventSystem.dispatch(event);
+	public void post(RapidEvent event) {
+		eventBus.post(event);
 	}
 
 	public void register(Object registerObject) {
-		eventSystem.registerEvents(registerObject);
+		eventBus.register(registerObject);
 	}
 
-	// TODO for feature upragdes and old event bus compatibility
-	public void unregister(Object createEntitySystem) {
+	public void unregister(Object unregisterObject) {
+		eventBus.unregister(unregisterObject);
+	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

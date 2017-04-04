@@ -1,9 +1,9 @@
 package galaxy.rapid.common;
 
-import net.mostlyoriginal.api.event.common.Event;
+import galaxy.rapid.event.RapidEvent;
 
 public class TickEvent {
-	private Event postingObject;
+	private RapidEvent postingObject;
 	private float invokeTime;
 	private int repeatCount;
 	private float repeatDeley;
@@ -11,22 +11,22 @@ public class TickEvent {
 	public TickEvent() {
 	}
 
-	public TickEvent(Event postingObject, float invokeTime) {
+	public TickEvent(RapidEvent postingObject, float invokeTime) {
 		this(postingObject, invokeTime, 0, 0);
 	}
 
-	public TickEvent(Event postingObject, float invokeTime, int repeatCount, float repeatDeley) {
+	public TickEvent(RapidEvent postingObject, float invokeTime, int repeatCount, float repeatDeley) {
 		this.postingObject = postingObject;
 		this.invokeTime = invokeTime;
 		this.repeatCount = repeatCount;
 		this.repeatDeley = repeatDeley;
 	}
 
-	public Event getPostingObject() {
+	public RapidEvent getPostingObject() {
 		return postingObject;
 	}
 
-	public void setPostingObject(Event postingObject) {
+	public void setPostingObject(RapidEvent postingObject) {
 		this.postingObject = postingObject;
 	}
 

@@ -5,10 +5,11 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.google.common.eventbus.Subscribe;
 
 import galaxy.rapid.asset.AssetQueue;
+import galaxy.rapid.event.ChangeScreenEvent;
 import galaxy.rapid.eventbus.RapidBus;
-import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class ScreenNavigator {
 	private Screen currentScreen;
@@ -51,7 +52,7 @@ public class ScreenNavigator {
 		}
 	}
 
-	@Subscribe
+	@Subscribe()
 	public void changeScreen(ChangeScreenEvent changeEvent) {
 		Gdx.app.log("ScreenNavigator", "Incoming change screen event: ");
 		try {

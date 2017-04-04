@@ -5,16 +5,20 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
 import galaxy.rapid.configuration.RapidConfig;
 import galaxy.rapid.configuration.RapidConfiguration;
+import galaxy.rapid.input.RapidInput;
 import galaxy.rapid.screen.ScreenNavigator;
+import galaxy.rapid.screen.RapidScreenSettings;
 
 public class RapidApp extends ApplicationAdapter {
 	private ScreenNavigator screenNavigator;
 	private Screen startScreen;
-
+	private RapidInput rapidInput = new RapidInput();
+	
 	public RapidApp(Screen startScreen) {		
 		this.startScreen = startScreen;		
 		
@@ -34,6 +38,7 @@ public class RapidApp extends ApplicationAdapter {
 		
 		Gdx.app.debug(RapidApp.class.getSimpleName(), "Setting multiplexer...");
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(rapidInput);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 		
 		Gdx.app.debug(RapidApp.class.getSimpleName(), "Run first scene...");
@@ -42,9 +47,11 @@ public class RapidApp extends ApplicationAdapter {
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Color clearColor = RapidScreenSettings.INSTANCE.getClearColor();
+		Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		screenNavigator.updateCurrentScreen(Gdx.graphics.getDeltaTime());
+		rapidInput.endRender();
 	}
 
 	@Override

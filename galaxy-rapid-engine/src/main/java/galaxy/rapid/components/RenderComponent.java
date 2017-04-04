@@ -5,38 +5,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import galaxy.rapid.common.RenderBody;
-import galaxy.rapid.common.RenderOffset;
 
 public class RenderComponent extends Component {
-	// TODO zrobi wsparcie do foramtowania spritów
-	private RenderOffset widthOffset = RenderOffset.CENTER;
-	private RenderOffset heightOffset = RenderOffset.CENTER;
 	private Vector2 cornerPosition = new Vector2();
 	private RenderBody renderBody;
 	private Color color;
 	private boolean flipX, flipY;
-
-	private int layer;
+	private float scaleX, scaleY;
+	private boolean render = true;
 	private int orderZ;
 
 	public RenderComponent() {
 	}
 
 	public RenderComponent(int orderZ) {
-		this(orderZ, 0);
-	}
-
-	public RenderComponent(int orderZ, int layer) {
-		this.layer = layer;
 		this.orderZ = orderZ;
-	}
-
-	public int getLayout() {
-		return layer;
-	}
-
-	public void setLayout(int layout) {
-		this.layer = layout;
 	}
 
 	public int getOrderZ() {
@@ -63,22 +46,6 @@ public class RenderComponent extends Component {
 		this.flipY = flipY;
 	}
 
-	public RenderOffset getWidthOffset() {
-		return widthOffset;
-	}
-
-	public void setWidthOffset(RenderOffset widthOffset) {
-		this.widthOffset = widthOffset;
-	}
-
-	public RenderOffset getHeightOffset() {
-		return heightOffset;
-	}
-
-	public void setHeightOffset(RenderOffset heightOffset) {
-		this.heightOffset = heightOffset;
-	}
-
 	public Color getColor() {
 		return color;
 	}
@@ -95,11 +62,11 @@ public class RenderComponent extends Component {
 		result = prime * result + ((cornerPosition == null) ? 0 : cornerPosition.hashCode());
 		result = prime * result + (flipX ? 1231 : 1237);
 		result = prime * result + (flipY ? 1231 : 1237);
-		result = prime * result + ((heightOffset == null) ? 0 : heightOffset.hashCode());
-		result = prime * result + layer;
 		result = prime * result + orderZ;
+		result = prime * result + (render ? 1231 : 1237);
 		result = prime * result + ((renderBody == null) ? 0 : renderBody.hashCode());
-		result = prime * result + ((widthOffset == null) ? 0 : widthOffset.hashCode());
+		result = prime * result + Float.floatToIntBits(scaleX);
+		result = prime * result + Float.floatToIntBits(scaleY);
 		return result;
 	}
 
@@ -126,20 +93,56 @@ public class RenderComponent extends Component {
 			return false;
 		if (flipY != other.flipY)
 			return false;
-		if (heightOffset != other.heightOffset)
-			return false;
-		if (layer != other.layer)
-			return false;
 		if (orderZ != other.orderZ)
+			return false;
+		if (render != other.render)
 			return false;
 		if (renderBody == null) {
 			if (other.renderBody != null)
 				return false;
 		} else if (!renderBody.equals(other.renderBody))
 			return false;
-		if (widthOffset != other.widthOffset)
+		if (Float.floatToIntBits(scaleX) != Float.floatToIntBits(other.scaleX))
+			return false;
+		if (Float.floatToIntBits(scaleY) != Float.floatToIntBits(other.scaleY))
 			return false;
 		return true;
+	}
+
+	public boolean isRender() {
+		return render;
+	}
+
+	public void setRender(boolean render) {
+		this.render = render;
+	}
+
+	/**
+	 * @return the scaleX
+	 */
+	public float getScaleX() {
+		return scaleX;
+	}
+
+	/**
+	 * @param scaleX the scaleX to set
+	 */
+	public void setScaleX(float scaleX) {
+		this.scaleX = scaleX;
+	}
+
+	/**
+	 * @return the scaleY
+	 */
+	public float getScaleY() {
+		return scaleY;
+	}
+
+	/**
+	 * @param scaleY the scaleY to set
+	 */
+	public void setScaleY(float scaleY) {
+		this.scaleY = scaleY;
 	}
 
 }

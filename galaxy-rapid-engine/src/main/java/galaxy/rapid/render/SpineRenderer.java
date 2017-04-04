@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.esotericsoftware.spine.AnimationState;
 import com.esotericsoftware.spine.Skeleton;
@@ -26,10 +27,12 @@ public enum SpineRenderer implements Renderer {
 	private RapidCamera camera = new RapidCamera(new OrthographicCamera(640, 480));
 	private RapidCamera mainCamera;
 	private Matrix4 oldProjMatrix;
+	
 	private SpineRenderer() {
 		renderer = new SkeletonRenderer<PolygonSpriteBatch>();
 		renderer.setPremultipliedAlpha(true);
 	}
+	
 	public void prepareCamera(RapidCamera mainCamera){
 		this.mainCamera = mainCamera;
 		oldProjMatrix = mainCamera.getCombined();
@@ -51,34 +54,26 @@ public enum SpineRenderer implements Renderer {
 		Skeleton skeleton = spine.getSkeleton();
 
 		skeleton.setFlipX(render.isFlipX());
+		skeleton.setFlipY(render.isFlipY());
 
-		float posX = position.getPosition().x;
-		float posY = position.getPosition().y;
+		float posX = position.getPosition().x + spine.getOffset().x;
+		float posY = position.getPosition().y + spine.getOffset().y;
 
 		skeleton.setPosition(posX, posY);
-		// skeleton.setBonesToSetupPose();
-		// skeleton.setSlotsToSetupPose();
-		// System.out.println("Rotacja spine: " + body.getRotation());
-		// skeleton.getRootBone().setRotation(position.getRotation());
+		skeleton.getRootBone().setRotation(position.getRotation());
+		skeleton.getRootBone().setScale(position.getScale().x, position.getScale().y);
 		skeleton.getColor().a = 1;
 		state.update(e.getWorld().getDelta());
 		state.apply(skeleton);
 		skeleton.updateWorldTransform();
 
+		
 		int blendDst = batch.getBlendDstFunc();
 		int blendSrc = batch.getBlendSrcFunc();
-
-		camera.setPosition(posX, posY);
-		camera.setRotation(mainCamera.getRotation() + position.getRotation());
-		camera.update();
-		// batch.setTransformMatrix(oldTransMatrix.cpy().setTranslation(0, 0,
-		// 0.00000f));
-		// batch.setTransformMatrix(oldTransMatrix.cpy().rotate(axis.mul(oldTransMatrix),
-		// position.getRotation()));
-		// batch.setProjectionMatrix(oldProjMatrix.cpy().rotate(axis.mul(oldProjMatrix),
-		// position.getRotation()));
-		batch.setProjectionMatrix(camera.getCombined());
+		
+		batch.setProjectionMatrix(mainCamera.getCombined());
 		renderer.draw((PolygonSpriteBatch) batch, skeleton);
+
 		batch.setBlendFunction(blendSrc, blendDst);
 		batch.setProjectionMatrix(oldProjMatrix);
 	}

@@ -9,8 +9,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -28,9 +30,12 @@ public enum RapidAsset {
 	INSTANCE;
 
 	private volatile AssetManager manager;
-	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(10);
+	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(64);
+	private Map<String, Sprite> spriteMemoryMap = new HashMap<String, Sprite>(64);
 //	private Map<String, MultiTextureAtlas> atlasMap = new HashMap<String, MultiTextureAtlas>(10);
 //	private Map<String, Sprite> atlasesSpriteMap = new HashMap<String, Sprite>(10);
+	private Map<String, BitmapFont> fontsMap = new HashMap<String, BitmapFont>(32);
+	
 	private Set<String> atlases = new HashSet<String>();
 	private FileHandleResolver handleResolver;
 
@@ -44,9 +49,23 @@ public enum RapidAsset {
 		manager.setLoader(SkeletonData.class, new SkeletonDataLoader());
 	}
 
-	public void loadSound(String sound) {
-		String assetName = "sounds/" + sound;
+	public void loadSound(String path) {
+		String assetName = path;
 		manager.load(assetName, Sound.class);
+	}
+	
+	public void loadMusic(String path) {
+		manager.load(path, Music.class);
+	}
+
+	public Sound getSound(String resourcePath) {
+		manager.finishLoadingAsset(resourcePath);
+		return manager.get(resourcePath, Sound.class);
+	}
+
+	public Music getMusic(String resourcePath) {
+		manager.finishLoadingAsset(resourcePath);
+		return manager.get(resourcePath, Music.class);
 	}
 
 	/**
@@ -73,7 +92,7 @@ public enum RapidAsset {
 		Array<AtlasRegion> regions = atlas.getRegions();
 		for(AtlasRegion region : regions){
 			String spriteName = region.name;
-			System.out.println("Region: " + spriteName);
+//			System.out.println("Region: " + spriteName);
 			spriteMap.put(textureAtlasPath + "#" + spriteName, atlas.createSprite(spriteName));
 		}
 		
@@ -102,24 +121,33 @@ public enum RapidAsset {
 			manager.finishLoadingAsset(resourcePath);
 			Sprite sprite = new Sprite((Texture) manager.get(resourcePath));
 			spriteMap.put(resourcePath, sprite);
+//			Gdx.app.debug("AssetManager", "put sprite: " + resourcePath);
 		} catch (Exception exd) {
-
+			exd.printStackTrace();
 		}
 	}
 
-	public Sprite getSprite(String spritePath) {
+	public Sprite getSprite(String resourcePath) {
 //		System.out.println("getSprite: " + spritePath + " instance: "+ spriteMap.get(spritePath));
-		if(spritePath == null || spritePath.equals("null")){
+		if(resourcePath == null || resourcePath.equals("null")){
 			Gdx.app.error("AssetManager", "try get null sprite");
 			return null;
 		}
 		
-		Sprite loadingSprite = spriteMap.get(spritePath);
+		Sprite loadingSprite = spriteMap.get(resourcePath);
 		if (loadingSprite == null) {
-//			loadSprite(spritePath);
-			manager.finishLoadingAsset(spritePath);
-			loadingSprite = spriteMap.get(spritePath);
+			manager.finishLoadingAsset(resourcePath);
+			loadingSprite = spriteMap.get(resourcePath);
 		}
+		
+		if (loadingSprite == null) {
+			loadingSprite = spriteMemoryMap.get(resourcePath);
+		}
+		
+		if(loadingSprite == null){
+			Gdx.app.error("AssetManager", "null sprite: " + resourcePath);
+		}
+		
 		return loadingSprite;
 	}
 
@@ -168,5 +196,36 @@ public enum RapidAsset {
 
 	public void dispose() {
 		manager.dispose();
+	}
+
+	public BitmapFont getBitmapFont(String fontResource) {
+		if(fontsMap.containsKey(fontResource)){
+			return fontsMap.get(fontResource);
+		}
+		manager.finishLoadingAsset(fontResource);
+		return manager.get(fontResource);
+	}
+	public boolean isBitmapFontLoaded(String fontResource){
+		if(fontsMap.containsKey(fontResource)){
+			return true;
+		}
+		return manager.isLoaded(fontResource);
+	}
+	
+	public void loadBitmapFont(String fontResource) {
+		if(isBitmapFontLoaded(fontResource)) return;
+		manager.load(fontResource, BitmapFont.class);
+	}
+	
+	public void putBitmapFont(String fontFile, BitmapFont font){
+		fontsMap.put(fontFile, font);
+	}
+
+	public void addMemorySprite(String spriteName, Sprite sprite) {
+		spriteMemoryMap.put(spriteName, sprite);	
+	}
+	
+	public Sprite getMemorySprite(String spriteName){
+		return spriteMemoryMap.get(spriteName);
 	}
 }

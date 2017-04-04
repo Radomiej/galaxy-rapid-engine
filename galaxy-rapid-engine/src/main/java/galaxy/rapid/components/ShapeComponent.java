@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.artemis.Component;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class ShapeComponent extends Component {
 	private List<Vector2> polygonPoints = new ArrayList<Vector2>();
-
+	private ShapeType shapeType = ShapeType.Filled;
+	private float width = 1;
+	private Color color = new Color(Color.WHITE);
+	
 	public List<Vector2> getPolygonPoints() {
 		return polygonPoints;
 	}
@@ -17,7 +22,9 @@ public class ShapeComponent extends Component {
 		this.polygonPoints = polygonPoints;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -28,7 +35,9 @@ public class ShapeComponent extends Component {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -48,12 +57,38 @@ public class ShapeComponent extends Component {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "ShapeComponent [polygonPoints=" + polygonPoints + "]";
 	}
-	
+
+	public ShapeType getShapeType() {
+		return shapeType;
+	}
+
+	public void setShapeType(ShapeType shapeType) {
+		this.shapeType = shapeType;
+	}
+
+	public float getWidth() {
+		return width;
+	}
+
+	public void setWidth(float width) {
+		this.width = width;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color.set(color);
+	}
+
 }
