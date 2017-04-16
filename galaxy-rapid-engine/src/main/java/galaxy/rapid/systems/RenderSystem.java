@@ -11,7 +11,6 @@ import com.google.common.eventbus.Subscribe;
 import galaxy.rapid.camera.RapidCamera;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.ShapeComponent;
-import galaxy.rapid.components.SpineComponent;
 import galaxy.rapid.components.SpriteComponent;
 import galaxy.rapid.components.TextComponent;
 import galaxy.rapid.event.PhysicDebugEnterChangeEvent;
@@ -22,7 +21,6 @@ import galaxy.rapid.managers.RenderableManager;
 import galaxy.rapid.render.EmptyRenderer;
 import galaxy.rapid.render.Renderer;
 import galaxy.rapid.render.LineRenderer;
-import galaxy.rapid.render.SpineRenderer;
 import galaxy.rapid.render.SpriteRenderer;
 import galaxy.rapid.render.TextRenderer;
 
@@ -30,10 +28,9 @@ public class RenderSystem extends BaseSystem {
 
 	private final PreRenderEvent preRenderEvent = new PreRenderEvent();
 	private final PostRenderEvent postRenderEvent = new PostRenderEvent();
-	
+
 	private ComponentMapper<RenderComponent> renderMapper;
 	private ComponentMapper<SpriteComponent> spriteMapper;
-	private ComponentMapper<SpineComponent> spineMapper;
 	private ComponentMapper<ShapeComponent> shapeMapper;
 	private ComponentMapper<TextComponent> textMapper;
 
@@ -48,7 +45,7 @@ public class RenderSystem extends BaseSystem {
 	private RapidCamera camera;
 	@Wire
 	private RapidBus rapidBus;
-	
+
 	@Override
 	protected void initialize() {
 		debugRenderer = new Box2DDebugRenderer();
@@ -57,11 +54,10 @@ public class RenderSystem extends BaseSystem {
 
 	@Override
 	protected void begin() {
-		SpineRenderer.INSTANCE.prepareCamera(camera);
 		TextRenderer.INSTANCE.prepareCamera(camera);
-		
+
 		rapidBus.post(preRenderEvent);
-		
+
 		polygonBatch.setProjectionMatrix(camera.getCombined());
 		polygonBatch.begin();
 	}
@@ -72,7 +68,8 @@ public class RenderSystem extends BaseSystem {
 			Renderer renderer = getRendererForEntity(e);
 			// if(renderer == ShapeRenderer.INSTANCE) continue;
 			RenderComponent renderComponent = renderMapper.get(e);
-			if(renderComponent.isRender()) renderer.render(e, polygonBatch);
+			if (renderComponent.isRender())
+				renderer.render(e, polygonBatch);
 		}
 	}
 
@@ -81,9 +78,7 @@ public class RenderSystem extends BaseSystem {
 			return SpriteRenderer.INSTANCE;
 		} else if (shapeMapper.has(e)) {
 			return LineRenderer.INSTANCE;
-		} else if (spineMapper.has(e)) {
-			return SpineRenderer.INSTANCE;
-		}else if (textMapper.has(e)) {
+		} else if (textMapper.has(e)) {
 			return TextRenderer.INSTANCE;
 		} else {
 			return EmptyRenderer.INSTANCE;
@@ -100,7 +95,7 @@ public class RenderSystem extends BaseSystem {
 	}
 
 	@Subscribe
-	public void physicDebugEnterChangeEvent(PhysicDebugEnterChangeEvent event){
+	public void physicDebugEnterChangeEvent(PhysicDebugEnterChangeEvent event) {
 		debugRender = event.enableDebugRender;
 	}
 }

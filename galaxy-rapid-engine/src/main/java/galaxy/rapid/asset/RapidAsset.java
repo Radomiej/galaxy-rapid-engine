@@ -17,13 +17,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.spine.AnimationState;
-import com.esotericsoftware.spine.AnimationStateData;
-import com.esotericsoftware.spine.Skeleton;
-import com.esotericsoftware.spine.SkeletonData;
-
-import galaxy.rapid.asset.spine.SkeletonDataLoader;
-import galaxy.rapid.asset.spine.SkeletonDataLoaderParameter;
 import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum RapidAsset {
@@ -46,7 +39,6 @@ public enum RapidAsset {
 //		}
 
 		manager = new AssetManager(handleResolver);
-		manager.setLoader(SkeletonData.class, new SkeletonDataLoader());
 	}
 
 	public void loadSound(String path) {
@@ -99,22 +91,6 @@ public enum RapidAsset {
 		atlases.add(textureAtlasPath);
 	}
 
-	public SpineAssetModel getSpine(String skeletonAssetName, final String skinName) {
-		final String jsonFullName = skeletonAssetName;
-		manager.finishLoadingAsset(jsonFullName);
-		SkeletonData skeletonData = manager.get(jsonFullName, SkeletonData.class);
-		
-		SpineAssetModel newSpineAssetModel = new SpineAssetModel();
-		newSpineAssetModel.setSkeleton(new Skeleton(skeletonData));
-		newSpineAssetModel.getSkeleton().setSkin(skinName);
-
-		AnimationStateData animationStateData = new AnimationStateData(skeletonData);
-		AnimationState animationState = new AnimationState(animationStateData);
-		newSpineAssetModel.setAnimationState(animationState);
-
-		return newSpineAssetModel;
-	}
-
 	public void loadSprite(String resourcePath) {
 		try {
 			manager.load(resourcePath, Texture.class);
@@ -158,18 +134,6 @@ public enum RapidAsset {
 			loadingSprite = spriteMap.get(loadingSprite);
 		}
 		return loadingSprite;
-	}
-
-	public void loadSpine(String spineAssetsPath) {
-		
-		final String spineAtlasFullName = spineAssetsPath.replace(".json", ".atlas");
-		final String jsonFullName = spineAssetsPath;
-		Gdx.app.log("RapidAsset", "spineAtlas: " + spineAtlasFullName);
-		Gdx.app.log("RapidAsset", "jsonData: " + jsonFullName);
-
-		SkeletonDataLoaderParameter parameter = new SkeletonDataLoaderParameter(spineAtlasFullName, 1);
-		manager.load(jsonFullName, SkeletonData.class, parameter);
-
 	}
 
 	public void unloadSpine(String spineAssetsName) {
