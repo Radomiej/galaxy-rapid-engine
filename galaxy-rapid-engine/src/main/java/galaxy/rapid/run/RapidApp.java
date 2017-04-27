@@ -8,8 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 
-import galaxy.rapid.configuration.RapidConfig;
-import galaxy.rapid.configuration.RapidConfiguration;
 import galaxy.rapid.input.RapidInput;
 import galaxy.rapid.screen.ScreenNavigator;
 import galaxy.rapid.screen.RapidScreenSettings;
@@ -27,14 +25,6 @@ public class RapidApp extends ApplicationAdapter {
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		
-		Gdx.app.debug(RapidApp.class.getSimpleName(), "Loading configuration...");
-		RapidConfiguration.INSTANCE.load();
-		RapidConfig rapidConfig = RapidConfiguration.INSTANCE.getRapidConfig();
-		
-		if(rapidConfig.debugMode){
-			Gdx.app.setLogLevel(Gdx.app.LOG_DEBUG);
-		}
 		
 		Gdx.app.debug(RapidApp.class.getSimpleName(), "Setting multiplexer...");
 		InputMultiplexer inputMultiplexer = new InputMultiplexer();

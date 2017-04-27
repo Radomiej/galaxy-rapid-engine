@@ -3,21 +3,16 @@ package galaxy.rapid.render;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.camera.RapidCamera;
 import galaxy.rapid.components.PositionComponent;
-import galaxy.rapid.components.SpriteComponent;
 import galaxy.rapid.components.TextComponent;
-import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum TextRenderer implements Renderer {
 	INSTANCE;

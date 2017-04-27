@@ -11,7 +11,6 @@ import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.PositionComponent;
 import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.components.SpriteComponent;
-import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum SpriteRenderer implements Renderer {
 	INSTANCE;

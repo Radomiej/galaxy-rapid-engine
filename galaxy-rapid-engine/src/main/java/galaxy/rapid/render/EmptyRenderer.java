@@ -3,15 +3,11 @@ package galaxy.rapid.render;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
-import galaxy.rapid.asset.RapidAsset;
 import galaxy.rapid.components.PositionComponent;
-import galaxy.rapid.configuration.RapidConfiguration;
 
 public enum EmptyRenderer implements Renderer {
 	INSTANCE;

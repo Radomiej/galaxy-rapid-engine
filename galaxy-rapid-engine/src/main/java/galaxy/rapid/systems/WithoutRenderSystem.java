@@ -10,8 +10,6 @@ import galaxy.rapid.components.RenderComponent;
 import galaxy.rapid.render.EmptyRenderer;
 
 public class WithoutRenderSystem extends EntityProcessingSystem {
-
-	
 	@Wire
 	private SpriteBatch spriteBatch;	
 	

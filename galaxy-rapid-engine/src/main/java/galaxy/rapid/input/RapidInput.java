@@ -3,8 +3,6 @@ package galaxy.rapid.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
-import galaxy.rapid.configuration.RapidConfiguration;
-
 public class RapidInput implements InputProcessor{
 	
 	static public int getX(){

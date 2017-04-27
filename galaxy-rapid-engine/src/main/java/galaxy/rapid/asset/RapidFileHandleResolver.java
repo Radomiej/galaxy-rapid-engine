@@ -7,8 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 
-import galaxy.rapid.configuration.RapidConfiguration;
-
 public class RapidFileHandleResolver implements FileHandleResolver {
 	public FileHandle resolve(String fileName) {
 
@@ -53,13 +51,6 @@ public class RapidFileHandleResolver implements FileHandleResolver {
 		if (file.exists())
 			return file;
 		// System.out.println("Brak pliku w: " + file.path());
-
-		file = Gdx.files.external(
-				RapidConfiguration.INSTANCE.getAppName() + File.separator + "assets" + File.separator + fileName);
-		if (file.exists())
-			return file;
-		// System.out.println("Brak pliku w: " + file.path());
-
 		return file;
 	}
 }
