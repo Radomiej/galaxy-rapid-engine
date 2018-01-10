@@ -23,8 +23,6 @@ public enum RapidAsset {
 	private volatile AssetManager manager;
 	private Map<String, Sprite> spriteMap = new HashMap<String, Sprite>(64);
 	private Map<String, Sprite> spriteMemoryMap = new HashMap<String, Sprite>(64);
-//	private Map<String, MultiTextureAtlas> atlasMap = new HashMap<String, MultiTextureAtlas>(10);
-//	private Map<String, Sprite> atlasesSpriteMap = new HashMap<String, Sprite>(10);
 	private Map<String, BitmapFont> fontsMap = new HashMap<String, BitmapFont>(32);
 	
 	private Set<String> atlases = new HashSet<String>();
@@ -32,10 +30,6 @@ public enum RapidAsset {
 
 	private RapidAsset() {
 		handleResolver = new RapidFileHandleResolver();
-//		if (RapidConfiguration.INSTANCE.isDebugMode()) {
-//			handleResolver = new InternalFileHandleResolver();
-//		}
-
 		manager = new AssetManager(handleResolver);
 	}
 
@@ -66,23 +60,13 @@ public enum RapidAsset {
 		manager.load(fileName, Texture.class);
 	}
 
-//	private void loadSprite() {
-//		Gdx.app.log("RapidAsset", "Loading all sprites in current avaiable in device memory");
-//		for (MultiTextureAtlas multiTextureAtlas : atlasMap.values()) {
-//			multiTextureAtlas.signAllAssets(spriteMap);
-//		}
-//	}
-
 	public void loadTextureAtlas(final String textureAtlasPath) {
-//		MultiTextureAtlas multiTextureAtlas = new MultiTextureAtlas(textureAtlasAsset);
-//		multiTextureAtlas.findAllAtlas(handleResolver, manager);
 		manager.load(textureAtlasPath, TextureAtlas.class);
 		manager.finishLoadingAsset(textureAtlasPath);
 		TextureAtlas atlas = manager.get(textureAtlasPath);
 		Array<AtlasRegion> regions = atlas.getRegions();
 		for(AtlasRegion region : regions){
 			String spriteName = region.name;
-//			System.out.println("Region: " + spriteName);
 			spriteMap.put(textureAtlasPath + "#" + spriteName, atlas.createSprite(spriteName));
 		}
 		
@@ -95,14 +79,12 @@ public enum RapidAsset {
 			manager.finishLoadingAsset(resourcePath);
 			Sprite sprite = new Sprite((Texture) manager.get(resourcePath));
 			spriteMap.put(resourcePath, sprite);
-//			Gdx.app.debug("AssetManager", "put sprite: " + resourcePath);
 		} catch (Exception exd) {
 			exd.printStackTrace();
 		}
 	}
 
 	public Sprite getSprite(String resourcePath) {
-//		System.out.println("getSprite: " + spritePath + " instance: "+ spriteMap.get(spritePath));
 		if(resourcePath == null || resourcePath.equals("null")){
 			Gdx.app.error("AssetManager", "try get null sprite");
 			return null;
@@ -140,8 +122,6 @@ public enum RapidAsset {
 	}
 
 	public void unloadTextureAtlas(String textureAtlasAsset) {
-//		MultiTextureAtlas multiTextureAtlas = atlasMap.get(textureAtlasAsset);
-//		multiTextureAtlas.dispose();
 		TextureAtlas atlas = manager.get(textureAtlasAsset);
 		atlas.dispose();
 		atlases.remove(textureAtlasAsset);
